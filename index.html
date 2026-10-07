@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحدي المسلسلات والأفلام</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, sans-serif; }
+body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 15px; color: #fff; }
+.container { background: rgba(255,255,255,0.08); border-radius: 24px; padding: 28px 20px; width: 100%; max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
+h1 { text-align: center; font-size: 22px; margin-bottom: 8px; color: #ffd700; }
+.subtitle { text-align: center; font-size: 13px; color: #aaa; margin-bottom: 22px; }
+.stats { display: flex; justify-content: space-between; margin-bottom: 18px; font-size: 14px; }
+.stats span { background: rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 12px; }
+.stats .score { color: #00ff88; font-weight: bold; }
+.stats .timer { color: #ff6b6b; font-weight: bold; }
+.question-box { background: linear-gradient(135deg, #e94560, #903749); padding: 22px 16px; border-radius: 18px; text-align: center; font-size: 17px; font-weight: bold; min-height: 110px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; line-height: 1.6; }
+.answers { display: grid; gap: 12px; }
+.answer { background: rgba(255,255,255,0.12); border: 2px solid transparent; padding: 15px; border-radius: 14px; font-size: 15px; cursor: pointer; transition: all 0.2s; color: #fff; text-align: center; font-family: inherit; }
+.answer:hover { background: rgba(255,255,255,0.22); }
+.answer.correct { background: #00b894; border-color: #00ff88; }
+.answer.wrong { background: #d63031; border-color: #ff6b6b; }
+.answer:disabled { cursor: not-allowed; opacity: 0.85; }
+.progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 18px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #ffd700, #00ff88); width: 0%; transition: width 0.4s; }
+.hidden { display: none; }
+.end-screen { text-align: center; padding: 20px 0; }
+.end-screen h2 { color: #ffd700; font-size: 26px; margin-bottom: 12px; }
+.end-screen .final { font-size: 40px; color: #00ff88; font-weight: bold; margin: 20px 0; }
+.end-screen p { color: #ccc; margin-bottom: 20px; font-size: 15px; }
+.btn { background: linear-gradient(135deg, #ffd700, #ff9500); color: #1a1a2e; border: none; padding: 14px 30px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; font-family: inherit; }
+.start-screen { text-align: center; padding: 20px 0; }
+.start-screen .icon { font-size: 60px; margin-bottom: 15px; }
+.start-screen p { color: #bbb; margin-bottom: 25px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div id="startScreen" class="start-screen">
+    <div class="icon">🎬</div>
+    <h1>تحدي المسلسلات والأفلام</h1>
+    <p class="subtitle">10 أسئلة • 15 ثانية لكل سؤال</p>
+    <p>هل أنت خبير في المسلسلات المصرية والعربية والعالمية؟<br>اختبر نفسك وشارك النتيجة مع أصحابك!</p>
+    <button class="btn" onclick="startGame()">ابدأ التحدي 🚀</button>
+  </div>
+  <div id="gameScreen" class="hidden">
+    <div class="stats">
+      <span>السؤال <b id="qNum">1</b>/10</span>
+      <span class="score">النقاط: <b id="score">0</b></span>
+      <span class="timer" id="timer">15</span>
+    </div>
+    <div class="question-box" id="question">السؤال هنا</div>
+    <div class="answers" id="answers"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  </div>
+  <div id="endScreen" class="end-screen hidden">
+    <h2 id="endTitle">🎉 أحسنت!</h2>
+    <div class="final" id="finalScore">0</div>
+    <p id="endMsg">نتيجتك من 100</p>
+    <button class="btn" onclick="restart()">العب تاني 🔄</button>
+  </div>
+</div>
+<script>
+const questions = [
+  { q: "في مسلسل 'الحفرة'، ما اسم الشخصية الرئيسية؟", a: ["يحيى", "جبل", "سليم", "كرم"], c: 0 },
+  { q: "من بطل مسلسل 'الاختيار'؟", a: ["أحمد عز", "أمير كرارة", "أحمد السقا", "محمد رمضان"], c: 1 },
+  { q: "مسلسل 'Game of Thrones' مبني على كتب من؟", a: ["J.K. Rowling", "George R.R. Martin", "Tolkien", "Stephen King"], c: 1 },
+  { q: "في 'Breaking Bad'، ما اسم المعلم الرئيسي؟", a: ["Jesse", "Hank", "Walter White", "Gus"], c: 2 },
+  { q: "مسلسل 'الفهد' بطولة من؟", a: ["محمد رمضان", "أحمد السقا", "أمير كرارة", "يوسف الشريف"], c: 1 },
+  { q: "فيلم 'Avatar' من إخراج؟", a: ["Nolan", "Spielberg", "James Cameron", "Scorsese"], c: 2 },
+  { q: "مسلسل 'Stranger Things' يدور في مدينة؟", a: ["Hawkins", "Derry", "Salem", "Riverdale"], c: 0 },
+  { q: "من بطل مسلسل 'الجزيرة'؟", a: ["أحمد السقا", "محمد رمضان", "أحمد عز", "كريم عبد العزيز"], c: 3 },
+  { q: "مسلسل 'Money Heist' أصله من؟", a: ["إيطاليا", "إسبانيا", "المكسيك", "فرنسا"], c: 1 },
+  { q: "فيلم 'The Godfather' من إخراج؟", a: ["Coppola", "Scorsese", "Tarantino", "Spielberg"], c: 0 }
+];
+let current = 0, score = 0, timeLeft = 15, timerInterval;
+function startGame() {
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('gameScreen').classList.remove('hidden');
+  current = 0; score = 0;
+  showQuestion();
+}
+function showQuestion() {
+  if (current >= questions.length) return endGame();
+  const q = questions[current];
+  document.getElementById('qNum').textContent = current + 1;
+  document.getElementById('score').textContent = score;
+  document.getElementById('question').textContent = q.q;
+  document.getElementById('progress').style.width = ((current / questions.length) * 100) + '%';
+  const answersDiv = document.getElementById('answers');
+  answersDiv.innerHTML = '';
+  q.a.forEach((ans, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer';
+    btn.textContent = ans;
+    btn.onclick = () => selectAnswer(i, btn);
+    answersDiv.appendChild(btn);
+  });
+  timeLeft = 15;
+  document.getElementById('timer').textContent = timeLeft;
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    document.getElementById('timer').textContent = timeLeft;
+    if (timeLeft <= 0) { clearInterval(timerInterval); revealAnswer(-1); }
+  }, 1000);
+}
+function selectAnswer(index, btn) { clearInterval(timerInterval); revealAnswer(index, btn); }
+function revealAnswer(selected) {
+  const q = questions[current];
+  const buttons = document.querySelectorAll('.answer');
+  buttons.forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.c) b.classList.add('correct');
+    if (i === selected && i !== q.c) b.classList.add('wrong');
+  });
+  if (selected === q.c) score += 10;
+  document.getElementById('score').textContent = score;
+  setTimeout(() => { current++; showQuestion(); }, 1200);
+}
+function endGame() {
+  clearInterval(timerInterval);
+  document.getElementById('gameScreen').classList.add('hidden');
+  document.getElementById('endScreen').classList.remove('hidden');
+  document.getElementById('finalScore').textContent = score + ' / 100';
+  let title = '🎬 نتيجة', msg = '';
+  if (score === 100) { title = '🏆 أسطورة!'; msg = 'أنت خبير حقيقي في المسلسلات والأفلام!'; }
+  else if (score >= 70) { title = '🔥 ممتاز!'; msg = 'معلوماتك قوية جداً، قريب من الاحتراف!'; }
+  else if (score >= 50) { title = '👍 جيد!'; msg = 'مستواك كويس، جرب تاني تكسر الـ 100.'; }
+  else { title = '📺 مبتدئ'; msg = 'محتاج تتفرج على مسلسلات أكتر 😄'; }
+  document.getElementById('endTitle').textContent = title;
+  document.getElementById('endMsg').textContent = msg;
+}
+function restart() {
+  document.getElementById('endScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
