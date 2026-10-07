@@ -3,123 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>SOULFIRE — نار الروح</title>
+<title>SOULFIRE — Cinematic</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;font-family:'Segoe UI',Tahoma,sans-serif}
 html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;touch-action:none}
 #c{display:block;position:absolute;inset:0}
 #ui{position:absolute;inset:0;pointer-events:none;z-index:10}
-#top{position:absolute;top:0;left:0;right:0;padding:10px 16px;display:flex;justify-content:space-between;align-items:flex-start}
-.hud-label{font-size:9px;letter-spacing:3px;color:#555;text-transform:uppercase}
-.hud-val{font-size:20px;font-weight:900;color:#fff;letter-spacing:1px;line-height:1.1}
-#waveBox{text-align:center}
-#waveBox .hud-val{color:#ff66cc}
-#karmaBox{text-align:right}
-#karmaBox .hud-val{color:#00ff88}
-#spiritBox{position:absolute;top:80px;left:50%;transform:translateX(-50%);text-align:center}
-#spiritName{font-size:14px;font-weight:900;letter-spacing:3px;transition:all .3s}
-#spiritName.light{color:#ffee66;text-shadow:0 0 15px #ffcc00}
-#spiritName.shadow{color:#aa44ff;text-shadow:0 0 15px #8800ff}
-#hpOuter{position:absolute;top:110px;left:50%;transform:translateX(-50%);width:220px}
-#hpBar{height:12px;background:rgba(0,0,0,.85);border:1px solid rgba(255,255,255,.25);border-radius:6px;overflow:hidden}
-#hpFill{height:100%;background:linear-gradient(90deg,#ff2244,#ff6644);width:100%;transition:width .2s;border-radius:6px}
-#shieldBar{height:5px;background:rgba(0,0,0,.85);border:1px solid rgba(255,204,0,.5);border-radius:3px;overflow:hidden;margin-top:3px;display:none}
-#shieldFill{height:100%;background:linear-gradient(90deg,#ffcc00,#ff8800);width:0%;transition:width .2s}
-#storyBox{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);max-width:90%;text-align:center;opacity:0;transition:opacity .5s;pointer-events:none;z-index:20}
-#storyBox.on{opacity:1}
-#storyTitle{font-size:24px;font-weight:900;color:#ffee66;text-shadow:0 0 20px #ffcc00;letter-spacing:2px;margin-bottom:8px}
-#storyText{font-size:14px;color:#bbb;line-height:1.7;letter-spacing:1px;max-width:500px;margin:0 auto}
-#bossBar{position:absolute;top:80px;left:50%;transform:translateX(-50%);width:80%;max-width:400px;display:none}
-#bossBar.on{display:block}
-#bossName{font-size:12px;font-weight:900;color:#00ff44;letter-spacing:3px;text-align:center;margin-bottom:4px;text-shadow:0 0 10px #00ff44}
-#bossHpOuter{height:14px;background:rgba(0,0,0,.9);border:2px solid #00ff44;border-radius:7px;overflow:hidden}
-#bossHpFill{height:100%;background:linear-gradient(90deg,#ff2244,#aa0044);width:100%;transition:width .2s;border-radius:5px}
-#combo{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:56px;font-weight:900;color:#ffff00;text-shadow:0 0 30px #ffcc00,0 0 60px #ff8800;letter-spacing:4px;transition:transform .2s;pointer-events:none;z-index:15}
-#combo.on{transform:translate(-50%,-50%) scale(1)}
-#joy{position:absolute;bottom:40px;left:30px;width:150px;height:150px;border-radius:50%;border:2px solid rgba(255,238,102,.25);background:radial-gradient(circle,rgba(255,238,102,.06),rgba(0,0,0,.5));pointer-events:auto;touch-action:none;box-shadow:0 0 30px rgba(255,238,102,.15)}
-#joy.shadow{border-color:rgba(170,68,255,.3);background:radial-gradient(circle,rgba(170,68,255,.08),rgba(0,0,0,.5));box-shadow:0 0 30px rgba(170,68,255,.2)}
-#jk{position:absolute;top:50%;left:50%;width:65px;height:65px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff,#ffee66);transform:translate(-50%,-50%);box-shadow:0 0 30px #ffee66;pointer-events:none;transition:all .1s}
-#jk.shadow{background:radial-gradient(circle at 30% 30%,#cc88ff,#6600cc);box-shadow:0 0 30px #aa44ff}
-#switchBtn{position:absolute;bottom:60px;right:30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffee88,#cc8800);display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:auto;box-shadow:0 0 50px rgba(255,204,0,.8),inset 0 -8px 20px rgba(0,0,0,.3);transition:all .3s;touch-action:none;cursor:pointer;border:3px solid rgba(255,255,255,.4)}
-#switchBtn.shadow{background:radial-gradient(circle at 30% 30%,#cc88ff,#4400aa);box-shadow:0 0 50px rgba(170,68,255,.9),inset 0 -8px 20px rgba(0,0,0,.4);border-color:rgba(200,150,255,.5)}
-#switchBtn:active{transform:scale(.9)}
-#switchBtn .icon{font-size:44px;line-height:1}
-#switchBtn .label{font-size:10px;letter-spacing:2px;font-weight:900;margin-top:2px;color:rgba(0,0,0,.7)}
-#switchBtn.shadow .label{color:rgba(255,255,255,.9)}
-#switchCd{position:absolute;inset:0;border-radius:50%;background:conic-gradient(rgba(0,0,0,.75) 0deg,transparent 0deg);pointer-events:none}
-#toast{position:absolute;top:28%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#ffee66,#aa44ff);color:#000;padding:10px 28px;font-weight:900;letter-spacing:3px;border-radius:8px;font-size:14px;opacity:0;transition:opacity .3s;box-shadow:0 0 40px rgba(170,68,255,.8);pointer-events:none;z-index:20;white-space:nowrap}
-#toast.on{opacity:1}
+#skipBtn{position:absolute;top:16px;left:16px;font-size:12px;color:#666;letter-spacing:2px;padding:8px 14px;border:1px solid #333;border-radius:6px;pointer-events:auto;cursor:pointer;background:rgba(0,0,0,.5);z-index:50}
+#skipBtn:active{background:#222}
+.hud{position:absolute;top:12px;font-size:9px;letter-spacing:3px;color:#555}
+.hud b{display:block;font-size:18px;font-weight:900;color:#fff;letter-spacing:1px}
+#hudSc{right:16px;text-align:right}
+#hudWv{left:50%;transform:translateX(-50%);text-align:center}
+#hudWv b{color:#ff66cc}
+#hpOuter{position:absolute;top:60px;left:50%;transform:translateX(-50%);width:200px;height:10px;background:rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.25);border-radius:5px;overflow:hidden}
+#hpFill{height:100%;background:linear-gradient(90deg,#ff2244,#ff6644);width:100%;transition:width .2s}
+#joy{position:absolute;bottom:35px;left:25px;width:140px;height:140px;border-radius:50%;border:2px solid rgba(255,238,102,.3);background:radial-gradient(circle,rgba(255,238,102,.06),rgba(0,0,0,.55));pointer-events:auto;touch-action:none;box-shadow:0 0 30px rgba(255,238,102,.15)}
+#jk{position:absolute;top:50%;left:50%;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff,#ffee66);transform:translate(-50%,-50%);box-shadow:0 0 30px #ffee66;pointer-events:none}
+#atkBtn{position:absolute;bottom:55px;right:25px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffee88,#cc8800);display:flex;align-items:center;justify-content:center;font-size:44px;pointer-events:auto;box-shadow:0 0 40px rgba(255,204,0,.7),inset 0 -8px 20px rgba(0,0,0,.3);transition:transform .1s;touch-action:none;cursor:pointer;border:3px solid rgba(255,255,255,.4);color:#fff}
+#atkBtn:active{transform:scale(.9)}
+#spiritBtn{position:absolute;bottom:190px;right:25px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(170,68,255,.9),rgba(100,0,180,.9));display:flex;align-items:center;justify-content:center;font-size:32px;pointer-events:auto;box-shadow:0 0 30px rgba(170,68,255,.8);transition:transform .1s;touch-action:none;cursor:pointer;border:2px solid rgba(255,255,255,.3)}
+#spiritBtn:active{transform:scale(.9)}
 
-.screen{position:absolute;inset:0;background:radial-gradient(ellipse at center,#1a0a2a 0%,#0a0510 60%,#000 100%);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:20px;text-align:center;overflow-y:auto}
-.screen.on{display:flex}
-.screen h1{font-size:clamp(40px,11vw,64px);font-weight:900;background:linear-gradient(135deg,#ffee66 0%,#ff66cc 50%,#aa44ff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:clamp(6px,3vw,14px);margin-bottom:4px;filter:drop-shadow(0 0 30px rgba(170,68,255,.8))}
-.screen .subtitle{color:#888;font-size:12px;letter-spacing:10px;margin-bottom:35px}
-.screen .story{color:#ccc;font-size:14px;line-height:2.1;max-width:480px;margin-bottom:30px;padding:22px 24px;border:1px solid rgba(170,68,255,.3);background:rgba(20,5,40,.6);border-radius:12px}
-.screen .story b{color:#ffee66}
-.screen .story i{color:#aa44ff;font-style:normal}
-.screen .story .sep{display:inline-block;width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(170,68,255,.5),transparent);margin:10px 0}
-.btn{background:linear-gradient(135deg,#ffee66,#aa44ff);color:#000;border:none;padding:18px 55px;font-size:17px;font-weight:900;letter-spacing:5px;cursor:pointer;border-radius:8px;box-shadow:0 0 50px rgba(170,68,255,.8);pointer-events:auto;font-family:inherit;margin:6px;transition:transform .15s}
-.btn:active{transform:scale(.95)}
-.btn.red{background:linear-gradient(135deg,#ff4466,#aa0044);color:#fff}
-#over h2{font-size:clamp(36px,10vw,56px);color:#ff2244;text-shadow:0 0 40px #ff2244;letter-spacing:10px;margin-bottom:20px;font-weight:900}
-#over .stats{display:flex;gap:14px;margin-bottom:25px;flex-wrap:wrap;justify-content:center}
-#over .st{background:rgba(20,5,40,.7);padding:14px 22px;border:1px solid rgba(170,68,255,.3);border-radius:10px;min-width:90px}
-#over .st .l{color:#666;font-size:10px;letter-spacing:2px;margin-bottom:6px}
-#over .st .v{font-size:26px;font-weight:900;color:#ffee66}
-#over .ending{max-width:420px;padding:16px 22px;background:rgba(20,5,40,.7);border:1px solid rgba(255,238,102,.3);border-radius:10px;color:#ccc;font-size:13px;line-height:1.9;margin-bottom:20px;font-style:italic}
+#menu{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:20px;text-align:center}
+#menu h1{font-size:clamp(44px,13vw,72px);font-weight:900;background:linear-gradient(135deg,#ffee66 0%,#ff66cc 50%,#aa44ff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:clamp(8px,3.5vw,16px);margin-bottom:6px;filter:drop-shadow(0 0 40px rgba(170,68,255,.9))}
+#menu .sub{color:#888;font-size:12px;letter-spacing:10px;margin-bottom:50px}
+#menu button{background:linear-gradient(135deg,#ffee66,#aa44ff);color:#000;border:none;padding:18px 60px;font-size:17px;font-weight:900;letter-spacing:6px;cursor:pointer;border-radius:10px;box-shadow:0 0 50px rgba(170,68,255,.8);font-family:inherit;margin:6px;pointer-events:auto}
+#menu button:active{transform:scale(.95)}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 <div id="ui">
-  <div id="top">
-    <div class="scoreBox"><div class="hud-label">SCORE</div><div class="hud-val" id="sc">0</div></div>
-    <div id="waveBox"><div class="hud-label">WAVE</div><div class="hud-val" id="wv">1</div></div>
-    <div id="karmaBox"><div class="hud-label">KARMA</div><div class="hud-val" id="kr">+0</div></div>
-  </div>
-  <div id="spiritBox"><div id="spiritName" class="light">☀️ LIGHT</div></div>
-  <div id="hpOuter">
-    <div id="hpBar"><div id="hpFill"></div></div>
-    <div id="shieldBar"><div id="shieldFill"></div></div>
-  </div>
-  <div id="bossBar">
-    <div id="bossName">SPIDER MOTHER</div>
-    <div id="bossHpOuter"><div id="bossHpFill"></div></div>
-  </div>
-  <div id="storyBox"><div id="storyTitle"></div><div id="storyText"></div></div>
-  <div id="combo"></div>
-  <div id="toast"></div>
+  <div class="hud" id="hudSc">SCORE<b id="sc">0</b></div>
+  <div class="hud" id="hudWv">WAVE<b id="wv">1</b></div>
+  <div id="hpOuter"><div id="hpFill"></div></div>
   <div id="joy"><div id="jk"></div></div>
-  <div id="switchBtn"><div class="icon">☀️</div><div class="label">SWITCH</div><div id="switchCd"></div></div>
+  <div id="atkBtn">⚔️</div>
+  <div id="spiritBtn">🌑</div>
+  <div id="skipBtn">تخطي</div>
 </div>
 
-<div class="screen on" id="menu">
+<div id="menu">
   <h1>SOULFIRE</h1>
-  <div class="subtitle">نار الروح</div>
-  <div class="story">
-    منذ 1000 سنة، <b>انطفأت نار الروح</b>، وغرق العالم في ظلام أبدي.<br>
-    أنت <b>كاي</b> — آخر حارس، ونصف روحك <b>الضوء</b>، ونصفها الآخر <i>الظل</i>.<br>
-    <span class="sep"></span>
-    في <b>الغابة المسكونة</b>، ستبدأ رحلة الانتقام.<br>
-    <i>قاتل، بدّل بين روحيك، واكشف الحقيقة.</i>
-  </div>
-  <button class="btn" id="startBtn">▶ ابدأ الرحلة</button>
-  <div style="margin-top:20px;color:#666;font-size:12px;letter-spacing:2px">أعلى نتيجة: <span id="hiS" style="color:#ffee66;font-weight:900">0</span></div>
-</div>
-
-<div class="screen" id="over">
-  <h2 id="overTitle">GAME OVER</h2>
-  <div class="stats">
-    <div class="st"><div class="l">WAVE</div><div class="v" id="fWv">1</div></div>
-    <div class="st"><div class="l">SCORE</div><div class="v" id="fSc">0</div></div>
-    <div class="st"><div class="l">KILLS</div><div class="v" id="fKl">0</div></div>
-  </div>
-  <div class="ending" id="overMsg"></div>
-  <button class="btn red" id="retryBtn">⟳ حاول من جديد</button>
+  <div class="sub">نار الروح</div>
+  <button id="startBtn">▶ ابدأ</button>
 </div>
 
 <script>
-// ==================== SETUP ====================
+// ========== SETUP ==========
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 let W=0, H=0, DPR=1;
@@ -132,15 +64,15 @@ function resize(){
 }
 addEventListener('resize', resize); resize();
 
-// ==================== AUDIO ====================
+// ========== AUDIO ==========
 let actx = null;
 function initAudio(){
   if (actx) return;
   try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
 }
-function tone(f1, f2, dur, wave, vol){
+function tone(f1, f2, dur, wave, vol, delay){
   if (!actx) return;
-  const t = actx.currentTime;
+  const t = actx.currentTime + (delay || 0);
   const o = actx.createOscillator();
   const g = actx.createGain();
   o.type = wave || 'sine';
@@ -151,21 +83,133 @@ function tone(f1, f2, dur, wave, vol){
   o.connect(g); g.connect(actx.destination);
   o.start(t); o.stop(t + dur + 0.02);
 }
-function sfx(type){
-  if (type === 'shoot') tone(1400, 500, .06, 'square', .025);
-  else if (type === 'hit') tone(400, 100, .05, 'sawtooth', .04);
-  else if (type === 'die') tone(600, 80, .25, 'sawtooth', .07);
-  else if (type === 'hurt') tone(180, 60, .28, 'square', .12);
-  else if (type === 'light') { tone(600, 900, .1, 'sine', .12); setTimeout(()=>tone(900, 1400, .15, 'sine', .1), 70); }
-  else if (type === 'shadow') { tone(400, 200, .12, 'sawtooth', .14); setTimeout(()=>tone(200, 100, .2, 'sawtooth', .1), 70); }
-  else if (type === 'boss') { [0, 120, 240, 360].forEach(d => setTimeout(()=>tone(80, 40, .5, 'sawtooth', .2), d)); }
-  else if (type === 'levelup') { [0, 4, 7, 12].forEach((s, i) => setTimeout(()=>tone(440*Math.pow(2,s/12), 880*Math.pow(2,s/12), .2, 'sine', .08), i * 80)); }
-  else if (type === 'karma') tone(1200, 1800, .06, 'sine', .04);
-  else if (type === 'web') tone(300, 800, .15, 'triangle', .06);
-  else if (type === 'spawn') tone(200, 400, .2, 'triangle', .05);
+function noise(dur, vol, filterFreq, delay){
+  if (!actx) return;
+  const t = actx.currentTime + (delay || 0);
+  const n = actx.createBufferSource();
+  const buf = actx.createBuffer(1, actx.sampleRate * dur, actx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 1.5);
+  n.buffer = buf;
+  const f = actx.createBiquadFilter();
+  f.type = 'lowpass';
+  f.frequency.value = filterFreq || 1000;
+  const g = actx.createGain();
+  g.gain.setValueAtTime(vol, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  n.connect(f); f.connect(g); g.connect(actx.destination);
+  n.start(t);
+}
+function sfx(t){
+  if (t === 'shoot') tone(1400, 500, .06, 'square', .025);
+  else if (t === 'hit') tone(400, 100, .05, 'sawtooth', .035);
+  else if (t === 'die') noise(.25, .06, 800);
+  else if (t === 'hurt') { tone(180, 60, .25, 'square', .1); noise(.15, .05, 500); }
+  else if (t === 'spiderCome') { tone(60, 25, 1.5, 'sawtooth', .15); noise(1.5, .08, 200); }
+  else if (t === 'spiderYell') { tone(90, 30, .8, 'sawtooth', .2); tone(120, 40, .8, 'square', .1, .1); }
+  else if (t === 'web') { tone(300, 800, .15, 'triangle', .05); }
+  else if (t === 'switch') { tone(500, 1200, .15, 'sine', .1); tone(800, 1600, .15, 'sine', .08, .08); }
+  else if (t === 'levelup') { [0,4,7,12].forEach((s,i) => tone(440*Math.pow(2,s/12), 880*Math.pow(2,s/12), .25, 'sine', .08, i*.08)); }
 }
 
-// ==================== INPUT ====================
+// ========== CINEMATIC ENGINE ==========
+// A scene is a sequence of timed "beats" with drawing functions
+class Cinematic {
+  constructor(){
+    this.t = 0;
+    this.beats = [];
+    this.done = false;
+    this.onFinish = null;
+  }
+  add(time, duration, drawFn){ this.beats.push({ start: time, dur: duration, draw: drawFn }); }
+  update(dt){
+    this.t += dt;
+    // Check if all beats finished
+    let maxEnd = 0;
+    for (const b of this.beats) maxEnd = Math.max(maxEnd, b.start + b.dur);
+    if (this.t >= maxEnd){ this.done = true; if (this.onFinish) this.onFinish(); }
+  }
+  draw(){
+    for (const b of this.beats){
+      if (this.t >= b.start && this.t <= b.start + b.dur){
+        const progress = (this.t - b.start) / b.dur;
+        b.draw(progress, this.t - b.start);
+      }
+    }
+  }
+}
+
+// ========== GAME STATE ==========
+const G = {
+  phase: 'menu', // 'menu', 'intro', 'playing', 'victory'
+  wave: 1, score: 0,
+  shake: 0, flash: 0, hitStop: 0, slowmo: 0,
+  particles: [], texts: [], bullets: [], eBullets: [], webs: [],
+  trees: [], // forest trees
+  stars: [],
+  fogOffset: 0,
+  intro: null
+};
+
+// ========== FOREST BACKGROUND ==========
+function initForest(){
+  G.trees = [];
+  for (let i = 0; i < 40; i++){
+    G.trees.push({
+      x: (Math.random() - 0.5) * 3000,
+      y: (Math.random() - 0.5) * 3000,
+      size: 60 + Math.random() * 120,
+      layer: Math.floor(Math.random() * 3), // 0=far, 1=mid, 2=near
+      sway: Math.random() * Math.PI * 2,
+      swaySpeed: 0.5 + Math.random() * 0.5
+    });
+  }
+  // Sort by layer
+  G.trees.sort((a, b) => a.layer - b.layer);
+  
+  G.stars = [];
+  for (let i = 0; i < 80; i++){
+    G.stars.push({
+      x: Math.random(),
+      y: Math.random() * 0.5,
+      twinkle: Math.random() * Math.PI * 2,
+      size: 0.5 + Math.random() * 1.5
+    });
+  }
+}
+initForest();
+
+// ========== PLAYER (KAI) ==========
+const player = {
+  x: 0, y: 0, r: 18,
+  hp: 100, maxHp: 100,
+  angle: -Math.PI/2,
+  shootCd: 0, invuln: 0,
+  spirit: 'light',
+  walkPhase: 0,
+  capeWave: 0
+};
+
+// ========== BOSS (SPIDER) ==========
+const boss = {
+  x: 0, y: -250, targetX: 0, targetY: -220,
+  r: 70,
+  hp: 400, maxHp: 400,
+  phase: 1,
+  legPhase: 0,
+  breathe: 0,
+  eyeBlink: 0,
+  mouthOpen: 0,
+  webCd: 3, minionCd: 5, dashCd: 6,
+  state: 'idle', stateT: 0,
+  bodyTilt: 0,
+  hitFlash: 0,
+  active: false,
+  dying: false,
+  deathT: 0
+};
+
+// ========== INPUT ==========
 const input = { mx: 0, my: 0 };
 const joy = document.getElementById('joy'), jk = document.getElementById('jk');
 let joyOn = false, joyX = 0, joyY = 0;
@@ -180,7 +224,7 @@ joy.addEventListener('touchmove', e => {
   const t = e.touches[0];
   let dx = t.clientX - joyX, dy = t.clientY - joyY;
   const d = Math.hypot(dx, dy), mx = 60;
-  if (d > mx) { dx = dx/d*mx; dy = dy/d*mx; }
+  if (d > mx){ dx = dx/d*mx; dy = dy/d*mx; }
   input.mx = dx/mx; input.my = dy/mx;
   jk.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
 }, { passive: false });
@@ -190,136 +234,48 @@ joy.addEventListener('touchend', e => {
   jk.style.transform = 'translate(-50%, -50%)';
 }, { passive: false });
 
-const switchBtn = document.getElementById('switchBtn');
-const switchCd = document.getElementById('switchCd');
-const switchHandler = e => { e.preventDefault(); e.stopPropagation(); switchSpirit(); };
-switchBtn.addEventListener('touchstart', switchHandler, { passive: false });
-switchBtn.addEventListener('mousedown', switchHandler);
+const atkBtn = document.getElementById('atkBtn');
+let atkPressed = false;
+atkBtn.addEventListener('touchstart', e => { e.preventDefault(); e.stopPropagation(); atkPressed = true; }, {passive:false});
+atkBtn.addEventListener('touchend', e => { e.preventDefault(); atkPressed = false; }, {passive:false});
+atkBtn.addEventListener('mousedown', () => atkPressed = true);
+atkBtn.addEventListener('mouseup', () => atkPressed = false);
+
+const spiritBtn = document.getElementById('spiritBtn');
+spiritBtn.addEventListener('touchstart', e => { e.preventDefault(); e.stopPropagation(); switchSpirit(); }, {passive:false});
+spiritBtn.addEventListener('click', e => { e.stopPropagation(); switchSpirit(); });
+
+function switchSpirit(){
+  if (G.phase !== 'playing') return;
+  player.spirit = player.spirit === 'light' ? 'shadow' : 'light';
+  spiritBtn.textContent = player.spirit === 'light' ? '🌑' : '☀️';
+  sfx('switch');
+  const color = player.spirit === 'light' ? '#ffee66' : '#aa44ff';
+  addParticles(player.x, player.y, color, 30, 400, 5, 0.7);
+  if (player.spirit === 'light'){
+    player.hp = Math.min(player.maxHp, player.hp + 20);
+    updateHp();
+  } else {
+    // Burst damage to enemies
+    for (let i = G.enemies?.length - 1 || 0; i >= 0; i--){
+      const e = G.enemies[i];
+      if (e && Math.hypot(e.x - player.x, e.y - player.y) < 200){ e.hp -= 15; e.hitFlash = 0.15; }
+    }
+  }
+}
 
 const keys = {};
-addEventListener('keydown', e => {
-  keys[e.key.toLowerCase()] = true;
-  if (e.key === ' ' || e.key === 'q') { e.preventDefault(); switchSpirit(); }
+addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; if (e.key === ' ') atkPressed = true; });
+addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; if (e.key === ' ') atkPressed = false; });
+
+// ========== SKIP ==========
+document.getElementById('skipBtn').addEventListener('click', () => {
+  if (G.phase === 'intro') endIntro();
 });
-addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 
-// ==================== STATE ====================
-const SAVE_KEY = 'soulfire_save_v1';
-const G = {
-  running: false, paused: false,
-  score: 0, wave: 0, kills: 0, karma: 0,
-  shake: 0, flash: 0, hitStop: 0, slowmo: 0,
-  spirit: 'light',
-  switchCd: 0, switchCdMax: 1.8,
-  enemiesToSpawn: 0, spawnTimer: 0, waveActive: false,
-  bossActive: false, bossDefeated: false,
-  storyPlaying: false, storyT: 0,
-  particles: [], texts: [], bullets: [], enemies: [], eBullets: [], webs: [],
-  hi: 0
-};
-
-// ==================== PLAYER ====================
-const player = {
-  x: 0, y: 0, r: 16,
-  hp: 100, maxHp: 100, shield: 0, maxShield: 0,
-  angle: 0, shootCd: 0, invuln: 0,
-  speed: 320,
-  facing: 0
-};
-
-function isLight(){ return G.spirit === 'light'; }
-function getStats(){
-  return isLight()
-    ? { dmg: 4, rate: 0.14, speed: 340, color: '#ffee66', glow: '#ffcc00', count: 1, spread: 0, bulletSpeed: 950, bulletR: 5 }
-    : { dmg: 7, rate: 0.32, speed: 260, color: '#aa44ff', glow: '#8800ff', count: 3, spread: 0.18, bulletSpeed: 750, bulletR: 6 };
-}
-
-// ==================== ENEMY TYPES ====================
-const ENEMY_TYPES = {
-  bone: {
-    color: '#dddddd', glow: '#ffffff', r: 14, hp: 4, speed: 85, dmg: 8, score: 10,
-    shape: 'circle'
-  },
-  wolf: {
-    color: '#ff6644', glow: '#ff2200', r: 12, hp: 3, speed: 175, dmg: 6, score: 15,
-    shape: 'arrow'
-  },
-  ghost: {
-    color: '#66ddff', glow: '#0088ff', r: 16, hp: 6, speed: 95, dmg: 12, score: 20,
-    shape: 'ghost', alpha: 0.75
-  },
-  imp: {
-    color: '#22ff44', glow: '#00aa00', r: 15, hp: 5, speed: 70, dmg: 10, score: 25,
-    shape: 'imp', ranged: true, shootCd: 1.8, bulletDmg: 8, bulletSpeed: 260
-  }
-};
-
-// ==================== BOSS ====================
-const BOSS = {
-  x: 0, y: 0, r: 55,
-  hp: 320, maxHp: 320,
-  phase: 1,
-  state: 'idle', stateT: 0,
-  shootCd: 2, spawnCd: 3, webCd: 4,
-  hitFlash: 0, t: 0,
-  color: '#00ff44', glow: '#00aa33'
-};
-
-// ==================== SPIRITS ====================
-function switchSpirit(){
-  if (!G.running || G.paused || G.storyPlaying) return;
-  if (G.switchCd > 0) return;
-  G.switchCd = G.switchCdMax;
-  G.shake = Math.max(G.shake, 0.5);
-
-  if (isLight()){
-    G.spirit = 'shadow';
-    document.getElementById('spiritName').className = 'shadow';
-    document.getElementById('spiritName').textContent = '🌑 SHADOW';
-    switchBtn.classList.add('shadow');
-    switchBtn.querySelector('.icon').textContent = '🌑';
-    joy.classList.add('shadow');
-    jk.classList.add('shadow');
-    sfx('shadow');
-    // Shadow burst
-    addParticles(player.x, player.y, '#aa44ff', 30, 450, 6, 0.7);
-    addParticles(player.x, player.y, '#6600cc', 15, 300, 4, 0.5);
-    for (let i = enemies.length - 1; i >= 0; i--){
-      const e = enemies[i];
-      if (Math.hypot(e.x - player.x, e.y - player.y) < 220){
-        e.hp -= 8; e.hitFlash = 0.15;
-        addDamageText(e.x, e.y, 8, '#aa44ff');
-        if (e.hp <= 0) killEnemy(i);
-      }
-    }
-  } else {
-    G.spirit = 'light';
-    document.getElementById('spiritName').className = 'light';
-    document.getElementById('spiritName').textContent = '☀️ LIGHT';
-    switchBtn.classList.remove('shadow');
-    switchBtn.querySelector('.icon').textContent = '☀️';
-    joy.classList.remove('shadow');
-    jk.classList.remove('shadow');
-    sfx('light');
-    // Light heal + push
-    player.hp = Math.min(player.maxHp, player.hp + 15);
-    updateHp();
-    addParticles(player.x, player.y, '#ffee66', 30, 450, 6, 0.7);
-    addParticles(player.x, player.y, '#ffffff', 15, 300, 4, 0.5);
-    for (const e of enemies){
-      const dx = e.x - player.x, dy = e.y - player.y;
-      const d = Math.hypot(dx, dy) || 1;
-      if (d < 260){
-        e.x += dx/d * 120;
-        e.y += dy/d * 120;
-      }
-    }
-  }
-}
-
-// ==================== PARTICLES & TEXTS ====================
+// ========== PARTICLES ==========
 function addParticles(x, y, color, count, speed, size, life){
-  if (G.particles.length > 400) return;
+  if (G.particles.length > 500) return;
   for (let i = 0; i < count; i++){
     const a = Math.random() * Math.PI * 2;
     const s = (0.3 + Math.random()) * speed;
@@ -330,240 +286,695 @@ function addParticles(x, y, color, count, speed, size, life){
     });
   }
 }
-function addDamageText(x, y, dmg, color){
-  if (G.texts.length > 30) G.texts.shift();
-  G.texts.push({ x, y, txt: '-' + Math.round(dmg), color, size: 12, life: 0.7, maxLife: 0.7, vy: -50 });
-}
 function addText(x, y, txt, color, size){
-  if (G.texts.length > 30) G.texts.shift();
-  G.texts.push({ x, y, txt, color, size: size || 16, life: 1.1, maxLife: 1.1, vy: -55 });
+  if (G.texts.length > 40) G.texts.shift();
+  G.texts.push({ x, y, txt, color, size: size||16, life: 1.1, maxLife: 1.1, vy: -50 });
 }
 
-// ==================== SPAWN ====================
-function spawnEnemy(type){
-  const t = ENEMY_TYPES[type];
-  const a = Math.random() * Math.PI * 2;
-  const d = Math.max(W, H) * 0.62;
-  const hpMult = 1 + G.wave * 0.10;
-  G.enemies.push({
-    type,
-    x: player.x + Math.cos(a) * d,
-    y: player.y + Math.sin(a) * d,
-    r: t.r, hp: t.hp * hpMult, maxHp: t.hp * hpMult,
-    speed: t.speed, dmg: t.dmg, score: t.score,
-    color: t.color, glow: t.glow, shape: t.shape, alpha: t.alpha || 1,
+// ========== ENEMIES (basic for boss fight) ==========
+const G_enemies = [];
+G.enemies = G_enemies;
+
+function spawnMinion(x, y, type){
+  const isWolf = type === 'wolf';
+  G_enemies.push({
+    x, y,
+    r: isWolf ? 14 : 16,
+    hp: isWolf ? 5 : 7, maxHp: isWolf ? 5 : 7,
+    speed: isWolf ? 180 : 90,
+    dmg: isWolf ? 8 : 12,
+    color: isWolf ? '#ff6644' : '#dddddd',
+    glow: isWolf ? '#ff2200' : '#ffffff',
+    shape: isWolf ? 'arrow' : 'skull',
     hitFlash: 0, t: Math.random() * 10,
-    ranged: t.ranged, shootCd: t.shootCd || 0, bulletDmg: t.bulletDmg, bulletSpeed: t.bulletSpeed
+    walkPhase: Math.random() * 10
   });
-  addParticles(player.x + Math.cos(a) * d, player.y + Math.sin(a) * d, t.glow, 8, 200, 4, 0.4);
+  addParticles(x, y, isWolf ? '#ff6644' : '#dddddd', 10, 250, 4, 0.5);
 }
 
-// ==================== DAMAGE ====================
-function damageEnemy(e, dmg, sourceX, sourceY){
-  e.hp -= dmg;
-  e.hitFlash = 0.1;
-  addDamageText(e.x, e.y - e.r - 5, dmg, isLight() ? '#ffee66' : '#aa44ff');
-  addParticles(e.x, e.y, e.glow, 5, 250, 3, 0.25);
-  sfx('hit');
-  if (e.hp <= 0) {
-    const idx = G.enemies.indexOf(e);
-    if (idx >= 0) killEnemy(idx);
+// ========== START CINEMATIC ==========
+function startIntro(){
+  G.phase = 'intro';
+  document.getElementById('menu').style.display = 'none';
+  initForest();
+  
+  const intro = new Cinematic();
+  intro.onFinish = () => endIntro();
+  
+  // ===== BEAT 1: Fade from black, moon appears =====
+  intro.add(0, 2.5, (p) => {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, W, H);
+    // Moon fading in
+    const a = Math.min(1, p * 1.2);
+    const mx = W * 0.72, my = H * 0.18, mr = Math.min(W, H) * 0.08;
+    const g = ctx.createRadialGradient(mx, my, 0, mx, my, mr * 6);
+    g.addColorStop(0, `rgba(220,220,255,${a * 0.5})`);
+    g.addColorStop(0.3, `rgba(150,150,220,${a * 0.2})`);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+    // Moon disc
+    ctx.fillStyle = `rgba(230,230,255,${a})`;
+    ctx.beginPath(); ctx.arc(mx, my, mr, 0, Math.PI*2); ctx.fill();
+    // Craters
+    ctx.fillStyle = `rgba(180,180,200,${a * 0.5})`;
+    ctx.beginPath(); ctx.arc(mx - mr*0.3, my - mr*0.2, mr*0.15, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(mx + mr*0.2, my + mr*0.3, mr*0.2, 0, Math.PI*2); ctx.fill();
+    
+    // Stars appear
+    for (const s of G.stars){
+      const twinkle = 0.5 + Math.sin(s.twinkle + p * 5) * 0.5;
+      ctx.fillStyle = `rgba(255,255,255,${twinkle * a * 0.8})`;
+      ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.size, 0, Math.PI*2); ctx.fill();
+    }
+  });
+  
+  // ===== BEAT 2: Trees reveal, fog rolls in =====
+  intro.add(2, 3, (p) => {
+    // Dark forest silhouette
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, W, H);
+    
+    // Moon (persistent)
+    const mx = W * 0.72, my = H * 0.18, mr = Math.min(W, H) * 0.08;
+    const mg = ctx.createRadialGradient(mx, my, 0, mx, my, mr * 6);
+    mg.addColorStop(0, 'rgba(220,220,255,0.4)');
+    mg.addColorStop(0.3, 'rgba(150,150,220,0.15)');
+    mg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = mg;
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(230,230,255,0.9)';
+    ctx.beginPath(); ctx.arc(mx, my, mr, 0, Math.PI*2); ctx.fill();
+    
+    // Stars
+    for (const s of G.stars){
+      ctx.fillStyle = `rgba(255,255,255,${0.4 + Math.sin(s.twinkle + p*5)*0.3})`;
+      ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.size, 0, Math.PI*2); ctx.fill();
+    }
+    
+    // Trees fading in
+    const reveal = Math.min(1, p * 1.5);
+    for (const tree of G.trees){
+      const tx = W/2 + tree.x * 0.3;
+      const ty = H * 0.7 + tree.y * 0.05;
+      if (tx < -100 || tx > W + 100) continue;
+      const alpha = [0.15, 0.35, 0.6][tree.layer] * reveal;
+      const treeH = tree.size;
+      const sway = Math.sin(tree.sway + G.fogOffset * tree.swaySpeed) * 3;
+      
+      // Trunk
+      ctx.fillStyle = `rgba(5,15,5,${alpha})`;
+      ctx.beginPath();
+      ctx.moveTo(tx - 6, ty + treeH * 0.3);
+      ctx.lineTo(tx - 3 + sway * 0.3, ty - treeH);
+      ctx.lineTo(tx + 3 + sway * 0.3, ty - treeH);
+      ctx.lineTo(tx + 6, ty + treeH * 0.3);
+      ctx.closePath(); ctx.fill();
+      
+      // Branches/crown
+      for (let b = 0; b < 5; b++){
+        const ba = -Math.PI/2 + (b - 2) * 0.4 + sway * 0.02;
+        const bl = treeH * 0.5;
+        ctx.strokeStyle = `rgba(5,15,5,${alpha})`;
+        ctx.lineWidth = 3 - tree.layer;
+        ctx.beginPath();
+        ctx.moveTo(tx + sway * 0.3, ty - treeH * 0.8);
+        ctx.lineTo(tx + Math.cos(ba) * bl + sway, ty - treeH * 0.8 + Math.sin(ba) * bl);
+        ctx.stroke();
+      }
+    }
+    
+    // Fog overlay
+    const fogG = ctx.createLinearGradient(0, H * 0.6, 0, H);
+    fogG.addColorStop(0, `rgba(30,60,30,${p * 0.3})`);
+    fogG.addColorStop(1, `rgba(0,0,0,${p * 0.6})`);
+    ctx.fillStyle = fogG;
+    ctx.fillRect(0, 0, W, H);
+  });
+  
+  // ===== BEAT 3: Spider descends on web thread =====
+  intro.add(4.5, 4, (p) => {
+    // Forest bg (persistent)
+    drawForestBG(p);
+    
+    // Web thread descending from top
+    const spiderProgress = Math.min(1, p * 1.3);
+    const spiderY = -200 + (spiderProgress * (H * 0.42 + 200));
+    const spiderX = W * 0.5;
+    
+    // Web thread
+    ctx.strokeStyle = `rgba(200,220,200,${0.5 + spiderProgress * 0.3})`;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(spiderX, 0);
+    ctx.lineTo(spiderX + Math.sin(p * 4) * 2, spiderY - boss.r);
+    ctx.stroke();
+    
+    // Draw spider at spiderX, spiderY
+    if (spiderProgress > 0.1){
+      drawSpiderBig(spiderX, spiderY, 1, p);
+    }
+    
+    // Camera shake as spider gets closer
+    if (spiderProgress > 0.7){
+      const shakeAmt = (spiderProgress - 0.7) * 3 * 20;
+      if (Math.random() < 0.15) sfx('spiderCome');
+    }
+  });
+  
+  // ===== BEAT 4: Spider roar + eyes glow =====
+  intro.add(8, 3, (p) => {
+    // Forest bg
+    drawForestBG(1);
+    
+    const spiderX = W * 0.5;
+    const spiderY = H * 0.42;
+    
+    // Web thread
+    ctx.strokeStyle = 'rgba(200,220,200,0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(spiderX, 0);
+    ctx.lineTo(spiderX, spiderY - boss.r);
+    ctx.stroke();
+    
+    // Spider
+    drawSpiderBig(spiderX, spiderY, 1, 1, p);
+    
+    // Screen darkens
+    ctx.fillStyle = `rgba(0,0,0,${p * 0.4})`;
+    ctx.fillRect(0, 0, W, H);
+    
+    // Trigger yell sound at start
+    if (p < 0.05 && !intro._yelled){ intro._yelled = true; sfx('spiderYell'); }
+  });
+  
+  // ===== BEAT 5: Kai appears at bottom =====
+  intro.add(11, 3, (p) => {
+    drawForestBG(1);
+    
+    // Spider (still there, dimmed)
+    ctx.globalAlpha = 0.6;
+    drawSpiderBig(W * 0.5, H * 0.42, 1, 1, 0.5);
+    ctx.globalAlpha = 1;
+    
+    // Dark overlay
+    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    ctx.fillRect(0, 0, W, H);
+    
+    // Kai silhouette rising from bottom
+    const kaiY = H + 100 - p * (H * 0.4 + 100);
+    const kaiX = W * 0.5;
+    
+    // Glow behind Kai
+    const glowG = ctx.createRadialGradient(kaiX, kaiY, 0, kaiX, kaiY, 200);
+    glowG.addColorStop(0, `rgba(255,238,102,${p * 0.5})`);
+    glowG.addColorStop(1, 'rgba(255,238,102,0)');
+    ctx.fillStyle = glowG;
+    ctx.fillRect(0, 0, W, H);
+    
+    // Draw Kai bigger
+    drawKai(kaiX, kaiY, 2.5, -Math.PI/2, 0);
+  });
+  
+  // ===== BEAT 6: Title card =====
+  intro.add(14, 3.5, (p) => {
+    // Full black with spider faint behind
+    ctx.fillStyle = `rgba(0,0,0,${0.7 + p * 0.3})`;
+    ctx.fillRect(0, 0, W, H);
+    
+    // Title appearing letter by letter
+    const title = 'SOULFIRE';
+    const totalChars = title.length;
+    const shownChars = Math.floor(Math.min(1, p * 1.5) * totalChars);
+    
+    ctx.font = `900 ${Math.min(W * 0.15, 90)}px Arial`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    // Gradient fill
+    const grad = ctx.createLinearGradient(W * 0.2, H * 0.4, W * 0.8, H * 0.6);
+    grad.addColorStop(0, '#ffee66');
+    grad.addColorStop(0.5, '#ff66cc');
+    grad.addColorStop(1, '#aa44ff');
+    
+    // Shadow
+    ctx.shadowBlur = 40;
+    ctx.shadowColor = 'rgba(170,68,255,0.8)';
+    ctx.fillStyle = grad;
+    
+    // Fade in each char
+    const displayTitle = title.slice(0, shownChars);
+    const fullWidth = ctx.measureText(title).width;
+    const startX = W/2 - fullWidth/2;
+    const charW = fullWidth / totalChars;
+    
+    ctx.textAlign = 'left';
+    for (let i = 0; i < displayTitle.length; i++){
+      ctx.fillText(displayTitle[i], startX + i * charW, H * 0.5);
+    }
+    ctx.shadowBlur = 0;
+    
+    // Subtitle
+    if (p > 0.6){
+      const subA = (p - 0.6) / 0.4;
+      ctx.textAlign = 'center';
+      ctx.font = `400 18px Arial`;
+      ctx.fillStyle = `rgba(200,200,220,${subA})`;
+      ctx.fillText('نار الروح', W/2, H * 0.5 + 60);
+    }
+  });
+  
+  // Beat 7: Instructions
+  intro.add(17.5, 4, (p) => {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, W, H);
+    
+    const alpha = Math.min(1, p * 1.2);
+    
+    // Kai standing at bottom-left
+    drawKai(W * 0.3, H * 0.7, 2, -Math.PI/3, 0);
+    ctx.globalAlpha = alpha;
+    
+    // Controls
+    ctx.font = `900 20px Arial`;
+    ctx.fillStyle = '#ffee66';
+    ctx.textAlign = 'right';
+    ctx.fillText('تحرك', W * 0.65, H * 0.35);
+    ctx.font = `400 14px Arial`;
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('العصا في الزاوية اليسرى', W * 0.65, H * 0.42);
+    
+    ctx.font = `900 20px Arial`;
+    ctx.fillStyle = '#ff6644';
+    ctx.fillText('اهجم', W * 0.65, H * 0.55);
+    ctx.font = `400 14px Arial`;
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('زرار ⚔️ في الزاوية اليمنى', W * 0.65, H * 0.62);
+    
+    ctx.font = `900 20px Arial`;
+    ctx.fillStyle = '#aa44ff';
+    ctx.fillText('بدّل الروح', W * 0.65, H * 0.75);
+    ctx.font = `400 14px Arial`;
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('زرار ☀️/🌑 فوق زرار الهجوم', W * 0.65, H * 0.82);
+  });
+  
+  G.intro = intro;
+  document.getElementById('skipBtn').style.display = 'block';
+}
+
+function endIntro(){
+  G.phase = 'playing';
+  document.getElementById('skipBtn').style.display = 'none';
+  // Setup boss fight
+  boss.active = true;
+  boss.x = 0; boss.y = -200;
+  boss.targetX = 0; boss.targetY = -180;
+  boss.hp = boss.maxHp = 400;
+  boss.phase = 1;
+  boss.dying = false;
+  boss.deathT = 0;
+  boss.webCd = 3;
+  boss.minionCd = 5;
+  boss.dashCd = 8;
+  player.x = 0; player.y = 150;
+  player.hp = player.maxHp = 100;
+  updateHp();
+}
+
+// ========== FOREST BACKGROUND DRAW (reusable) ==========
+function drawForestBG(intensity){
+  // Sky
+  const skyG = ctx.createLinearGradient(0, 0, 0, H);
+  skyG.addColorStop(0, '#050510');
+  skyG.addColorStop(0.4, '#0a1a0a');
+  skyG.addColorStop(1, '#000');
+  ctx.fillStyle = skyG;
+  ctx.fillRect(0, 0, W, H);
+  
+  // Moon
+  const mx = W * 0.72, my = H * 0.18, mr = Math.min(W, H) * 0.08;
+  const mg = ctx.createRadialGradient(mx, my, 0, mx, my, mr * 6);
+  mg.addColorStop(0, `rgba(220,220,255,${0.4 * intensity})`);
+  mg.addColorStop(0.3, `rgba(150,150,220,${0.15 * intensity})`);
+  mg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = mg;
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = `rgba(230,230,255,${0.9 * intensity})`;
+  ctx.beginPath(); ctx.arc(mx, my, mr, 0, Math.PI*2); ctx.fill();
+  
+  // Stars
+  for (const s of G.stars){
+    ctx.fillStyle = `rgba(255,255,255,${(0.4 + Math.sin(s.twinkle + performance.now()*0.001) * 0.3) * intensity})`;
+    ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.size, 0, Math.PI*2); ctx.fill();
+  }
+  
+  // Trees
+  for (const tree of G.trees){
+    const tx = W/2 + tree.x * 0.5;
+    const ty = H * 0.75 + tree.y * 0.08;
+    if (tx < -100 || tx > W + 100) continue;
+    const alpha = [0.15, 0.35, 0.6][tree.layer] * intensity;
+    const treeH = tree.size;
+    const sway = Math.sin(tree.sway + performance.now() * 0.001 * tree.swaySpeed) * 3;
+    
+    ctx.fillStyle = `rgba(5,15,5,${alpha})`;
+    ctx.beginPath();
+    ctx.moveTo(tx - 6, ty + treeH * 0.4);
+    ctx.lineTo(tx - 3 + sway * 0.3, ty - treeH);
+    ctx.lineTo(tx + 3 + sway * 0.3, ty - treeH);
+    ctx.lineTo(tx + 6, ty + treeH * 0.4);
+    ctx.closePath(); ctx.fill();
+    
+    // Branches
+    ctx.strokeStyle = `rgba(5,15,5,${alpha})`;
+    ctx.lineWidth = 3 - tree.layer;
+    for (let b = 0; b < 4; b++){
+      const ba = -Math.PI/2 + (b - 1.5) * 0.45 + sway * 0.02;
+      const bl = treeH * 0.45;
+      ctx.beginPath();
+      ctx.moveTo(tx + sway * 0.3, ty - treeH * 0.75);
+      ctx.lineTo(tx + Math.cos(ba) * bl + sway, ty - treeH * 0.75 + Math.sin(ba) * bl);
+      ctx.stroke();
+    }
+  }
+  
+  // Fog
+  const fogG = ctx.createLinearGradient(0, H * 0.55, 0, H);
+  fogG.addColorStop(0, 'rgba(30,60,30,0.15)');
+  fogG.addColorStop(1, 'rgba(0,0,0,0.7)');
+  ctx.fillStyle = fogG;
+  ctx.fillRect(0, 0, W, H);
+}
+
+// ========== DRAW SPIDER (BIG) ==========
+function drawSpiderBig(cx, cy, scale, life, roar){
+  const r = boss.r * scale;
+  const t = performance.now() * 0.001;
+  
+  // Breathing
+  const breathe = 1 + Math.sin(t * 2) * 0.03;
+  
+  // Aura / glow
+  const auraG = ctx.createRadialGradient(cx, cy, r * 0.5, cx, cy, r * 2.2);
+  auraG.addColorStop(0, `rgba(0,255,68,${0.15 * life})`);
+  auraG.addColorStop(1, 'rgba(0,255,68,0)');
+  ctx.fillStyle = auraG;
+  ctx.fillRect(cx - r*2.5, cy - r*2.5, r*5, r*5);
+  
+  // === LEGS (8 legs, 2 segments each, animated) ===
+  const legPhase = boss.legPhase;
+  const legCount = 8;
+  for (let i = 0; i < legCount; i++){
+    const side = i < 4 ? -1 : 1;
+    const idx = i % 4;
+    const baseAngle = -Math.PI/2 + (idx - 1.5) * 0.35;
+    const legLen1 = r * (1.6 + idx * 0.05);
+    const legLen2 = r * (1.4 + idx * 0.05);
+    const spread = side * (0.6 + idx * 0.15);
+    
+    // Animate walking (subtle)
+    const walkSway = Math.sin(t * 3 + i * 0.8) * 0.06;
+    
+    // Joint 1
+    const a1 = baseAngle * side + spread + walkSway;
+    const j1x = cx + Math.cos(a1 + Math.PI/2) * legLen1 * 0.5;
+    const j1y = cy + Math.sin(a1 + Math.PI/2) * legLen1 * 0.5 - r * 0.2;
+    
+    // Joint 2 (tip)
+    const a2 = a1 + 0.7 * side;
+    const j2x = j1x + Math.cos(a2 + Math.PI/2) * legLen2 * 0.7;
+    const j2y = j1y + Math.sin(a2 + Math.PI/2) * legLen2 * 0.7 + r * 0.5;
+    
+    // Draw leg with thickness
+    ctx.strokeStyle = `rgba(0,30,10,${life})`;
+    ctx.lineWidth = r * 0.16 * scale;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(a1) * r * 0.5, cy + Math.sin(a1) * r * 0.5);
+    ctx.quadraticCurveTo(j1x, j1y, j2x, j2y);
+    ctx.stroke();
+    
+    // Highlight
+    ctx.strokeStyle = `rgba(0,255,68,${0.3 * life})`;
+    ctx.lineWidth = r * 0.08 * scale;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(a1) * r * 0.5, cy + Math.sin(a1) * r * 0.5);
+    ctx.quadraticCurveTo(j1x, j1y, j2x, j2y);
+    ctx.stroke();
+    
+    // Joint dots
+    ctx.fillStyle = `rgba(0,80,20,${life})`;
+    ctx.beginPath(); ctx.arc(j1x, j1y, r * 0.09, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(j2x, j2y, r * 0.07, 0, Math.PI*2); ctx.fill();
+  }
+  
+  // === BODY ===
+  // Abdomen (big back part)
+  ctx.save();
+  ctx.translate(cx, cy - r * 0.15);
+  const abG = ctx.createRadialGradient(0, -r*0.2, 0, 0, -r*0.2, r * 1.1);
+  abG.addColorStop(0, `rgba(20,60,30,${life})`);
+  abG.addColorStop(0.5, `rgba(10,30,15,${life})`);
+  abG.addColorStop(1, `rgba(5,15,8,${life})`);
+  ctx.fillStyle = abG;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r * 1.05 * breathe, r * 0.9 * breathe, 0, 0, Math.PI*2);
+  ctx.fill();
+  
+  // Abdomen markings (V-shape)
+  ctx.strokeStyle = `rgba(0,255,68,${0.5 * life})`;
+  ctx.lineWidth = r * 0.05;
+  ctx.beginPath();
+  ctx.moveTo(-r * 0.5, -r * 0.5);
+  ctx.lineTo(0, -r * 0.2);
+  ctx.lineTo(r * 0.5, -r * 0.5);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(-r * 0.5, -r * 0.1);
+  ctx.lineTo(0, r * 0.2);
+  ctx.lineTo(r * 0.5, -r * 0.1);
+  ctx.stroke();
+  ctx.restore();
+  
+  // Cephalothorax (front part / head area)
+  ctx.save();
+  ctx.translate(cx, cy + r * 0.15);
+  const headG = ctx.createRadialGradient(0, -r*0.1, 0, 0, -r*0.1, r * 0.75);
+  headG.addColorStop(0, `rgba(30,80,40,${life})`);
+  headG.addColorStop(1, `rgba(10,30,15,${life})`);
+  ctx.fillStyle = headG;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r * 0.75 * breathe, r * 0.6 * breathe, 0, 0, Math.PI*2);
+  ctx.fill();
+  
+  // Eyes (8 red glowing)
+  const eyePositions = [
+    [-r*0.4, -r*0.15, r*0.08],
+    [-r*0.18, -r*0.3, r*0.06],
+    [r*0.18, -r*0.3, r*0.06],
+    [r*0.4, -r*0.15, r*0.08],
+    [-r*0.3, r*0.05, r*0.055],
+    [r*0.3, r*0.05, r*0.055],
+    [-r*0.14, r*0.18, r*0.045],
+    [r*0.14, r*0.18, r*0.045]
+  ];
+  
+  // Blink
+  const blink = (Math.sin(t * 0.7) > 0.98) ? 0.1 : 1;
+  
+  ctx.shadowBlur = 20 * life;
+  ctx.shadowColor = '#ff0000';
+  for (const [ex, ey, er] of eyePositions){
+    ctx.fillStyle = `rgba(255,0,0,${life})`;
+    ctx.beginPath();
+    ctx.ellipse(ex, ey, er, er * blink, 0, 0, Math.PI*2);
+    ctx.fill();
+    // Highlight
+    ctx.fillStyle = `rgba(255,150,150,${0.9 * life})`;
+    ctx.beginPath();
+    ctx.arc(ex - er*0.25, ey - er*0.25, er * 0.3, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.shadowBlur = 0;
+  
+  // Fangs / Chelicerae
+  const mouthOpen = roar ? (0.5 + Math.sin(t * 10) * 0.5) : boss.mouthOpen;
+  const fangSpread = r * (0.2 + mouthOpen * 0.3);
+  
+  ctx.fillStyle = `rgba(10,20,10,${life})`;
+  ctx.beginPath();
+  ctx.ellipse(0, r * 0.4, r * 0.4, r * 0.25, 0, 0, Math.PI*2);
+  ctx.fill();
+  
+  // Fangs
+  ctx.fillStyle = `rgba(220,255,220,${life})`;
+  ctx.beginPath();
+  ctx.moveTo(-fangSpread, r * 0.35);
+  ctx.lineTo(-fangSpread * 0.8, r * 0.7);
+  ctx.lineTo(-fangSpread * 0.4, r * 0.35);
+  ctx.closePath(); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(fangSpread, r * 0.35);
+  ctx.lineTo(fangSpread * 0.8, r * 0.7);
+  ctx.lineTo(fangSpread * 0.4, r * 0.35);
+  ctx.closePath(); ctx.fill();
+  
+  // Inner mouth glow
+  if (mouthOpen > 0.3){
+    const mouthG = ctx.createRadialGradient(0, r*0.45, 0, 0, r*0.45, r*0.35);
+    mouthG.addColorStop(0, `rgba(255,100,100,${(mouthOpen - 0.3) * life})`);
+    mouthG.addColorStop(1, 'rgba(255,0,0,0)');
+    ctx.fillStyle = mouthG;
+    ctx.beginPath();
+    ctx.ellipse(0, r * 0.45, r * 0.35, r * 0.2, 0, 0, Math.PI*2);
+    ctx.fill();
+  }
+  
+  ctx.restore();
+  
+  // Hit flash
+  if (boss.hitFlash > 0){
+    ctx.globalAlpha = boss.hitFlash * 3;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(cx, cy, r * 1.1, 0, Math.PI*2); ctx.fill();
+    ctx.globalAlpha = 1;
   }
 }
 
-function killEnemy(idx){
-  const e = G.enemies[idx];
-  if (!e) return;
-  addParticles(e.x, e.y, e.color, 22, 350, 4, 0.7);
-  addParticles(e.x, e.y, '#ffffff', 8, 250, 3, 0.5);
-  G.shake = Math.max(G.shake, 0.3);
-  sfx('die');
-
-  G.score += e.score;
-  G.kills++;
-  if (isLight()) G.karma++; else G.karma--;
-  if (G.karma < 0) G.karma = 0;
-  addText(e.x, e.y, '+' + e.score, e.color, 14);
-  sfx('karma');
-
-  updateHud();
-  G.enemies.splice(idx, 1);
+// ========== DRAW KAI ==========
+function drawKai(cx, cy, scale, angle, walkPhase){
+  const r = 16 * scale;
+  const isLight = player.spirit === 'light';
+  const mainColor = isLight ? '#ffee66' : '#aa44ff';
+  const headColor = isLight ? '#fff8cc' : '#cc88ff';
+  const glow = isLight ? '#ffcc00' : '#8800ff';
+  
+  ctx.save();
+  ctx.translate(cx, cy);
+  
+  // Aura
+  const auraG = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 2);
+  auraG.addColorStop(0, `${glow}40`);
+  auraG.addColorStop(1, `${glow}00`);
+  ctx.fillStyle = auraG;
+  ctx.beginPath(); ctx.arc(0, 0, r * 2, 0, Math.PI*2); ctx.fill();
+  
+  ctx.rotate(angle);
+  
+  // Cape (behind)
+  const capeWave = Math.sin(walkPhase + performance.now() * 0.003) * 0.15;
+  ctx.fillStyle = isLight ? '#aa7722' : '#440077';
+  ctx.beginPath();
+  ctx.moveTo(-r * 0.3, -r * 1.1);
+  ctx.quadraticCurveTo(-r * 1.3 + capeWave * 10, 0, -r * 0.3, r * 1.1);
+  ctx.lineTo(-r * 0.1, r * 0.8);
+  ctx.quadraticCurveTo(-r * 0.9 + capeWave * 10, 0, -r * 0.1, -r * 0.8);
+  ctx.closePath();
+  ctx.fill();
+  
+  // Legs (subtle animation)
+  const legSwing = Math.sin(walkPhase) * r * 0.4;
+  ctx.strokeStyle = isLight ? '#cc8822' : '#220055';
+  ctx.lineWidth = r * 0.35;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(0, r * 0.3);
+  ctx.lineTo(-r * 0.2 + legSwing * 0.5, r * 0.9);
+  ctx.moveTo(0, r * 0.3);
+  ctx.lineTo(r * 0.2 - legSwing * 0.5, r * 0.9);
+  ctx.stroke();
+  
+  // Body (armor)
+  const bodyG = ctx.createLinearGradient(0, -r, 0, r);
+  bodyG.addColorStop(0, mainColor);
+  bodyG.addColorStop(1, isLight ? '#aa8800' : '#440088');
+  ctx.fillStyle = bodyG;
+  ctx.beginPath();
+  ctx.moveTo(r * 0.7, 0);
+  ctx.lineTo(-r * 0.4, -r * 0.85);
+  ctx.lineTo(-r * 0.6, 0);
+  ctx.lineTo(-r * 0.4, r * 0.85);
+  ctx.closePath();
+  ctx.fill();
+  
+  // Chest armor detail
+  ctx.fillStyle = isLight ? '#ffee88' : '#cc88ff';
+  ctx.beginPath();
+  ctx.moveTo(r * 0.3, -r * 0.3);
+  ctx.lineTo(-r * 0.2, 0);
+  ctx.lineTo(r * 0.3, r * 0.3);
+  ctx.closePath();
+  ctx.fill();
+  
+  // Head
+  ctx.fillStyle = headColor;
+  ctx.beginPath();
+  ctx.arc(-r * 0.3, 0, r * 0.55, 0, Math.PI*2);
+  ctx.fill();
+  
+  // Helmet
+  ctx.fillStyle = mainColor;
+  ctx.beginPath();
+  ctx.arc(-r * 0.3, 0, r * 0.55, Math.PI, 0);
+  ctx.fill();
+  
+  // Eyes (glow)
+  ctx.shadowBlur = 15;
+  ctx.shadowColor = glow;
+  ctx.fillStyle = '#000';
+  ctx.beginPath();
+  ctx.arc(-r * 0.1, -r * 0.15, r * 0.09, 0, Math.PI*2);
+  ctx.arc(-r * 0.1, r * 0.15, r * 0.09, 0, Math.PI*2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  
+  // Sword (glowing)
+  ctx.shadowBlur = 25;
+  ctx.shadowColor = glow;
+  ctx.strokeStyle = mainColor;
+  ctx.lineWidth = r * 0.15;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(r * 0.5, 0);
+  ctx.lineTo(r * 1.8, 0);
+  ctx.stroke();
+  
+  // Sword tip
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.arc(r * 1.8, 0, r * 0.12, 0, Math.PI*2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  
+  // Hilt
+  ctx.fillStyle = isLight ? '#ffcc00' : '#6600cc';
+  ctx.fillRect(r * 0.45, -r * 0.2, r * 0.15, r * 0.4);
+  
+  ctx.restore();
 }
 
-// ==================== BOSS ====================
-function spawnBoss(){
-  const a = Math.random() * Math.PI * 2;
-  BOSS.x = player.x + Math.cos(a) * 350;
-  BOSS.y = player.y + Math.sin(a) * 350;
-  BOSS.hp = BOSS.maxHp = 320;
-  BOSS.phase = 1;
-  BOSS.state = 'idle';
-  BOSS.stateT = 0;
-  BOSS.shootCd = 2;
-  BOSS.spawnCd = 3;
-  BOSS.webCd = 4;
-  BOSS.t = 0;
-  BOSS.hitFlash = 0;
-  G.bossActive = true;
-  G.bossDefeated = false;
-  document.getElementById('bossBar').classList.add('on');
-  document.getElementById('bossName').textContent = '🕷️ SPIDER MOTHER';
-  updateBossHp();
-  sfx('boss');
-  showStory('🕷️ العنكبوت الأم', 'الأرض تهتز... شيء ضخم قادم.', 2.5);
-}
-
-function updateBossHp(){
-  document.getElementById('bossHpFill').style.width = Math.max(0, BOSS.hp / BOSS.maxHp * 100) + '%';
-}
-
-function damageBoss(dmg){
-  BOSS.hp -= dmg;
-  BOSS.hitFlash = 0.1;
-  addDamageText(BOSS.x, BOSS.y - BOSS.r - 10, dmg, isLight() ? '#ffee66' : '#aa44ff');
-  addParticles(BOSS.x + (Math.random()-0.5)*40, BOSS.y + (Math.random()-0.5)*40, BOSS.glow, 4, 200, 3, 0.3);
-  updateBossHp();
-
-  // Phase transitions
-  const pct = BOSS.hp / BOSS.maxHp;
-  if (pct <= 0.66 && BOSS.phase === 1){
-    BOSS.phase = 2;
-    showToast('⚠ المرحلة 2 — العنكبوت أسرع');
-    sfx('boss');
-  } else if (pct <= 0.33 && BOSS.phase === 2){
-    BOSS.phase = 3;
-    showToast('⚠ المرحلة 3 — العنكبوت غاضب!');
-    sfx('boss');
-  }
-
-  if (BOSS.hp <= 0){
-    killBoss();
-  }
-}
-
-function killBoss(){
-  // Massive explosion
-  for (let i = 0; i < 6; i++){
-    setTimeout(() => {
-      const a = Math.random() * Math.PI * 2;
-      const r = Math.random() * 80;
-      addParticles(BOSS.x + Math.cos(a)*r, BOSS.y + Math.sin(a)*r, '#00ff44', 25, 450, 6, 1);
-    }, i * 100);
-  }
-  G.shake = 2.5;
-  G.flash = 1.5;
-  G.hitStop = 0.25;
-  G.slowmo = 2.5;
-  G.score += 1500;
-  G.kills++;
-  G.bossActive = false;
-  G.bossDefeated = true;
-  document.getElementById('bossBar').classList.remove('on');
-  sfx('boss');
-  addText(BOSS.x, BOSS.y, '+1500', '#00ff44', 32);
-  updateHud();
-
-  // Kill all remaining enemies
-  for (let i = G.enemies.length - 1; i >= 0; i--){
-    addParticles(G.enemies[i].x, G.enemies[i].y, G.enemies[i].color, 15, 300, 4, 0.6);
-    G.enemies.splice(i, 1);
-  }
-
-  // End game with victory
-  setTimeout(() => {
-    if (G.running) victory();
-  }, 3000);
-}
-
-// ==================== STORY ====================
-const STORY = {
-  1: { title: '🌲 الغابة المسكونة', text: 'كاي يستيقظ وسط الأشجار. الظلام يعم المكان... لكن شيء ما يتحرك.' },
-  2: { title: 'همسات', text: '"كاي..." صوت مألوف. "أنا محبوسة هنا منذ 1000 سنة."' },
-  3: { title: 'الذكريات', text: '"ملك الظلام كان صديقنا. لماذا خاننا؟"' },
-  4: { title: 'الوصية', text: '"ابني..." قالت سيرا. "حررني من هذه الغابة."' },
-  5: { title: '⚠️ الزعيم', text: 'العنكبوت الأم تعرف أنك قادم... وهي مستعدة.' }
-};
-
-function showStory(title, text, dur){
-  document.getElementById('storyTitle').textContent = title;
-  document.getElementById('storyText').textContent = text;
-  document.getElementById('storyBox').classList.add('on');
-  G.storyPlaying = true;
-  G.storyT = dur || 3;
-}
-
-function showToast(msg){
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('on');
-  setTimeout(() => el.classList.remove('on'), 2000);
-}
-
-// ==================== WAVES ====================
-function nextWave(){
-  if (!G.running) return;
-  G.wave++;
-  document.getElementById('wv').textContent = G.wave;
-
-  // Show story on key waves
-  if (STORY[G.wave]) {
-    setTimeout(() => showStory(STORY[G.wave].title, STORY[G.wave].text, 3), 300);
-  }
-
-  G.enemiesToSpawn = Math.floor(4 + G.wave * 1.6);
-  G.spawnTimer = 0;
-  G.waveActive = true;
-
-  // Boss on wave 5
-  if (G.wave === 5){
-    setTimeout(() => { if (G.running) spawnBoss(); }, 2500);
-  } else {
-    showToast('WAVE ' + G.wave);
-  }
-}
-
-// ==================== HUD ====================
-function updateHp(){
-  document.getElementById('hpFill').style.width = Math.max(0, player.hp / player.maxHp * 100) + '%';
-}
-function updateHud(){
-  document.getElementById('sc').textContent = G.score.toLocaleString();
-  document.getElementById('kr').textContent = (G.karma >= 0 ? '+' : '') + G.karma;
-  const karmaEl = document.getElementById('kr');
-  if (G.karma > 5) karmaEl.style.color = '#ffee66';
-  else if (G.karma < -5) karmaEl.style.color = '#aa44ff';
-  else karmaEl.style.color = '#00ff88';
-}
-
-// ==================== UPDATE ====================
+// ========== UPDATE ==========
 const clock = { last: performance.now() };
 
 function update(dt){
-  // Hit stop and slowmo
+  const t = performance.now() * 0.001;
+  G.fogOffset += dt;
+  
+  if (G.phase === 'intro'){
+    if (G.intro) G.intro.update(dt);
+    return;
+  }
+  
+  if (G.phase !== 'playing') return;
+  
   if (G.hitStop > 0){ G.hitStop -= dt; dt *= 0.15; }
   if (G.slowmo > 0){ G.slowmo -= dt; dt *= 0.4; }
   if (G.shake > 0) G.shake *= 0.88;
   if (G.flash > 0) G.flash -= dt * 3;
-
-  // Story pause
-  if (G.storyPlaying){
-    G.storyT -= dt;
-    if (G.storyT <= 0){
-      G.storyPlaying = false;
-      document.getElementById('storyBox').classList.remove('on');
-    }
-    return;
-  }
-
-  // Switch cooldown
-  if (G.switchCd > 0){
-    G.switchCd -= dt;
-    const pct = Math.max(0, Math.min(1, 1 - G.switchCd / G.switchCdMax));
-    switchCd.style.background = `conic-gradient(rgba(0,0,0,.75) ${pct * 360}deg, transparent ${pct * 360}deg)`;
-  } else {
-    switchCd.style.background = 'transparent';
-  }
-
+  
   // Movement
   let mx = input.mx, my = input.my;
   if (keys['w'] || keys['arrowup']) my = -1;
@@ -571,49 +982,52 @@ function update(dt){
   if (keys['a'] || keys['arrowleft']) mx = -1;
   if (keys['d'] || keys['arrowright']) mx = 1;
   const mag = Math.hypot(mx, my);
-  const stats = getStats();
   if (mag > 0.1){
     mx /= mag; my /= mag;
-    player.x += mx * stats.speed * dt;
-    player.y += my * stats.speed * dt;
+    const speed = player.spirit === 'light' ? 320 : 250;
+    player.x += mx * speed * dt;
+    player.y += my * speed * dt;
+    player.walkPhase += dt * 12;
+  } else {
+    player.walkPhase += dt * 2;
   }
   if (player.invuln > 0) player.invuln -= dt;
-
-  // Aim
-  let nearest = null, nd = Infinity;
-  if (G.bossActive){
-    const d = Math.hypot(BOSS.x - player.x, BOSS.y - player.y);
-    nearest = { x: BOSS.x, y: BOSS.y }; nd = d;
+  
+  // Aim at boss
+  if (boss.active){
+    player.angle = Math.atan2(boss.y - player.y, boss.x - player.x);
   }
-  for (const e of G.enemies){
-    const d = Math.hypot(e.x - player.x, e.y - player.y);
-    if (d < nd){ nd = d; nearest = e; }
-  }
-  if (nearest){
-    player.angle = Math.atan2(nearest.y - player.y, nearest.x - player.x);
-    player.facing = player.angle;
-  }
-
-  // Shoot
+  
+  // Auto-shoot
   player.shootCd -= dt;
-  if (player.shootCd <= 0 && (G.enemies.length > 0 || G.bossActive)){
-    player.shootCd = stats.rate;
-    for (let i = 0; i < stats.count; i++){
-      const off = (i - (stats.count - 1) / 2) * stats.spread;
+  if (player.shootCd <= 0 && boss.active && !boss.dying){
+    const isLight = player.spirit === 'light';
+    player.shootCd = isLight ? 0.15 : 0.32;
+    const color = isLight ? '#ffee66' : '#aa44ff';
+    const bulletSpeed = isLight ? 900 : 700;
+    const count = isLight ? 1 : 3;
+    const spread = isLight ? 0 : 0.2;
+    for (let i = 0; i < count; i++){
+      const off = (i - (count-1)/2) * spread;
       const a = player.angle + off;
       G.bullets.push({
-        x: player.x + Math.cos(a) * (player.r + 4),
-        y: player.y + Math.sin(a) * (player.r + 4),
-        vx: Math.cos(a) * stats.bulletSpeed,
-        vy: Math.sin(a) * stats.bulletSpeed,
-        r: stats.bulletR, dmg: stats.dmg, life: 1.6,
-        color: stats.color, glow: stats.glow
+        x: player.x + Math.cos(a) * (player.r + 5),
+        y: player.y + Math.sin(a) * (player.r + 5),
+        vx: Math.cos(a) * bulletSpeed,
+        vy: Math.sin(a) * bulletSpeed,
+        r: isLight ? 5 : 6,
+        dmg: isLight ? 4 : 8,
+        life: 1.5,
+        color, glow: color
       });
     }
     sfx('shoot');
-    addParticles(player.x + Math.cos(player.angle) * (player.r + 4), player.y + Math.sin(player.angle) * (player.r + 4), stats.glow, 3, 200, 3, 0.15);
+    addParticles(player.x + Math.cos(player.angle) * (player.r + 5), player.y + Math.sin(player.angle) * (player.r + 5), color, 3, 200, 3, 0.15);
   }
-
+  
+  // Manual attack
+  if (atkPressed && player.shootCd > 0.05){ /* handled by auto-shoot */ }
+  
   // Bullets
   for (let i = G.bullets.length - 1; i >= 0; i--){
     const b = G.bullets[i];
@@ -621,206 +1035,162 @@ function update(dt){
     b.x += b.vx * dt; b.y += b.vy * dt;
     b.life -= dt;
     if (b.life <= 0){ G.bullets.splice(i, 1); continue; }
-
-    // Swept collision
-    let hit = false;
-    const steps = 5;
-    for (let s = 1; s <= steps && !hit; s++){
-      const px = oldX + (b.x - oldX) * s / steps;
-      const py = oldY + (b.y - oldY) * s / steps;
-
-      // Boss hit
-      if (G.bossActive && Math.hypot(BOSS.x - px, BOSS.y - py) < BOSS.r + b.r){
-        damageBoss(b.dmg);
-        addParticles(px, py, '#00ff44', 6, 300, 3, 0.3);
+    
+    // Boss hit
+    if (boss.active && !boss.dying){
+      const dd = Math.hypot(boss.x - b.x, boss.y - b.y);
+      if (dd < boss.r * 1.1 + b.r){
+        boss.hp -= b.dmg;
+        boss.hitFlash = 0.12;
+        addParticles(b.x, b.y, '#00ff44', 6, 300, 3, 0.3);
+        addText(b.x, b.y, '-' + b.dmg, '#fff', 12);
+        sfx('hit');
+        updateBossHp();
+        // Phase transitions
+        const pct = boss.hp / boss.maxHp;
+        if (pct <= 0.66 && boss.phase === 1){ boss.phase = 2; sfx('spiderYell'); addParticles(boss.x, boss.y, '#ff0000', 30, 400, 6, 0.8); }
+        if (pct <= 0.33 && boss.phase === 2){ boss.phase = 3; sfx('spiderYell'); addParticles(boss.x, boss.y, '#ff0000', 40, 500, 7, 0.9); }
+        if (boss.hp <= 0){ boss.hp = 0; killBoss(); }
         G.bullets.splice(i, 1);
-        hit = true;
+        continue;
+      }
+    }
+    
+    // Minion hit
+    for (let j = G_enemies.length - 1; j >= 0; j--){
+      const e = G_enemies[j];
+      if (Math.hypot(e.x - b.x, e.y - b.y) < e.r + b.r){
+        e.hp -= b.dmg;
+        e.hitFlash = 0.12;
+        addParticles(b.x, b.y, e.glow, 5, 250, 3, 0.25);
+        if (e.hp <= 0){
+          addParticles(e.x, e.y, e.color, 20, 300, 4, 0.6);
+          G_enemies.splice(j, 1);
+          G.score += 10;
+          document.getElementById('sc').textContent = G.score;
+          sfx('die');
+        }
+        G.bullets.splice(i, 1);
         break;
       }
-
-      // Enemy hits
-      for (let j = G.enemies.length - 1; j >= 0; j--){
-        const e = G.enemies[j];
-        if (Math.hypot(e.x - px, e.y - py) < e.r + b.r){
-          damageEnemy(e, b.dmg);
-          addParticles(px, py, e.glow, 6, 250, 3, 0.3);
-          G.bullets.splice(i, 1);
-          hit = true;
-          break;
-        }
-      }
     }
   }
-
-  // Enemies
-  for (let i = G.enemies.length - 1; i >= 0; i--){
-    const e = G.enemies[i];
+  
+  // Minions
+  for (let i = G_enemies.length - 1; i >= 0; i--){
+    const e = G_enemies[i];
     if (e.hitFlash > 0) e.hitFlash -= dt;
     e.t += dt;
-
+    e.walkPhase += dt * 10;
     const dx = player.x - e.x, dy = player.y - e.y;
     const dd = Math.hypot(dx, dy) || 1;
-
-    // Ranged behavior
-    if (e.ranged){
-      if (dd > 240){
-        e.x += dx/dd * e.speed * dt;
-        e.y += dy/dd * e.speed * dt;
-      } else if (dd < 160){
-        e.x -= dx/dd * e.speed * 0.6 * dt;
-        e.y -= dy/dd * e.speed * 0.6 * dt;
-      }
-      e.shootCd -= dt;
-      if (e.shootCd <= 0){
-        e.shootCd = 1.8;
-        const a = Math.atan2(dy, dx);
-        G.eBullets.push({
-          x: e.x, y: e.y,
-          vx: Math.cos(a) * e.bulletSpeed, vy: Math.sin(a) * e.bulletSpeed,
-          r: 6, dmg: e.bulletDmg, life: 2.5, color: e.color
-        });
-      }
-    } else {
-      e.x += dx/dd * e.speed * dt;
-      e.y += dy/dd * e.speed * dt;
-    }
-
-    // Far teleport
-    if (dd > Math.max(W, H) * 1.15){
-      const a = Math.random() * Math.PI * 2;
-      const d2 = Math.max(W, H) * 0.55;
-      e.x = player.x + Math.cos(a) * d2;
-      e.y = player.y + Math.sin(a) * d2;
-    }
-
-    // Collision with player
+    e.x += dx/dd * e.speed * dt;
+    e.y += dy/dd * e.speed * dt;
+    
     if (dd < e.r + player.r && player.invuln <= 0){
       player.hp -= e.dmg;
-      player.invuln = 0.85;
-      G.shake = 0.7; G.flash = 0.5;
+      player.invuln = 0.8;
+      G.shake = 0.6; G.flash = 0.5;
+      addParticles(player.x, player.y, '#ff2244', 12, 250, 4, 0.5);
       sfx('hurt');
-      addParticles(player.x, player.y, '#ff2244', 15, 300, 4, 0.5);
       updateHp();
-      if (player.hp <= 0){ player.hp = 0; gameOver(); return; }
+      if (player.hp <= 0){ gameOver(); return; }
     }
   }
-
-  // Enemy bullets
-  for (let i = G.eBullets.length - 1; i >= 0; i--){
-    const b = G.eBullets[i];
-    b.x += b.vx * dt; b.y += b.vy * dt;
-    b.life -= dt;
-    if (b.life <= 0){ G.eBullets.splice(i, 1); continue; }
-    if (Math.hypot(b.x - player.x, b.y - player.y) < b.r + player.r && player.invuln <= 0){
-      player.hp -= b.dmg;
-      player.invuln = 0.6;
-      G.shake = 0.5; G.flash = 0.4;
-      sfx('hurt');
-      addParticles(player.x, player.y, '#ff4466', 10, 250, 3, 0.4);
-      G.eBullets.splice(i, 1);
-      updateHp();
-      if (player.hp <= 0){ player.hp = 0; gameOver(); return; }
-    }
-  }
-
-  // Webs (boss)
+  
+  // Webs
   for (let i = G.webs.length - 1; i >= 0; i--){
     const w = G.webs[i];
     w.x += w.vx * dt; w.y += w.vy * dt;
     w.life -= dt;
     if (w.life <= 0){ G.webs.splice(i, 1); continue; }
-    if (Math.hypot(w.x - player.x, w.y - player.y) < w.r + player.r){
-      // Slow player
-      player.hp -= 5;
-      player.invuln = 0.4;
-      sfx('web');
+    if (Math.hypot(w.x - player.x, w.y - player.y) < w.r + player.r && player.invuln <= 0){
+      player.hp -= 8;
+      player.invuln = 0.5;
+      G.shake = 0.4;
       addParticles(w.x, w.y, '#88ff88', 12, 200, 3, 0.5);
-      G.webs.splice(i, 1);
+      sfx('hurt');
       updateHp();
-      if (player.hp <= 0){ player.hp = 0; gameOver(); return; }
+      G.webs.splice(i, 1);
+      if (player.hp <= 0){ gameOver(); return; }
     }
   }
-
-  // BOSS UPDATE
-  if (G.bossActive){
-    BOSS.t += dt;
-    if (BOSS.hitFlash > 0) BOSS.hitFlash -= dt;
-
-    const dx = player.x - BOSS.x, dy = player.y - BOSS.y;
+  
+  // BOSS AI
+  if (boss.active && !boss.dying){
+    boss.bodyTilt += (Math.sin(t * 1.5) * 0.05 - boss.bodyTilt) * dt * 3;
+    boss.breathe += dt;
+    boss.legPhase += dt * (1.5 + boss.phase * 0.3);
+    boss.eyeBlink = (Math.sin(t * 0.7) > 0.98) ? 1 : 0;
+    boss.mouthOpen += (Math.sin(t * 1.5) * 0.15 + 0.1 - boss.mouthOpen) * dt * 3;
+    if (boss.hitFlash > 0) boss.hitFlash -= dt;
+    
+    // Move toward player smoothly
+    const dx = player.x - boss.x, dy = player.y - boss.y;
     const dd = Math.hypot(dx, dy) || 1;
-
-    // Movement — clamp distance
-    const targetDist = 260;
-    const spdMul = 1 + (BOSS.phase - 1) * 0.4;
-    if (dd > targetDist + 30){
-      BOSS.x += dx/dd * 80 * spdMul * dt;
-      BOSS.y += dy/dd * 80 * spdMul * dt;
-    } else if (dd < targetDist - 30){
-      BOSS.x -= dx/dd * 60 * spdMul * dt;
-      BOSS.y -= dy/dd * 60 * spdMul * dt;
+    const targetDist = 220;
+    
+    if (dd > targetDist + 40){
+      boss.x += dx/dd * (60 + boss.phase * 20) * dt;
+      boss.y += dy/dd * (60 + boss.phase * 20) * dt;
+    } else if (dd < targetDist - 40){
+      boss.x -= dx/dd * (40 + boss.phase * 15) * dt;
+      boss.y -= dy/dd * (40 + boss.phase * 15) * dt;
     }
-
-    // Clamp within screen area
-    const maxD = Math.min(W, H) * 0.42;
-    const bd = Math.hypot(BOSS.x - player.x, BOSS.y - player.y);
-    if (bd > maxD){
-      BOSS.x = player.x + (BOSS.x - player.x) / bd * maxD;
-      BOSS.y = player.y + (BOSS.y - player.y) / bd * maxD;
-    }
-
-    // Shoot webs
-    BOSS.webCd -= dt * spdMul;
-    if (BOSS.webCd <= 0){
-      BOSS.webCd = 4 - (BOSS.phase - 1) * 0.8;
-      // 5 webs in a spread
-      const baseA = Math.atan2(dy, dx);
+    
+    // Web attacks
+    boss.webCd -= dt * (1 + (boss.phase - 1) * 0.3);
+    if (boss.webCd <= 0){
+      boss.webCd = 3.5 - (boss.phase - 1) * 0.7;
+      const a = Math.atan2(player.y - boss.y, player.x - boss.x);
       for (let i = -2; i <= 2; i++){
-        const a = baseA + i * 0.2;
+        const aa = a + i * 0.18;
         G.webs.push({
-          x: BOSS.x, y: BOSS.y,
-          vx: Math.cos(a) * 280, vy: Math.sin(a) * 280,
-          r: 10, life: 3.5
+          x: boss.x, y: boss.y,
+          vx: Math.cos(aa) * 260, vy: Math.sin(aa) * 260,
+          r: 12, life: 3.5
         });
       }
       sfx('web');
-      addParticles(BOSS.x, BOSS.y, '#88ff88', 15, 300, 4, 0.5);
+      addParticles(boss.x, boss.y, '#88ff88', 15, 300, 4, 0.5);
     }
-
+    
     // Spawn minions
-    BOSS.spawnCd -= dt * spdMul;
-    if (BOSS.spawnCd <= 0 && G.enemies.length < 10){
-      BOSS.spawnCd = 4 - (BOSS.phase - 1) * 0.7;
-      const count = 1 + BOSS.phase;
+    boss.minionCd -= dt * (1 + (boss.phase - 1) * 0.4);
+    if (boss.minionCd <= 0 && G_enemies.length < 8){
+      boss.minionCd = 5 - (boss.phase - 1) * 0.8;
+      const count = 1 + boss.phase;
       for (let i = 0; i < count; i++){
         const a = Math.random() * Math.PI * 2;
-        const r = 70 + Math.random() * 40;
-        const x = BOSS.x + Math.cos(a) * r;
-        const y = BOSS.y + Math.sin(a) * r;
-        const type = Math.random() < 0.5 ? 'wolf' : 'bone';
-        const t = ENEMY_TYPES[type];
-        G.enemies.push({
-          type, x, y, r: t.r, hp: t.hp * (1 + G.wave * 0.10), maxHp: t.hp * (1 + G.wave * 0.10),
-          speed: t.speed, dmg: t.dmg, score: t.score,
-          color: t.color, glow: t.glow, shape: t.shape,
-          hitFlash: 0, t: Math.random() * 10, ranged: false, shootCd: 0
-        });
-        addParticles(x, y, t.glow, 10, 250, 4, 0.5);
+        spawnMinion(boss.x + Math.cos(a) * boss.r * 1.5, boss.y + Math.sin(a) * boss.r * 1.5, Math.random() < 0.5 ? 'wolf' : 'bone');
       }
-      sfx('spawn');
     }
-
-    // Body collision with player
-    if (dd < BOSS.r + player.r && player.invuln <= 0){
-      player.hp -= 20;
+    
+    // Body collision
+    if (dd < boss.r * 0.9 + player.r && player.invuln <= 0){
+      player.hp -= 18;
       player.invuln = 1;
       G.shake = 1; G.flash = 0.6;
       sfx('hurt');
       addParticles(player.x, player.y, '#ff2244', 20, 350, 5, 0.6);
       updateHp();
-      if (player.hp <= 0){ player.hp = 0; gameOver(); return; }
+      if (player.hp <= 0){ gameOver(); return; }
     }
   }
-
+  
+  // Boss dying animation
+  if (boss.dying){
+    boss.deathT += dt;
+    boss.legPhase += dt * 4;
+    if (Math.random() < 0.3){
+      addParticles(boss.x + (Math.random()-0.5)*boss.r*2, boss.y + (Math.random()-0.5)*boss.r*2, '#00ff44', 15, 400, 5, 0.8);
+    }
+    if (boss.deathT > 3 && !boss.victory){
+      boss.victory = true;
+      showVictory();
+    }
+  }
+  
   // Particles
   for (let i = G.particles.length - 1; i >= 0; i--){
     const p = G.particles[i];
@@ -829,7 +1199,7 @@ function update(dt){
     p.life -= dt;
     if (p.life <= 0) G.particles.splice(i, 1);
   }
-
+  
   // Texts
   for (let i = G.texts.length - 1; i >= 0; i--){
     const t = G.texts[i];
@@ -838,397 +1208,261 @@ function update(dt){
     t.life -= dt;
     if (t.life <= 0) G.texts.splice(i, 1);
   }
-
-  // Wave spawning
-  if (G.waveActive){
-    if (G.enemiesToSpawn > 0){
-      G.spawnTimer -= dt;
-      if (G.spawnTimer <= 0 && G.enemies.length < 12){
-        const roll = Math.random();
-        let type = 'bone';
-        if (G.wave >= 2 && roll < 0.35) type = 'wolf';
-        if (G.wave >= 3 && roll >= 0.35 && roll < 0.6) type = 'ghost';
-        if (G.wave >= 4 && roll >= 0.6 && roll < 0.8) type = 'imp';
-        spawnEnemy(type);
-        G.enemiesToSpawn--;
-        G.spawnTimer = Math.max(0.4, 1.1 - G.wave * 0.05);
-      }
-    } else if (G.enemies.length === 0 && !G.bossActive){
-      G.waveActive = false;
-      if (G.wave < 5){
-        setTimeout(() => { if (G.running) nextWave(); }, 1600);
-      }
-    }
-  }
 }
 
-// ==================== DRAW ====================
-function draw(){
-  // Background
-  ctx.fillStyle = '#051005';
-  ctx.fillRect(0, 0, W, H);
+function updateBossHp(){
+  // update a boss hp bar? For simplicity skip
+}
+function updateHp(){
+  document.getElementById('hpFill').style.width = Math.max(0, player.hp / player.maxHp * 100) + '%';
+}
 
-  // Grid (green forest-ish)
-  const gridSize = 60;
-  ctx.strokeStyle = 'rgba(0,255,68,0.05)';
-  ctx.lineWidth = 1;
-  const offX = (-player.x) % gridSize, offY = (-player.y) % gridSize;
-  for (let x = offX; x < W; x += gridSize){ ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
-  for (let y = offY; y < H; y += gridSize){ ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
-
-  ctx.save();
-  if (G.shake > 0){
-    ctx.translate((Math.random() - 0.5) * G.shake * 18, (Math.random() - 0.5) * G.shake * 18);
+function killBoss(){
+  boss.dying = true;
+  boss.deathT = 0;
+  boss.victory = false;
+  G.shake = 3;
+  G.flash = 2;
+  G.slowmo = 2;
+  sfx('spiderYell');
+  for (let i = 0; i < 8; i++){
+    setTimeout(() => {
+      if (!boss.dying) return;
+      const a = Math.random() * Math.PI * 2;
+      const r = Math.random() * boss.r * 2;
+      addParticles(boss.x + Math.cos(a) * r, boss.y + Math.sin(a) * r, '#00ff44', 30, 500, 6, 1);
+    }, i * 150);
   }
-  ctx.translate(W/2 - player.x, H/2 - player.y);
+  G_enemies.length = 0;
+}
 
-  // Particles (additive)
-  ctx.globalCompositeOperation = 'lighter';
-  for (const p of G.particles){
-    const a = Math.max(0, p.life / p.maxLife);
-    ctx.fillStyle = p.color;
-    ctx.globalAlpha = a * 0.85;
-    ctx.beginPath(); ctx.arc(p.x, p.y, p.r * a, 0, Math.PI * 2); ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-
-  // Webs
-  for (const w of G.webs){
-    ctx.strokeStyle = 'rgba(136,255,136,0.7)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    for (let i = 0; i < 8; i++){
-      const a = i / 8 * Math.PI * 2;
-      ctx.moveTo(w.x, w.y);
-      ctx.lineTo(w.x + Math.cos(a) * w.r * 2, w.y + Math.sin(a) * w.r * 2);
+function showVictory(){
+  G.phase = 'victory';
+  // Fade to white then show ending
+  let fadeT = 0;
+  const fadeInterval = setInterval(() => {
+    fadeT += 0.02;
+    ctx.fillStyle = `rgba(0,0,0,${fadeT})`;
+    ctx.fillRect(0, 0, W, H);
+    if (fadeT >= 1){
+      clearInterval(fadeInterval);
+      setTimeout(() => {
+        alert('🏆 انتصرت!\n\nالعنكبوت الأم سقطت.\nالنار عادت تشتعل.\nلكن الرحلة لم تنتهي بعد...');
+        location.reload();
+      }, 500);
     }
-    ctx.stroke();
-    ctx.beginPath(); ctx.arc(w.x, w.y, w.r, 0, Math.PI * 2); ctx.stroke();
+  }, 30);
+}
+
+function gameOver(){
+  G.phase = 'over';
+  setTimeout(() => {
+    alert('💀 سقط كاي...\n\nلكن الأسطورة لم تنتهي.\nحاول مرة أخرى.');
+    location.reload();
+  }, 1000);
+}
+
+// ========== DRAW ==========
+function draw(){
+  const t = performance.now() * 0.001;
+  
+  if (G.phase === 'menu'){
+    // Menu background
+    drawForestBG(0.7);
+    // Dark overlay
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(0, 0, W, H);
+    return;
   }
-
-  // Bullets
-  for (const b of G.bullets){
-    ctx.fillStyle = b.color;
-    ctx.shadowBlur = 20; ctx.shadowColor = b.glow;
-    ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#fff';
-    ctx.beginPath(); ctx.arc(b.x, b.y, b.r * 0.45, 0, Math.PI * 2); ctx.fill();
+  
+  if (G.phase === 'intro'){
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, W, H);
+    if (G.intro) G.intro.draw();
+    return;
   }
-  ctx.shadowBlur = 0;
-
-  // Enemy bullets
-  for (const b of G.eBullets){
-    ctx.fillStyle = b.color;
-    ctx.shadowBlur = 15; ctx.shadowColor = b.color;
-    ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill();
-  }
-  ctx.shadowBlur = 0;
-  ctx.globalCompositeOperation = 'source-over';
-
-  // Enemies
-  for (const e of G.enemies){
-    const pulse = 1 + Math.sin(e.t * 5) * 0.08;
-    const r = e.r * pulse;
-    ctx.globalAlpha = e.alpha || 1;
-    ctx.shadowBlur = 20; ctx.shadowColor = e.glow;
-    ctx.fillStyle = e.hitFlash > 0 ? '#fff' : e.color;
-
-    if (e.shape === 'arrow'){
-      ctx.save();
-      ctx.translate(e.x, e.y);
-      ctx.rotate(Math.atan2(player.y - e.y, player.x - e.x));
-      ctx.beginPath();
-      ctx.moveTo(r, 0); ctx.lineTo(-r, -r * 0.7); ctx.lineTo(-r, r * 0.7);
-      ctx.closePath(); ctx.fill();
-      ctx.restore();
-    } else if (e.shape === 'ghost'){
-      ctx.beginPath();
-      ctx.arc(e.x, e.y - r*0.3, r, Math.PI, 0);
-      ctx.lineTo(e.x + r, e.y + r * 0.5);
-      for (let i = 0; i < 3; i++){
-        ctx.quadraticCurveTo(e.x + r - r * 0.66 * (i * 2 + 1)/3, e.y + r * (i % 2 === 0 ? 0.2 : 0.8), e.x + r - r * 0.66 * (i * 2 + 2)/3, e.y + r * 0.5);
-      }
-      ctx.closePath();
-      ctx.fill();
-    } else if (e.shape === 'imp'){
-      ctx.save();
-      ctx.translate(e.x, e.y);
-      ctx.beginPath();
-      for (let i = 0; i < 5; i++){
-        const a = i / 5 * Math.PI * 2 - Math.PI/2;
-        const px = Math.cos(a) * r, py = Math.sin(a) * r;
-        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-      }
-      ctx.closePath(); ctx.fill();
-      ctx.restore();
-    } else {
-      ctx.beginPath(); ctx.arc(e.x, e.y, r, 0, Math.PI * 2); ctx.fill();
+  
+  if (G.phase === 'playing' || G.phase === 'victory'){
+    // === GAME WORLD ===
+    // Background
+    ctx.fillStyle = '#051005';
+    ctx.fillRect(0, 0, W, H);
+    
+    // Grid
+    const gridSize = 80;
+    ctx.strokeStyle = 'rgba(0,255,68,0.04)';
+    ctx.lineWidth = 1;
+    const camX = W/2 - player.x * 0.5;
+    const camY = H/2 - player.y * 0.5;
+    const offX = camX % gridSize;
+    const offY = camY % gridSize;
+    for (let x = offX; x < W; x += gridSize){ ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+    for (let y = offY; y < H; y += gridSize){ ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+    
+    ctx.save();
+    if (G.shake > 0){
+      ctx.translate((Math.random()-0.5)*G.shake*15, (Math.random()-0.5)*G.shake*15);
+    }
+    ctx.translate(camX, camY);
+    
+    // World coords = player coords now
+    const worldOffX = -player.x * 0.5;
+    const worldOffY = -player.y * 0.5;
+    // So world position (x,y) is drawn at (x + worldOffX + ...)
+    // Actually let's simplify: translate to (W/2 - player.x, H/2 - player.y) and draw world coords
+    ctx.restore();
+    ctx.save();
+    if (G.shake > 0){
+      ctx.translate((Math.random()-0.5)*G.shake*15, (Math.random()-0.5)*G.shake*15);
+    }
+    ctx.translate(W/2 - player.x, H/2 - player.y);
+    
+    // Particles
+    ctx.globalCompositeOperation = 'lighter';
+    for (const p of G.particles){
+      const a = Math.max(0, p.life / p.maxLife);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = a * 0.85;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r * a, 0, Math.PI*2); ctx.fill();
     }
     ctx.globalAlpha = 1;
-
-    // Eyes
-    ctx.fillStyle = '#000';
-    const eyeOff = r * 0.4;
-    const lookDir = Math.atan2(player.y - e.y, player.x - e.x);
-    const eyeX = Math.cos(lookDir) * r * 0.3;
-    const eyeY = Math.sin(lookDir) * r * 0.3;
-    ctx.beginPath(); ctx.arc(e.x - eyeOff * 0.5 + eyeX, e.y - 3 + eyeY, r*0.15, 0, Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(e.x + eyeOff * 0.5 + eyeX, e.y - 3 + eyeY, r*0.15, 0, Math.PI*2); ctx.fill();
-    ctx.shadowBlur = 0;
-
-    // HP bar (if hurt)
-    if (e.hp < e.maxHp){
-      const bw = r * 2.2, bh = 3;
-      ctx.fillStyle = 'rgba(0,0,0,0.8)';
-      ctx.fillRect(e.x - bw/2, e.y - r - 10, bw, bh);
-      ctx.fillStyle = '#ff2244';
-      ctx.fillRect(e.x - bw/2, e.y - r - 10, bw * (e.hp / e.maxHp), bh);
-    }
-  }
-
-  // BOSS
-  if (G.bossActive){
-    const r = BOSS.r * (1 + Math.sin(BOSS.t * 3) * 0.03);
-    ctx.shadowBlur = 50; ctx.shadowColor = BOSS.glow;
-
-    // Legs
-    ctx.strokeStyle = BOSS.hitFlash > 0 ? '#fff' : '#00aa33';
-    ctx.lineWidth = 5;
-    ctx.lineCap = 'round';
-    for (let i = 0; i < 4; i++){
-      const side = i < 2 ? -1 : 1;
-      const idx = i % 2;
-      const a1 = side * (0.5 + idx * 0.5);
-      const a2 = side * (0.9 + idx * 0.3);
+    
+    // Webs
+    for (const w of G.webs){
+      ctx.strokeStyle = 'rgba(180,255,180,0.7)';
+      ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.moveTo(BOSS.x + Math.cos(a1) * r * 0.6, BOSS.y + Math.sin(a1) * r * 0.6);
-      ctx.quadraticCurveTo(
-        BOSS.x + Math.cos(a1) * r * 1.5, BOSS.y + Math.sin(a1) * r * 1.5,
-        BOSS.x + Math.cos(a2) * r * 2, BOSS.y + Math.sin(a2) * r * 2 + Math.sin(BOSS.t * 5 + i) * 8
-      );
+      for (let i = 0; i < 6; i++){
+        const a = i / 6 * Math.PI * 2 + w.x * 0.01;
+        ctx.moveTo(w.x, w.y);
+        ctx.lineTo(w.x + Math.cos(a) * w.r * 2, w.y + Math.sin(a) * w.r * 2);
+      }
       ctx.stroke();
+      ctx.beginPath(); ctx.arc(w.x, w.y, w.r, 0, Math.PI*2); ctx.stroke();
     }
-
-    // Body
-    ctx.fillStyle = BOSS.hitFlash > 0 ? '#fff' : '#0a1a0a';
-    ctx.strokeStyle = '#00ff44';
-    ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.ellipse(BOSS.x, BOSS.y, r * 1.05, r * 0.85, BOSS.t * 0.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#1a3a1a';
-    ctx.beginPath(); ctx.ellipse(BOSS.x, BOSS.y, r * 0.75, r * 0.6, BOSS.t * 0.5, 0, Math.PI * 2); ctx.fill();
-
-    // Eyes (8 red)
-    ctx.shadowBlur = 20; ctx.shadowColor = '#ff0000';
-    ctx.fillStyle = '#ff0000';
-    const eyes = [
-      [-r*0.35, -r*0.15, r*0.09], [-r*0.15, -r*0.28, r*0.07],
-      [r*0.15, -r*0.28, r*0.07], [r*0.35, -r*0.15, r*0.09],
-      [-r*0.28, 0, r*0.07], [r*0.28, 0, r*0.07],
-      [-r*0.13, r*0.13, r*0.055], [r*0.13, r*0.13, r*0.055]
-    ];
-    for (const [ex, ey, er] of eyes){
-      ctx.beginPath(); ctx.arc(BOSS.x + ex, BOSS.y + ey, er, 0, Math.PI * 2); ctx.fill();
+    
+    // Bullets
+    for (const b of G.bullets){
+      ctx.fillStyle = b.color;
+      ctx.shadowBlur = 20; ctx.shadowColor = b.glow;
+      ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(b.x, b.y, b.r * 0.4, 0, Math.PI*2); ctx.fill();
     }
     ctx.shadowBlur = 0;
-
-    // Fangs
-    ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.moveTo(BOSS.x - r*0.2, BOSS.y + r*0.5);
-    ctx.lineTo(BOSS.x - r*0.15, BOSS.y + r*0.8);
-    ctx.lineTo(BOSS.x - r*0.1, BOSS.y + r*0.5);
-    ctx.closePath(); ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(BOSS.x + r*0.2, BOSS.y + r*0.5);
-    ctx.lineTo(BOSS.x + r*0.15, BOSS.y + r*0.8);
-    ctx.lineTo(BOSS.x + r*0.1, BOSS.y + r*0.5);
-    ctx.closePath(); ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+    
+    // Minions
+    for (const e of G_enemies){
+      drawMinion(e);
+    }
+    
+    // Boss
+    if (boss.active){
+      const deathFade = boss.dying ? Math.max(0, 1 - boss.deathT / 3) : 1;
+      drawSpiderBig(boss.x, boss.y, 1, deathFade, false);
+    }
+    
+    // Player
+    drawKai(player.x, player.y, 1, player.angle, player.walkPhase);
+    
+    ctx.restore();
+    
+    // Damage texts (drawn in screen space)
+    ctx.save();
+    if (G.shake > 0){
+      ctx.translate((Math.random()-0.5)*G.shake*15, (Math.random()-0.5)*G.shake*15);
+    }
+    ctx.translate(W/2 - player.x, H/2 - player.y);
+    ctx.textAlign = 'center';
+    for (const t of G.texts){
+      const a = Math.max(0, t.life / t.maxLife);
+      ctx.globalAlpha = a;
+      ctx.fillStyle = t.color;
+      ctx.font = `900 ${t.size}px Tahoma`;
+      ctx.shadowBlur = 12; ctx.shadowColor = t.color;
+      ctx.fillText(t.txt, t.x, t.y);
+    }
+    ctx.globalAlpha = 1;
     ctx.shadowBlur = 0;
-  }
-
-  // Player — KAI
-  const stats = getStats();
-  ctx.save();
-  ctx.translate(player.x, player.y);
-
-  // Aura
-  ctx.globalAlpha = 0.25 + Math.sin(performance.now() * 0.005) * 0.12;
-  ctx.fillStyle = stats.glow;
-  ctx.beginPath(); ctx.arc(0, 0, player.r + 14, 0, Math.PI * 2); ctx.fill();
-  ctx.globalAlpha = 1;
-
-  ctx.rotate(player.facing);
-  ctx.shadowBlur = 30; ctx.shadowColor = stats.glow;
-
-  // Body — humanoid
-  ctx.fillStyle = stats.color;
-  ctx.beginPath();
-  ctx.moveTo(player.r, 0);
-  ctx.lineTo(-player.r * 0.5, -player.r * 0.95);
-  ctx.lineTo(-player.r * 0.35, 0);
-  ctx.lineTo(-player.r * 0.5, player.r * 0.95);
-  ctx.closePath();
-  ctx.fill();
-
-  // Head
-  ctx.fillStyle = isLight() ? '#fff8cc' : '#cc88ff';
-  ctx.beginPath(); ctx.arc(-player.r * 0.2, 0, player.r * 0.55, 0, Math.PI * 2); ctx.fill();
-
-  // Eyes
-  ctx.fillStyle = '#000';
-  ctx.beginPath(); ctx.arc(player.r * 0.15, -3, 2, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(player.r * 0.15, 3, 2, 0, Math.PI*2); ctx.fill();
-
-  // Weapon
-  ctx.strokeStyle = stats.color;
-  ctx.lineWidth = 3;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(player.r * 0.6, 0);
-  ctx.lineTo(player.r + 18, 0);
-  ctx.stroke();
-  // Sword tip
-  ctx.fillStyle = '#fff';
-  ctx.beginPath(); ctx.arc(player.r + 18, 0, 3, 0, Math.PI * 2); ctx.fill();
-
-  ctx.restore();
-  ctx.shadowBlur = 0;
-
-  // Invuln ring
-  if (player.invuln > 0){
-    ctx.strokeStyle = `rgba(255,255,255,${0.4 + Math.sin(performance.now() * 0.02) * 0.3})`;
-    ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.arc(player.x, player.y, player.r + 20, 0, Math.PI * 2); ctx.stroke();
-  }
-
-  // Damage texts
-  ctx.textAlign = 'center';
-  for (const t of G.texts){
-    const a = Math.max(0, t.life / t.maxLife);
-    ctx.globalAlpha = a;
-    ctx.fillStyle = t.color;
-    ctx.font = `900 ${t.size}px Tahoma`;
-    ctx.shadowBlur = 12; ctx.shadowColor = t.color;
-    ctx.fillText(t.txt, t.x, t.y);
-  }
-  ctx.globalAlpha = 1; ctx.shadowBlur = 0;
-
-  ctx.restore();
-
-  // Flash
-  if (G.flash > 0){
-    ctx.fillStyle = `rgba(255,255,255,${Math.min(1, G.flash * 0.4)})`;
-    ctx.fillRect(0, 0, W, H);
-  }
-
-  // Vignette
-  const vg = ctx.createRadialGradient(W/2, H/2, H * 0.35, W/2, H/2, H * 0.9);
-  vg.addColorStop(0, 'rgba(0,0,0,0)');
-  vg.addColorStop(1, isLight() ? 'rgba(20,10,0,0.75)' : 'rgba(10,0,25,0.85)');
-  ctx.fillStyle = vg;
-  ctx.fillRect(0, 0, W, H);
-
-  // Slow-mo overlay
-  if (G.slowmo > 0){
-    ctx.fillStyle = `rgba(100,0,200,${Math.min(0.15, G.slowmo * 0.1)})`;
+    ctx.restore();
+    
+    // Flash
+    if (G.flash > 0){
+      ctx.fillStyle = `rgba(255,255,255,${Math.min(1, G.flash * 0.4)})`;
+      ctx.fillRect(0, 0, W, H);
+    }
+    
+    // Vignette
+    const vg = ctx.createRadialGradient(W/2, H/2, H * 0.35, W/2, H/2, H * 0.9);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,0.85)');
+    ctx.fillStyle = vg;
     ctx.fillRect(0, 0, W, H);
   }
 }
 
-// ==================== LOOP ====================
+function drawMinion(e){
+  ctx.save();
+  ctx.translate(e.x, e.y);
+  const pulse = 1 + Math.sin(e.t * 5) * 0.1;
+  const r = e.r * pulse;
+  ctx.shadowBlur = 20; ctx.shadowColor = e.glow;
+  ctx.fillStyle = e.hitFlash > 0 ? '#fff' : e.color;
+  
+  if (e.shape === 'arrow'){
+    ctx.rotate(Math.atan2(player.y - e.y, player.x - e.x));
+    const legSwing = Math.sin(e.walkPhase) * r * 0.5;
+    // Legs
+    ctx.strokeStyle = e.color;
+    ctx.lineWidth = r * 0.3;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(-r * 0.3, -r * 0.2);
+    ctx.lineTo(-r * 0.5 + legSwing, r * 0.6);
+    ctx.moveTo(-r * 0.3, r * 0.2);
+    ctx.lineTo(-r * 0.5 - legSwing, r * 0.6);
+    ctx.stroke();
+    // Body
+    ctx.beginPath();
+    ctx.moveTo(r, 0); ctx.lineTo(-r, -r * 0.75); ctx.lineTo(-r, r * 0.75);
+    ctx.closePath(); ctx.fill();
+    // Eye
+    ctx.fillStyle = '#ff0000';
+    ctx.beginPath(); ctx.arc(r * 0.3, 0, r * 0.2, 0, Math.PI*2); ctx.fill();
+  } else {
+    // Skull-like
+    ctx.beginPath(); ctx.arc(e.x, e.y, r, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#000';
+    ctx.beginPath();
+    ctx.arc(e.x - r*0.3, e.y - r*0.15, r*0.15, 0, Math.PI*2);
+    ctx.arc(e.x + r*0.3, e.y - r*0.15, r*0.15, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.fillRect(e.x - r*0.4, e.y + r*0.3, r*0.8, r*0.1);
+  }
+  ctx.restore();
+}
+
+// ========== LOOP ==========
 function loop(now){
   const dt = Math.min(0.05, (now - clock.last) / 1000);
   clock.last = now;
-  if (G.running && !G.paused) update(dt);
+  update(dt);
   draw();
   requestAnimationFrame(loop);
 }
 
-// ==================== START / END ====================
-function startGame(){
+// ========== BUTTONS ==========
+document.getElementById('startBtn').addEventListener('click', () => {
   initAudio();
   if (actx && actx.state === 'suspended') actx.resume();
+  startIntro();
+});
 
-  G.running = true; G.paused = false;
-  G.score = 0; G.wave = 0; G.kills = 0; G.karma = 0;
-  G.shake = 0; G.flash = 0; G.hitStop = 0; G.slowmo = 0;
-  G.switchCd = 0;
-  G.enemiesToSpawn = 0; G.spawnTimer = 0; G.waveActive = false;
-  G.bossActive = false; G.bossDefeated = false;
-  G.storyPlaying = false;
-  G.spirit = 'light';
-
-  player.x = 0; player.y = 0;
-  player.hp = player.maxHp = 100;
-  player.shield = player.maxShield = 0;
-  player.invuln = 0;
-  player.shootCd = 0;
-  player.facing = -Math.PI / 2;
-
-  G.bullets = []; G.enemies = []; G.particles = []; G.texts = []; G.eBullets = []; G.webs = [];
-
-  document.getElementById('spiritName').className = 'light';
-  document.getElementById('spiritName').textContent = '☀️ LIGHT';
-  switchBtn.classList.remove('shadow');
-  switchBtn.querySelector('.icon').textContent = '☀️';
-  joy.classList.remove('shadow');
-  jk.classList.remove('shadow');
-
-  document.getElementById('bossBar').classList.remove('on');
-  document.getElementById('storyBox').classList.remove('on');
-  document.getElementById('menu').classList.remove('on');
-  document.getElementById('over').classList.remove('on');
-
-  updateHp(); updateHud();
-
-  // Opening story
-  showStory('🌲 الغابة المسكونة', 'كاي يستيقظ وسط الأشجار... الظلام يعم المكان.', 3.5);
-
-  setTimeout(() => { if (G.running) nextWave(); }, 3800);
-}
-
-function gameOver(){
-  G.running = false;
-  document.getElementById('overTitle').textContent = 'GAME OVER';
-  document.getElementById('fWv').textContent = G.wave;
-  document.getElementById('fSc').textContent = G.score.toLocaleString();
-  document.getElementById('fKl').textContent = G.kills;
-  document.getElementById('overMsg').textContent = G.karma > 10
-    ? 'مت بنور... لكن الظلام لم يرحل بعد.'
-    : (G.karma < -10 ? 'انحدرت في الظل... هل هذا ما أردته؟' : 'سقط كاي... لكن الأسطورة لم تنته بعد.');
-  if (G.score > G.hi){ G.hi = G.score; try { localStorage.setItem(SAVE_KEY, G.hi); } catch(e){} }
-  document.getElementById('hiS').textContent = G.hi.toLocaleString();
-  addParticles(player.x, player.y, getStats().color, 80, 500, 6, 1.5);
-  setTimeout(() => document.getElementById('over').classList.add('on'), 700);
-}
-
-function victory(){
-  G.running = false;
-  document.getElementById('overTitle').textContent = '🏆 VICTORY';
-  document.getElementById('fWv').textContent = G.wave;
-  document.getElementById('fSc').textContent = G.score.toLocaleString();
-  document.getElementById('fKl').textContent = G.kills;
-  document.getElementById('overMsg').textContent = G.karma > 20
-    ? 'أنت الحارس الذي حافظ على التوازن. النور والظل اتحدا فيك. الجزء الأول من الأسطورة انتهى.'
-    : (G.karma < -20
-      ? 'قوّتك من الظل هزمت العنكبوت... لكن ثمن الظل باهظ. هل أنت مستعد للجزء الثاني؟'
-      : 'العنكبوت سقط. نار الروح بدأت تعود شيئاً فشيئاً. أنت جاهز للرحلة القادمة.');
-  if (G.score > G.hi){ G.hi = G.score; try { localStorage.setItem(SAVE_KEY, G.hi); } catch(e){} }
-  document.getElementById('hiS').textContent = G.hi.toLocaleString();
-  setTimeout(() => document.getElementById('over').classList.add('on'), 1200);
-}
-
-// ==================== INIT ====================
-try {
-  const s = localStorage.getItem(SAVE_KEY);
-  if (s) G.hi = parseInt(s) || 0;
-} catch(e){}
-document.getElementById('hiS').textContent = G.hi.toLocaleString();
-
-document.getElementById('startBtn').addEventListener('click', startGame);
-document.getElementById('retryBtn').addEventListener('click', startGame);
-
+// ========== INIT ==========
 requestAnimationFrame(loop);
 </script>
 </body>
-                                                                                                                                                       </html>
+</html>
