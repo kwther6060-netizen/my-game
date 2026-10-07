@@ -3,621 +3,920 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>THE ABANDONED</title>
+<title>NIGHT SHIFT</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;font-family:'Courier New',monospace}
 html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;touch-action:none}
-#c{display:block;position:absolute;inset:0}
-#vignette{position:absolute;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 0%,rgba(0,0,0,.6) 50%,rgba(0,0,0,.98) 90%,#000 100%)}
-#bloodScreen{position:absolute;inset:0;pointer-events:none;z-index:7;opacity:0;background:radial-gradient(ellipse at center,transparent 10%,rgba(80,0,0,.7) 60%,rgba(30,0,0,.95) 100%);transition:opacity .5s}
+canvas{display:block;position:absolute;inset:0;width:100%;height:100%}
 #ui{position:absolute;inset:0;pointer-events:none;z-index:10}
-#crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:4px;height:4px;background:#fff;border-radius:50%;box-shadow:0 0 8px #fff;opacity:.6}
-.hud{position:absolute;bottom:20px;padding:10px 16px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);font-size:12px;letter-spacing:2px}
-#hpBox{bottom:20px;right:20px;color:#ff2222}
-#hpBox .v{color:#ff4444;font-size:18px;font-weight:bold;margin-left:8px}
-#batteryBox{bottom:20px;left:20px;color:#ffcc00}
-#batteryBox .v{color:#ffdd44;font-size:18px;font-weight:bold;margin-left:8px}
-#objective{position:absolute;top:20px;left:50%;transform:translateX(-50%);padding:8px 20px;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.15);font-size:12px;letter-spacing:3px;color:#ccc;text-align:center;max-width:90%}
-#whisper{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);font-size:22px;color:rgba(255,255,255,.85);text-shadow:0 0 20px #000;letter-spacing:4px;opacity:0;transition:opacity 1s;pointer-events:none;font-style:italic}
-#joy{position:absolute;bottom:100px;left:25px;width:130px;height:130px;border-radius:50%;border:2px solid rgba(255,255,255,.15);background:radial-gradient(circle,rgba(20,20,20,.4),rgba(0,0,0,.7));pointer-events:auto}
-#joyk{position:absolute;top:50%;left:50%;width:55px;height:55px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.6),rgba(120,120,120,.3));transform:translate(-50%,-50%);box-shadow:0 0 15px rgba(255,255,255,.3);pointer-events:none}
-#btnShoot{position:absolute;bottom:120px;right:30px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(200,30,30,.7),rgba(80,0,0,.9));border:2px solid rgba(255,100,100,.5);display:flex;align-items:center;justify-content:center;font-size:42px;pointer-events:auto;box-shadow:0 0 30px rgba(200,0,0,.5);color:#fff}
-#btnShoot:active{transform:scale(.9)}
-#menu{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:30px;text-align:center}
-#menu h1{font-size:48px;font-weight:900;color:#fff;letter-spacing:12px;text-shadow:0 0 20px #ff2222,0 0 40px #880000;margin-bottom:8px;animation:flicker 3s infinite}
-@keyframes flicker{0%,90%,100%{opacity:1}91%{opacity:.3}92%{opacity:1}93%{opacity:.2}94%{opacity:1}}
-#menu .sub{color:#666;font-size:12px;letter-spacing:8px;margin-bottom:30px}
-#menu .arabic{color:#444;font-size:14px;letter-spacing:6px;margin-bottom:40px}
-#menu .warnbox{max-width:480px;padding:20px 25px;border:1px solid #550000;background:rgba(20,0,0,.5);margin-bottom:40px}
-#menu .warnbox p{color:#888;line-height:1.9;font-size:13px}
-#menu .warnbox .r{color:#ff2222;font-weight:bold}
-#menu .headphone{color:#ffcc00;font-size:11px;letter-spacing:4px;margin-top:15px}
-#startBtn{background:transparent;color:#fff;border:2px solid #ff2222;padding:18px 60px;border-radius:4px;font-size:18px;font-weight:bold;cursor:pointer;letter-spacing:6px;box-shadow:0 0 30px rgba(255,0,0,.5)}
-#startBtn:active{transform:scale(.95)}
-#gameover{position:absolute;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:30px;text-align:center}
-#gameover h2{font-size:60px;color:#ff0000;letter-spacing:14px;text-shadow:0 0 40px #ff0000;margin-bottom:30px}
-#gameover .quote{color:#666;font-style:italic;font-size:14px;margin-bottom:40px;max-width:400px;line-height:1.8}
-#gameover .stats{color:#888;font-size:13px;letter-spacing:3px;margin-bottom:35px;line-height:2.2}
-#gameover .stats b{color:#ff2222}
-#retryBtn{background:transparent;color:#fff;border:2px solid #ff2222;padding:16px 50px;border-radius:4px;font-size:16px;letter-spacing:5px;cursor:pointer}
-#loading{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;color:#ff2222;transition:opacity .5s}
-#loading .t{letter-spacing:12px;font-size:16px;margin-bottom:20px}
-#err{position:absolute;top:0;left:0;right:0;background:#500;color:#fff;padding:8px;font-size:11px;z-index:999;display:none;white-space:pre-wrap}
+#time{position:absolute;top:15px;right:20px;font-size:28px;font-weight:900;color:#fff;text-shadow:0 0 15px #fff,0 0 30px #88aaff;letter-spacing:3px}
+#night{position:absolute;top:15px;left:20px;font-size:14px;color:#ff4444;letter-spacing:4px;text-shadow:0 0 10px #ff0000}
+#power{position:absolute;bottom:20px;right:20px;text-align:right;font-size:12px;color:#88aaff;letter-spacing:2px}
+#power .v{font-size:22px;font-weight:900;color:#fff;text-shadow:0 0 10px #88aaff}
+#usage{position:absolute;bottom:20px;left:20px;font-size:12px;color:#ffaa00;letter-spacing:2px}
+#usage .v{font-size:18px;font-weight:900;color:#ffcc00}
+#hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;color:rgba(255,255,255,.7);text-align:center;letter-spacing:2px;pointer-events:none;text-shadow:0 0 10px #000}
+#arrow{position:absolute;top:50%;font-size:40px;color:rgba(255,255,255,.4);pointer-events:none;animation:pulse 1.5s infinite;z-index:9}
+#arrow.left{left:10px;transform:translateY(-50%)}
+#arrow.right{right:10px;transform:translateY(-50%)}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.9}}
+.zone{position:absolute;top:0;bottom:120px;width:60px;pointer-events:auto;z-index:8}
+#zoneL{left:0}
+#zoneR{right:0}
+.btn{position:absolute;bottom:30px;width:120px;height:70px;background:rgba(0,0,0,.7);border:2px solid #444;display:flex;align-items:center;justify-content:center;font-size:14px;letter-spacing:2px;pointer-events:auto;font-weight:bold;color:#888;transition:all .1s;z-index:15}
+.btn.on{background:#440000;border-color:#ff2222;color:#ff4444;box-shadow:0 0 20px rgba(255,0,0,.6)}
+.btn:active{transform:scale(.95)}
+#btnLeft{left:20px}
+#btnRight{right:20px}
+#lightBtn{left:50%;transform:translateX(-50%);width:140px;height:60px;bottom:30px}
+#lightBtn.on{background:#443300;border-color:#ffcc00;color:#ffcc00;box-shadow:0 0 20px rgba(255,204,0,.6)}
+
+#menu{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;padding:25px;text-align:center}
+#menu h1{font-size:52px;font-weight:900;color:#fff;text-shadow:0 0 20px #ff2222,0 0 40px #880000;letter-spacing:10px;margin-bottom:5px;animation:flicker 4s infinite}
+@keyframes flicker{0%,90%,100%{opacity:1}91%{opacity:.4}92%{opacity:1}93%{opacity:.2}94%{opacity:1}}
+#menu .sub{color:#666;font-size:11px;letter-spacing:10px;margin-bottom:35px}
+#menu .box{max-width:440px;padding:22px;border:1px solid #550000;background:rgba(20,0,0,.6);margin-bottom:30px;text-align:right}
+#menu .box p{color:#bbb;font-size:13px;line-height:2;font-family:'Segoe UI',sans-serif}
+#menu .box .r{color:#ff2222;font-weight:bold}
+#menu .box .y{color:#ffcc00;font-weight:bold}
+#menu button{background:transparent;color:#fff;border:2px solid #ff2222;padding:18px 70px;font-size:16px;font-weight:bold;letter-spacing:6px;cursor:pointer;font-family:inherit;box-shadow:0 0 30px rgba(255,0,0,.5);margin:5px}
+#menu button:active{transform:scale(.95)}
+#menu .nightBtn{font-size:13px;padding:10px 25px;letter-spacing:3px;border-color:#444;color:#666;box-shadow:none}
+
+#jumpscare{position:absolute;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:300;overflow:hidden}
+#jumpscare canvas{position:absolute;inset:0;width:100%;height:100%}
+
+#win{position:absolute;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:250;padding:30px;text-align:center}
+#win h2{font-size:44px;color:#00ff88;text-shadow:0 0 30px #00ff88;letter-spacing:8px;margin-bottom:25px}
+#win p{color:#aaa;font-size:15px;letter-spacing:2px;line-height:2.2;margin-bottom:30px}
+#win button{background:transparent;color:#fff;border:2px solid #00ff88;padding:15px 50px;font-size:15px;letter-spacing:5px;cursor:pointer;font-family:inherit}
+
+#dead{position:absolute;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:250;padding:30px;text-align:center}
+#dead h2{font-size:56px;color:#ff0000;text-shadow:0 0 40px #ff0000;letter-spacing:12px;margin-bottom:30px;animation:shake .2s infinite}
+@keyframes shake{0%,100%{transform:translate(0,0)}50%{transform:translate(-3px,3px)}}
+#dead p{color:#666;font-size:13px;letter-spacing:3px;margin-bottom:30px;line-height:2}
+#dead button{background:transparent;color:#fff;border:2px solid #ff2222;padding:15px 50px;font-size:15px;letter-spacing:5px;cursor:pointer;font-family:inherit}
+
+#loading{position:absolute;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:400;color:#ff2222;letter-spacing:8px;font-size:14px}
 </style>
 </head>
 <body>
-<div id="err"></div>
-<div id="loading"><div class="t">ENTERING...</div><div style="font-size:24px">. . .</div></div>
-<canvas id="c"></canvas>
-<div id="vignette"></div>
-<div id="bloodScreen"></div>
+<canvas id="game"></canvas>
 
 <div id="ui">
-  <div id="crosshair"></div>
-  <div id="objective">ابحث عن الباب المضيء... واخرج</div>
-  <div id="whisper"></div>
-  <div id="hpBox" class="hud">HEALTH <span class="v" id="hpv">100</span></div>
-  <div id="batteryBox" class="hud">BATTERY <span class="v" id="batv">100%</span></div>
-  <div id="joy"><div id="joyk"></div></div>
-  <div id="btnShoot">🔫</div>
+  <div id="night">NIGHT 1</div>
+  <div id="time">12 AM</div>
+  <div id="power">
+    POWER LEFT<br>
+    <span class="v" id="powerV">100%</span>
+  </div>
+  <div id="usage">
+    USAGE<br>
+    <span class="v" id="usageV">1</span>
+  </div>
+  <div id="hint">◄ اسحب يمين وشمال للنظر ►</div>
 </div>
+
+<div id="arrow" class="left">◄</div>
+<div id="arrow" class="right">►</div>
+
+<div id="zoneL" class="zone"></div>
+<div id="zoneR" class="zone"></div>
+
+<div id="btnLeft" class="btn">🚪 LEFT DOOR</div>
+<div id="btnRight" class="btn">RIGHT DOOR 🚪</div>
+<div id="lightBtn" class="btn">💡 LIGHT</div>
+
+<div id="jumpscare"><canvas id="scareCanvas"></canvas></div>
 
 <div id="menu">
-  <h1>ABANDONED</h1>
-  <div class="sub">THE LAST PATIENT</div>
-  <div class="arabic">— الملجأ المهجور —</div>
-  <div class="warnbox">
+  <h1>NIGHT SHIFT</h1>
+  <div class="sub">SURVIVE UNTIL 6 AM</div>
+  <div class="box">
     <p>
-      <span class="r">⚠</span> أنت محبوس داخل ملجأ نفسي مهجور.<br>
-      <span class="r">⚠</span> لا توجد إضاءة. كشافك هو سلاحك.<br>
-      <span class="r">⚠</span> شيء ما يتحرك في الظلام...<br>
-      <span class="r">⚠</span> اخرج من الباب قبل أن يمسك بك.
+      <span class="r">⚠</span> أنت حارس أمن في مطعم مهجور.<br>
+      <span class="r">⚠</span> من 12 لـ 6 الصبح.<br>
+      <span class="y">💡 استخدم الكشاف</span> لترى ما يقترب.<br>
+      <span class="y">🚪 أغلق الأبواب</span> لتصد المهاجمين.<br>
+      <span class="r">⚡ الطاقة محدودة.</span> لا تسرف.<br>
+      <span class="r">💀 إذا وصلوك... انتهى الأمر.</span>
     </p>
-    <div class="headphone">🎧 استخدم سماعات - مهم جداً</div>
   </div>
-  <button id="startBtn">▶ ادخل</button>
+  <button id="startBtn">▶ ابدأ الوردية</button>
 </div>
 
-<div id="gameover">
+<div id="win">
+  <h2>6 AM ✓</h2>
+  <p>نجوت حتى الصباح!<br>الوردية انتهت.<br>لكن الليلة القادمة... أسوأ.</p>
+  <button id="nextNight">→ الليلة التالية</button>
+</div>
+
+<div id="dead">
   <h2>YOU DIED</h2>
-  <div class="quote" id="deathQuote">"لم يتوقفوا يوماً عن الصراخ... لكن لا أحد سمعه."</div>
-  <div class="stats">
-    الوقت: <b id="timeS">0:00</b><br>
-    قُتلت: <b id="killS">0</b> كائنات
-  </div>
+  <p>لم تصلح للوردية.<br>الليلة القادمة... ستكون أطول.</p>
   <button id="retryBtn">⟳ حاول مرة أخرى</button>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// إخفاء التحميل فوراً
-document.getElementById('loading').style.opacity = '0';
-setTimeout(() => { document.getElementById('loading').style.display = 'none'; }, 500);
+// ==========================================
+// SETUP
+// ==========================================
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+let W = 0, H = 0;
+function resize() {
+  W = innerWidth; H = innerHeight;
+  canvas.width = W; canvas.height = H;
+}
+addEventListener('resize', resize);
+resize();
 
-function showError(msg) {
-  const e = document.getElementById('err');
-  e.style.display = 'block';
-  e.textContent = 'ERROR: ' + msg;
+// ==========================================
+// GAME STATE
+// ==========================================
+const G = {
+  running: false,
+  night: 1,
+  time: 0,          // 0 = 12AM, 6 = 6AM
+  view: 0,          // -1 = يسار, 0 = وسط, 1 = يمين
+  targetView: 0,
+  power: 100,
+  powerDrain: 1,
+  leftDoorClosed: false,
+  rightDoorClosed: false,
+  lightOn: false,
+  enemyLeft: -1,    // -1 = بعيد, 0-100 = يقترب
+  enemyRight: -1,
+  enemyNextMove: 3,
+  jumpscareActive: false,
+  survived: false,
+  dead: false,
+  powerOut: false,
+  powerOutTimer: 0,
+  nightStart: 0,
+  moveCooldown: 0
+};
+
+// ==========================================
+// AUDIO
+// ==========================================
+let actx = null;
+function initAudio() {
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+  } catch(e) {}
 }
 
-if (typeof THREE === 'undefined') {
-  showError('فشل تحميل مكتبة Three.js. تحقق من الإنترنت.');
-} else {
-  try {
-    // ==== SETUP ====
-    const canvas = document.getElementById('c');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
-    
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
-    scene.fog = new THREE.FogExp2(0x000000, 0.18);
-    
-    const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.05, 60);
-    
-    addEventListener('resize', () => {
-      camera.aspect = innerWidth/innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
-    });
-    
-    // ==== LIGHTS ====
-    scene.add(new THREE.AmbientLight(0x151515, 0.4));
-    const flashlight = new THREE.SpotLight(0xffeedd, 3.5, 18, Math.PI/7, 0.5, 1.6);
-    scene.add(flashlight);
-    scene.add(flashlight.target);
-    
-    // ==== WALLS ====
-    const wallMat = new THREE.MeshStandardMaterial({ color: 0x2a2523, roughness: 0.95, metalness: 0.05 });
-    
-    function wall(x, z, w, h, d) {
-      const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), wallMat);
-      m.position.set(x, h/2, z);
-      scene.add(m);
-    }
-    
-    // غرفة كبيرة + ممرات
-    // الجدران الخارجية (ساحة 30×30)
-    wall(0, -20, 40, 4, 0.5);   // شمال
-    wall(0, 20, 40, 4, 0.5);    // جنوب
-    wall(-20, 0, 0.5, 4, 40);   // غرب
-    wall(20, 0, 0.5, 4, 40);    // شرق
-    
-    // جدران داخلية - متاهة
-    wall(-8, -8, 15, 4, 0.5);
-    wall(8, 8, 15, 4, 0.5);
-    wall(-8, 8, 0.5, 4, 12);
-    wall(8, -8, 0.5, 4, 12);
-    wall(0, -12, 10, 4, 0.5);
-    wall(0, 12, 10, 4, 0.5);
-    wall(-14, 0, 0.5, 4, 8);
-    wall(14, 0, 0.5, 4, 8);
-    
-    // أرضية
-    const floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(50, 50),
-      new THREE.MeshStandardMaterial({ color: 0x1a1512, roughness: 1 })
-    );
-    floor.rotation.x = -Math.PI/2;
-    scene.add(floor);
-    
-    // سقف
-    const ceil = new THREE.Mesh(
-      new THREE.PlaneGeometry(50, 50),
-      new THREE.MeshStandardMaterial({ color: 0x0a0808, roughness: 1 })
-    );
-    ceil.rotation.x = Math.PI/2;
-    ceil.position.y = 4;
-    scene.add(ceil);
-    
-    // ==== EXIT ====
-    const exitDoor = new THREE.Mesh(
-      new THREE.BoxGeometry(3, 4, 0.3),
-      new THREE.MeshBasicMaterial({ color: 0x00ff44 })
-    );
-    exitDoor.position.set(0, 2, 19.5);
-    scene.add(exitDoor);
-    const exitLight = new THREE.PointLight(0x00ff44, 2, 8);
-    exitLight.position.set(0, 2.5, 18);
-    scene.add(exitLight);
-    
-    // ==== PROPS ====
-    function prop(x, z, s, color) {
-      const m = new THREE.Mesh(
-        new THREE.BoxGeometry(s, s, s),
-        new THREE.MeshStandardMaterial({ color, roughness: 0.9 })
-      );
-      m.position.set(x, s/2, z);
-      m.rotation.y = Math.random() * Math.PI * 2;
-      scene.add(m);
-    }
-    prop(-15, -15, 1.2, 0x2a1a15);
-    prop(15, -15, 1.2, 0x2a1a15);
-    prop(-15, 15, 1.2, 0x2a1a15);
-    prop(15, 15, 1.2, 0x2a1a15);
-    prop(-5, -15, 1, 0x1a1512);
-    prop(5, -15, 1, 0x1a1512);
-    prop(-10, 5, 1, 0x1a1512);
-    prop(10, -5, 1, 0x1a1512);
-    prop(-16, 0, 1.5, 0x2a1a15);
-    prop(16, 0, 1.5, 0x2a1a15);
-    
-    // ==== PLAYER ====
-    const player = {
-      pos: new THREE.Vector3(0, 1.6, -15),
-      yaw: Math.PI, pitch: 0,
-      hp: 100, battery: 100,
-      shootCd: 0, killCount: 0, gameTime: 0,
-      flashlightOn: true
-    };
-    camera.position.copy(player.pos);
-    
-    // ==== WEAPON ====
-    const weaponGroup = new THREE.Group();
-    camera.add(weaponGroup);
-    scene.add(camera);
-    const gunMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.5, metalness: 0.85 });
-    const gun = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 0.45), gunMat);
-    gun.position.set(0.18, -0.2, -0.4);
-    weaponGroup.add(gun);
-    const gunB = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.3, 8), gunMat);
-    gunB.rotation.x = Math.PI/2;
-    gunB.position.set(0.18, -0.18, -0.65);
-    weaponGroup.add(gunB);
-    
-    // ==== ENEMIES ====
-    const enemies = [];
-    
-    function makeEnemy(x, z, hp, speed, scale, color) {
-      const g = new THREE.Group();
-      const skinMat = new THREE.MeshStandardMaterial({ color, roughness: 0.9, emissive: 0x330000, emissiveIntensity: 0.5 });
-      
-      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 1.6, 8), skinMat);
-      body.position.y = 1.2;
-      g.add(body);
-      
-      const head = new THREE.Mesh(new THREE.SphereGeometry(0.35, 10, 10), skinMat);
-      head.position.y = 2.1;
-      g.add(head);
-      
-      const eyeMat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-      const eye1 = new THREE.Mesh(new THREE.SphereGeometry(0.08, 6, 6), eyeMat);
-      eye1.position.set(-0.13, 2, 0.32);
-      g.add(eye1);
-      const eye2 = eye1.clone();
-      eye2.position.x = 0.13;
-      g.add(eye2);
-      
-      const armL = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.3, 6), skinMat);
-      armL.position.set(-0.5, 1.4, 0.2);
-      armL.rotation.x = -Math.PI/2.3;
-      g.add(armL);
-      const armR = armL.clone();
-      armR.position.x = 0.5;
-      g.add(armR);
-      
-      g.scale.setScalar(scale);
-      g.position.set(x, 0, z);
-      
-      const light = new THREE.PointLight(0xff0000, 0.5, 4);
-      light.position.y = 1.5;
-      g.add(light);
-      
-      scene.add(g);
-      enemies.push({ mesh: g, hp, speed, scale, animT: Math.random()*10, armL, armR, head, body, lastHit: 0 });
-    }
-    
-    function spawnEnemyAway() {
-      for (let t = 0; t < 30; t++) {
-        const a = Math.random() * Math.PI * 2;
-        const r = 10 + Math.random() * 10;
-        const x = Math.max(-19, Math.min(19, player.pos.x + Math.cos(a) * r));
-        const z = Math.max(-19, Math.min(19, player.pos.z + Math.sin(a) * r));
-        const forward = new THREE.Vector3(-Math.sin(player.yaw), 0, -Math.cos(player.yaw));
-        const toE = new THREE.Vector3(x - player.pos.x, 0, z - player.pos.z).normalize();
-        if (forward.dot(toE) > -0.3) continue;
-        const roll = Math.random();
-        if (roll < 0.5) makeEnemy(x, z, 1, 2.2, 0.9, 0x1a0a0a);
-        else if (roll < 0.8) makeEnemy(x, z, 2, 1.6, 1.4, 0x0a0a0a);
-        else makeEnemy(x, z, 1, 3.5, 1, 0x1a0515);
-        return;
-      }
-    }
-    
-    // ==== AUDIO ====
-    let actx = null;
-    function initAudio() {
-      if (actx) return;
-      try {
-        actx = new (window.AudioContext || window.webkitAudioContext)();
-      } catch(e) {}
-    }
-    
-    function playTone(freq, dur, type, vol) {
-      if (!actx) return;
-      const t = actx.currentTime;
+function playSfx(type) {
+  if (!actx) return;
+  const t = actx.currentTime;
+  if (type === 'door') {
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(80, t);
+    o.frequency.exponentialRampToValueAtTime(40, t + 0.3);
+    g.gain.setValueAtTime(0.2, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t); o.stop(t + 0.3);
+  } else if (type === 'light') {
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = 'square';
+    o.frequency.setValueAtTime(400, t);
+    o.frequency.exponentialRampToValueAtTime(800, t + 0.1);
+    g.gain.setValueAtTime(0.08, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t); o.stop(t + 0.15);
+  } else if (type === 'step') {
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(120, t);
+    o.frequency.exponentialRampToValueAtTime(50, t + 0.15);
+    g.gain.setValueAtTime(0.15, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t); o.stop(t + 0.15);
+  } else if (type === 'heart') {
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(60, t);
+    o.frequency.exponentialRampToValueAtTime(30, t + 0.1);
+    g.gain.setValueAtTime(0.25, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t); o.stop(t + 0.15);
+  } else if (type === 'scare') {
+    // صرخة عالية
+    for (let i = 0; i < 3; i++) {
       const o = actx.createOscillator();
       const g = actx.createGain();
-      o.type = type || 'sine';
-      o.frequency.setValueAtTime(freq, t);
-      g.gain.setValueAtTime(vol || 0.2, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(2000 + i * 300, t);
+      o.frequency.exponentialRampToValueAtTime(300, t + 0.7);
+      g.gain.setValueAtTime(0.3, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.9);
       o.connect(g); g.connect(actx.destination);
-      o.start(t); o.stop(t + dur);
+      o.start(t); o.stop(t + 0.9);
     }
-    
-    // نبضات قلب
-    let heartInterval = null;
-    function startHeart() {
-      if (heartInterval) clearInterval(heartInterval);
-      const beat = () => {
-        playTone(60, 0.15, 'sine', 0.35);
-        setTimeout(() => playTone(50, 0.12, 'sine', 0.25), 200);
-      };
-      beat();
-      heartInterval = setInterval(beat, 1100);
-    }
-    
-    // همسات
-    function whisper() {
-      if (!actx) return;
-      const words = ['...تعال...', '...خلفك...', '...نحن هنا...', '...انظر...', '...لا مفر...'];
-      const el = document.getElementById('whisper');
-      el.textContent = words[Math.floor(Math.random() * words.length)];
-      el.style.opacity = '1';
-      setTimeout(() => el.style.opacity = '0', 1500);
-    }
-    
-    // ==== INPUT ====
-    const input = { mx: 0, my: 0, shoot: false };
-    const keys = {};
-    const joy = document.getElementById('joy');
-    const joyk = document.getElementById('joyk');
-    let joyOn = false, joyX = 0, joyY = 0;
-    
-    joy.addEventListener('touchstart', e => {
-      e.preventDefault();
-      joyOn = true;
-      const r = joy.getBoundingClientRect();
-      joyX = r.left + r.width/2;
-      joyY = r.top + r.height/2;
-    }, { passive: false });
-    
-    document.addEventListener('touchmove', e => {
-      if (!joyOn) return;
-      e.preventDefault();
-      const t = e.touches[0];
-      let dx = t.clientX - joyX, dy = t.clientY - joyY;
-      const d = Math.hypot(dx, dy), mx = 55;
-      if (d > mx) { dx = dx/d*mx; dy = dy/d*mx; }
-      input.mx = dx/mx;
-      input.my = dy/mx;
-      joyk.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-    }, { passive: false });
-    
-    document.addEventListener('touchend', () => {
-      joyOn = false;
-      input.mx = 0; input.my = 0;
-      joyk.style.transform = 'translate(-50%, -50%)';
-    });
-    
-    let lookOn = false, lookX = 0, lookY = 0;
-    canvas.addEventListener('touchstart', e => {
-      if (joy.contains(e.target)) return;
-      if (e.target === document.getElementById('btnShoot')) return;
-      const t = e.touches[0];
-      lookOn = true; lookX = t.clientX; lookY = t.clientY;
-    }, { passive: true });
-    
-    canvas.addEventListener('touchmove', e => {
-      if (!lookOn) return;
-      const t = e.touches[0];
-      const dx = t.clientX - lookX, dy = t.clientY - lookY;
-      player.yaw -= dx * 0.005;
-      player.pitch = Math.max(-1.3, Math.min(1.3, player.pitch - dy * 0.005));
-      lookX = t.clientX; lookY = t.clientY;
-    }, { passive: true });
-    
-    canvas.addEventListener('touchend', () => { lookOn = false; });
-    
-    const btnShoot = document.getElementById('btnShoot');
-    btnShoot.addEventListener('touchstart', e => { e.preventDefault(); input.shoot = true; }, { passive: false });
-    btnShoot.addEventListener('touchend', e => { e.preventDefault(); input.shoot = false; }, { passive: false });
-    btnShoot.addEventListener('mousedown', () => input.shoot = true);
-    btnShoot.addEventListener('mouseup', () => input.shoot = false);
-    
-    addEventListener('keydown', e => {
-      keys[e.key.toLowerCase()] = true;
-      if (e.key === ' ') input.shoot = true;
-    });
-    addEventListener('keyup', e => {
-      keys[e.key.toLowerCase()] = false;
-      if (e.key === ' ') input.shoot = false;
-    });
-    
-    // ==== SHOOT ====
-    const raycaster = new THREE.Raycaster();
-    const bloodParts = [];
-    
-    function shoot() {
-      if (player.shootCd > 0) return;
-      player.shootCd = 0.4;
-      playTone(180, 0.15, 'square', 0.3);
-      
-      const dir = new THREE.Vector3(0, 0, -1).applyEuler(camera.rotation);
-      raycaster.set(camera.position, dir);
-      
-      let closest = null, cd = Infinity;
-      for (const e of enemies) {
-        const pos = new THREE.Vector3();
-        e.mesh.getWorldPosition(pos);
-        pos.y += 1.2 * e.scale;
-        const d = camera.position.distanceTo(pos);
-        if (d > 25) continue;
-        const hit = raycaster.ray.distanceToPoint(pos);
-        if (hit < 0.9 * e.scale && d < cd) { closest = e; cd = d; }
-      }
-      
-      if (closest) {
-        closest.hp--;
-        const pos = new THREE.Vector3();
-        closest.mesh.getWorldPosition(pos);
-        pos.y += 1.2;
-        for (let i = 0; i < 10; i++) {
-          const p = new THREE.Mesh(
-            new THREE.SphereGeometry(0.06, 4, 4),
-            new THREE.MeshBasicMaterial({ color: 0x880000 })
-          );
-          p.position.copy(pos);
-          scene.add(p);
-          const v = new THREE.Vector3((Math.random()-.5)*2, Math.random()*0.7, (Math.random()-.5)*2).normalize().multiplyScalar(3);
-          bloodParts.push({ m: p, v, life: 1 });
-        }
-        playTone(250, 0.15, 'sawtooth', 0.15);
-        if (closest.hp <= 0) {
-          player.killCount++;
-          document.getElementById('killS').textContent = player.killCount;
-          scene.remove(closest.mesh);
-          const i = enemies.indexOf(closest);
-          if (i >= 0) enemies.splice(i, 1);
-        }
-      }
-    }
-    
-    // ==== UPDATE ====
-    let bobT = 0, spawnT = 3, whisperT = 6;
-    const G = { running: false, shake: 0 };
-    const clock = new THREE.Clock();
-    
-    function update(dt) {
-      player.gameTime += dt;
-      
-      let mx = input.mx, my = input.my;
-      if (keys['w']) my = -1;
-      if (keys['s']) my = 1;
-      if (keys['a']) mx = -1;
-      if (keys['d']) mx = 1;
-      
-      const mag = Math.hypot(mx, my);
-      if (mag > 0.1) {
-        mx /= mag; my /= mag;
-        const fx = -Math.sin(player.yaw), fz = -Math.cos(player.yaw);
-        const rx = Math.cos(player.yaw), rz = -Math.sin(player.yaw);
-        const nx = player.pos.x + (fx * -my + rx * mx) * 3.2 * dt;
-        const nz = player.pos.z + (fz * -my + rz * mx) * 3.2 * dt;
-        player.pos.x = Math.max(-19, Math.min(19, nx));
-        player.pos.z = Math.max(-19, Math.min(19, nz));
-        bobT += dt * 8;
-      }
-      
-      const bobY = Math.sin(bobT * 2) * 0.04 * (mag > 0.1 ? 1 : 0);
-      camera.position.set(player.pos.x, 1.6 + bobY, player.pos.z);
-      camera.rotation.order = 'YXZ';
-      camera.rotation.y = player.yaw;
-      camera.rotation.x = player.pitch;
-      
-      flashlight.position.copy(camera.position);
-      const fdir = new THREE.Vector3(0, 0, -1).applyEuler(camera.rotation);
-      flashlight.target.position.copy(camera.position.clone().add(fdir.multiplyScalar(15)));
-      
-      // بطارية
-      player.battery = Math.max(0, player.battery - dt * 0.4);
-      document.getElementById('batv').textContent = Math.round(player.battery) + '%';
-      flashlight.intensity = 3.5 * (player.battery / 100);
-      
-      // اطلاق
-      if (input.shoot) shoot();
-      player.shootCd -= dt;
-      
-      // أعداء
-      for (let i = enemies.length - 1; i >= 0; i--) {
-        const e = enemies[i];
-        const dx = player.pos.x - e.mesh.position.x;
-        const dz = player.pos.z - e.mesh.position.z;
-        const dd = Math.hypot(dx, dz) || 1;
-        if (dd > 1) {
-          e.mesh.position.x += dx/dd * e.speed * dt;
-          e.mesh.position.z += dz/dd * e.speed * dt;
-        }
-        e.mesh.rotation.y = Math.atan2(dx, dz);
-        e.animT += dt * 5;
-        e.armL.rotation.z = Math.sin(e.animT * 2) * 0.4;
-        e.armR.rotation.z = -Math.sin(e.animT * 2) * 0.4;
-        e.body.rotation.z = Math.sin(e.animT * 3) * 0.1;
-        
-        if (dd < 1.5) {
-          const t = performance.now() / 1000;
-          if (t - e.lastHit > 1) {
-            e.lastHit = t;
-            player.hp -= 15;
-            playTone(120, 0.3, 'sawtooth', 0.3);
-            document.getElementById('bloodScreen').style.opacity = '1';
-            G.shake = 1;
-            if (player.hp <= 0) { gameOver(); return; }
-          }
-        }
-      }
-      
-      document.getElementById('hpv').textContent = Math.max(0, Math.round(player.hp));
-      
-      // جزيئات دم
-      for (let i = bloodParts.length - 1; i >= 0; i--) {
-        const p = bloodParts[i];
-        p.m.position.add(p.v.clone().multiplyScalar(dt));
-        p.v.y -= 8 * dt;
-        p.life -= dt;
-        p.m.material.opacity = Math.max(0, p.life);
-        if (p.life <= 0) { scene.remove(p.m); bloodParts.splice(i, 1); }
-      }
-      
-      // spawn
-      spawnT -= dt;
-      if (spawnT <= 0 && enemies.length < 4) {
-        spawnT = 4 + Math.random() * 5;
-        spawnEnemyAway();
-      }
-      
-      // whisper
-      whisperT -= dt;
-      if (whisperT <= 0) { whisperT = 8 + Math.random() * 8; whisper(); }
-      
-      // الخروج
-      const distExit = Math.hypot(player.pos.x, player.pos.z - 19);
-      if (distExit < 2.5) {
-        document.getElementById('objective').textContent = '🎉 نجوت!';
-        if (distExit < 1.2) winGame();
-      }
-      
-      // shake
-      if (G.shake > 0) {
-        camera.position.x += (Math.random() - 0.5) * G.shake * 0.3;
-        camera.position.y += (Math.random() - 0.5) * G.shake * 0.3;
-        G.shake *= 0.85;
-      }
-    }
-    
-    function loop() {
-      const dt = Math.min(0.05, clock.getDelta());
-      if (G.running) update(dt);
-      renderer.render(scene, camera);
-      requestAnimationFrame(loop);
-    }
-    
-    function startGame() {
-      initAudio();
-      if (actx && actx.state === 'suspended') actx.resume();
-      G.running = true;
-      G.shake = 0;
-      player.pos.set(0, 1.6, -15);
-      player.yaw = Math.PI;
-      player.pitch = 0;
-      player.hp = 100;
-      player.battery = 100;
-      player.killCount = 0;
-      player.gameTime = 0;
-      spawnT = 3;
-      document.getElementById('menu').style.display = 'none';
-      document.getElementById('gameover').style.display = 'none';
-      document.getElementById('bloodScreen').style.opacity = '0';
-      document.getElementById('objective').textContent = 'ابحث عن الباب المضيء... واخرج';
-      document.getElementById('hpv').textContent = '100';
-      document.getElementById('batv').textContent = '100%';
-      enemies.forEach(e => scene.remove(e.mesh));
-      enemies.length = 0;
-      bloodParts.forEach(p => scene.remove(p.m));
-      bloodParts.length = 0;
-      startHeart();
-    }
-    
-    function gameOver() {
-      G.running = false;
-      if (heartInterval) clearInterval(heartInterval);
-      document.getElementById('bloodScreen').style.opacity = '1';
-      const m = Math.floor(player.gameTime / 60);
-      const s = Math.floor(player.gameTime % 60);
-      document.getElementById('timeS').textContent = m + ':' + (s < 10 ? '0' + s : s);
-      document.getElementById('killS').textContent = player.killCount;
-      setTimeout(() => { document.getElementById('gameover').style.display = 'flex'; }, 1500);
-    }
-    
-    function winGame() {
-      G.running = false;
-      if (heartInterval) clearInterval(heartInterval);
-      setTimeout(() => {
-        alert('🎉 نجحت!\n\nخرجت من الملجأ.\nالوقت: ' + Math.floor(player.gameTime) + ' ثانية\nقتلت: ' + player.killCount + ' كائنات');
-        location.reload();
-      }, 500);
-    }
-    
-    document.getElementById('startBtn').addEventListener('click', startGame);
-    document.getElementById('retryBtn').addEventListener('click', startGame);
-    
-    loop();
-  } catch(err) {
-    showError(err.message);
+    // ضجيج أبيض
+    const noise = actx.createBufferSource();
+    const buf = actx.createBuffer(1, actx.sampleRate * 0.8, actx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 2);
+    noise.buffer = buf;
+    const ng = actx.createGain();
+    ng.gain.setValueAtTime(0.3, t);
+    ng.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
+    noise.connect(ng); ng.connect(actx.destination);
+    noise.start(t);
+  } else if (type === 'clock') {
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(800, t);
+    g.gain.setValueAtTime(0.15, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t); o.stop(t + 0.3);
+  } else if (type === 'powerout') {
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(200, t);
+    o.frequency.exponentialRampToValueAtTime(20, t + 1.5);
+    g.gain.setValueAtTime(0.3, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 1.5);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t); o.stop(t + 1.5);
   }
 }
+
+// ==========================================
+// INPUT
+// ==========================================
+let touchStartX = 0;
+let touching = false;
+
+canvas.addEventListener('touchstart', e => {
+  const t = e.touches[0];
+  touchStartX = t.clientX;
+  touching = true;
+}, { passive: true });
+
+canvas.addEventListener('touchmove', e => {
+  if (!touching || !G.running) return;
+  const t = e.touches[0];
+  const dx = t.clientX - touchStartX;
+  if (dx > 60) {
+    G.targetView = 1;
+    touchStartX = t.clientX;
+  } else if (dx < -60) {
+    G.targetView = -1;
+    touchStartX = t.clientX;
+  }
+}, { passive: true });
+
+canvas.addEventListener('touchend', () => { touching = false; });
+
+// القفز للاتجاه
+addEventListener('click', e => {
+  if (!G.running) return;
+  if (e.target.closest('.btn')) return;
+  const x = e.clientX;
+  if (x < W * 0.3) G.targetView = -1;
+  else if (x > W * 0.7) G.targetView = 1;
+  else G.targetView = 0;
+});
+
+// كمبيوتر
+addEventListener('keydown', e => {
+  if (!G.running) return;
+  const k = e.key.toLowerCase();
+  if (k === 'a' || k === 'arrowleft') G.targetView = -1;
+  if (k === 'd' || k === 'arrowright') G.targetView = 1;
+  if (k === 's' || k === ' ') G.targetView = 0;
+  if (k === 'q') toggleLeftDoor();
+  if (k === 'e') toggleRightDoor();
+  if (k === 'f') toggleLight();
+});
+
+// الأزرار
+document.getElementById('btnLeft').addEventListener('touchstart', e => {
+  e.preventDefault(); e.stopPropagation();
+  toggleLeftDoor();
+}, { passive: false });
+document.getElementById('btnLeft').addEventListener('click', e => { e.stopPropagation(); toggleLeftDoor(); });
+
+document.getElementById('btnRight').addEventListener('touchstart', e => {
+  e.preventDefault(); e.stopPropagation();
+  toggleRightDoor();
+}, { passive: false });
+document.getElementById('btnRight').addEventListener('click', e => { e.stopPropagation(); toggleRightDoor(); });
+
+document.getElementById('lightBtn').addEventListener('touchstart', e => {
+  e.preventDefault(); e.stopPropagation();
+  toggleLight();
+}, { passive: false });
+document.getElementById('lightBtn').addEventListener('click', e => { e.stopPropagation(); toggleLight(); });
+
+function toggleLeftDoor() {
+  if (!G.running) return;
+  G.leftDoorClosed = !G.leftDoorClosed;
+  playSfx('door');
+  updateButtons();
+}
+function toggleRightDoor() {
+  if (!G.running) return;
+  G.rightDoorClosed = !G.rightDoorClosed;
+  playSfx('door');
+  updateButtons();
+}
+function toggleLight() {
+  if (!G.running) return;
+  G.lightOn = !G.lightOn;
+  playSfx('light');
+  updateButtons();
+}
+function updateButtons() {
+  document.getElementById('btnLeft').classList.toggle('on', G.leftDoorClosed);
+  document.getElementById('btnRight').classList.toggle('on', G.rightDoorClosed);
+  document.getElementById('lightBtn').classList.toggle('on', G.lightOn);
+}
+
+// ==========================================
+// UPDATE
+// ==========================================
+function update(dt) {
+  if (!G.running) return;
+  
+  // حركة الرؤية
+  const speed = 5 * dt;
+  if (G.view < G.targetView) G.view = Math.min(G.targetView, G.view + speed);
+  else if (G.view > G.targetView) G.view = Math.max(G.targetView, G.view - speed);
+  
+  // الوقت — كل ثانية حقيقية = 30 ثانية من اللعبة (الليلة ~12 دقيقة واقعية)
+  G.time += dt / 60; // 60 ثانية لكل ساعة
+  
+  if (G.time >= 6 && !G.survived) {
+    winNight();
+    return;
+  }
+  
+  // حساب استخدام الطاقة
+  let usage = 1;
+  if (G.leftDoorClosed) usage++;
+  if (G.rightDoorClosed) usage++;
+  if (G.lightOn) usage++;
+  
+  document.getElementById('usageV').textContent = usage;
+  
+  // استنزاف الطاقة
+  if (!G.powerOut) {
+    G.power -= usage * dt * 1.2;
+    if (G.power <= 0) {
+      G.power = 0;
+      G.powerOut = true;
+      playSfx('powerout');
+      G.leftDoorClosed = false;
+      G.rightDoorClosed = false;
+      G.lightOn = false;
+      updateButtons();
+    }
+    document.getElementById('powerV').textContent = Math.ceil(G.power) + '%';
+  }
+  
+  // نهاية الطاقة = موت مؤكد
+  if (G.powerOut) {
+    G.powerOutTimer += dt;
+    if (G.powerOutTimer > 6 + Math.random() * 4) {
+      triggerJumpscare();
+      return;
+    }
+  }
+  
+  // تحديث الساعات
+  const hours = Math.floor(G.time) + 12;
+  const hour12 = hours >= 12 ? (hours === 12 ? 12 : hours - 12) : hours;
+  const display = hour12 === 0 ? '12' : hour12;
+  document.getElementById('time').textContent = display + ' AM';
+  
+  // الأعداء
+  G.enemyNextMove -= dt;
+  
+  if (G.enemyNextMove <= 0 && G.running) {
+    // كل عدو يتحرك كل ~4-6 ثواني
+    G.enemyNextMove = Math.max(2.5, 5.5 - G.night * 0.4) + Math.random() * 2;
+    
+    // اليسار
+    const moveLeft = Math.random() < (0.35 + G.night * 0.05);
+    if (moveLeft) {
+      if (G.enemyLeft < 0) G.enemyLeft = 0;
+      else G.enemyLeft = Math.min(100, G.enemyLeft + 30 + Math.random() * 30);
+      playSfx('step');
+    }
+    // اليمين
+    const moveRight = Math.random() < (0.35 + G.night * 0.05);
+    if (moveRight) {
+      if (G.enemyRight < 0) G.enemyRight = 0;
+      else G.enemyRight = Math.min(100, G.enemyRight + 30 + Math.random() * 30);
+      playSfx('step');
+    }
+  }
+  
+  // إذا وصل عدو للباب — تحقق من الإغلاق
+  if (G.enemyLeft >= 100 && !G.leftDoorClosed) {
+    if (G.lightOn && G.view < -0.3) {
+      // إنت شفت وجهه — تمهل قليلاً
+      G.enemyLeft = 90;
+    } else {
+      triggerJumpscare();
+      return;
+    }
+  } else if (G.enemyLeft >= 100 && G.leftDoorClosed) {
+    // صد — يرجع
+    G.enemyLeft = -1;
+    playSfx('door');
+  }
+  
+  if (G.enemyRight >= 100 && !G.rightDoorClosed) {
+    if (G.lightOn && G.view > 0.3) {
+      G.enemyRight = 90;
+    } else {
+      triggerJumpscare();
+      return;
+    }
+  } else if (G.enemyRight >= 100 && G.rightDoorClosed) {
+    G.enemyRight = -1;
+    playSfx('door');
+  }
+  
+  // نبضات القلب — أسرع لما يكون الخطر قريب
+  const danger = Math.max(G.enemyLeft, G.enemyRight);
+  if (danger > 60 && Math.random() < dt * 2) {
+    playSfx('heart');
+  }
+}
+
+// ==========================================
+// DRAW
+// ==========================================
+function draw() {
+  // view = -1 يسار، 0 وسط، 1 يمين
+  const viewOff = G.view * W * 0.55;
+  
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+  
+  // رسم المشهد كله على كانفس داخلي 3 أضعاف العرض
+  const sceneW = W * 3;
+  const sceneOff = W - viewOff - W; // مركز المشهد
+  
+  // ===== الغرفة =====
+  // الجدار الخلفي
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, '#1a1520');
+  grad.addColorStop(1, '#0a0810');
+  ctx.fillStyle = grad;
+  ctx.fillRect(sceneOff, 0, sceneW, H);
+  
+  // ===== الجدار اليسار =====
+  ctx.fillStyle = '#0a0508';
+  ctx.fillRect(sceneOff - W, 0, W, H);
+  
+  // شباك على الجدار اليسار
+  ctx.fillStyle = '#1a2030';
+  ctx.fillRect(sceneOff - W * 0.6, H * 0.15, W * 0.5, H * 0.5);
+  ctx.fillStyle = '#000';
+  for (let i = 0; i < 6; i++) {
+    ctx.fillRect(sceneOff - W * 0.6 + i * (W * 0.5/6) + 8, H * 0.15 + 8, W * 0.5/6 - 16, H * 0.5 - 16);
+  }
+  // قمر خارج الشباك
+  ctx.fillStyle = 'rgba(200,220,255,0.3)';
+  ctx.beginPath();
+  ctx.arc(sceneOff - W * 0.35, H * 0.25, 30, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // ===== الجدار اليمين =====
+  ctx.fillStyle = '#0a0508';
+  ctx.fillRect(sceneOff + sceneW - W*1.5, 0, W * 1.5, H);
+  
+  // شباك على الجدار اليمين
+  ctx.fillStyle = '#1a2030';
+  ctx.fillRect(sceneOff + sceneW - W * 0.7, H * 0.15, W * 0.5, H * 0.5);
+  ctx.fillStyle = '#000';
+  for (let i = 0; i < 6; i++) {
+    ctx.fillRect(sceneOff + sceneW - W * 0.7 + i * (W * 0.5/6) + 8, H * 0.15 + 8, W * 0.5/6 - 16, H * 0.5 - 16);
+  }
+  
+  // ===== المشهد الرئيسي =====
+  // الطاولة الأمامية
+  ctx.fillStyle = '#2a1a15';
+  ctx.fillRect(sceneOff, H * 0.65, sceneW, H * 0.35);
+  ctx.fillStyle = '#1a0a05';
+  ctx.fillRect(sceneOff, H * 0.65, sceneW, 8);
+  
+  // شاشة الكمبيوتر
+  ctx.fillStyle = '#1a2030';
+  ctx.fillRect(sceneOff + W * 0.35, H * 0.45, W * 0.3, H * 0.2);
+  ctx.fillStyle = '#0a1520';
+  ctx.fillRect(sceneOff + W * 0.36, H * 0.46, W * 0.28, H * 0.18);
+  ctx.fillStyle = 'rgba(80,180,255,0.4)';
+  for (let i = 0; i < 5; i++) {
+    ctx.fillRect(sceneOff + W * 0.37, H * 0.47 + i * 8, Math.random() * W * 0.2, 3);
+  }
+  
+  // مروحة السقف
+  const fanAngle = performance.now() * 0.002;
+  ctx.save();
+  ctx.translate(sceneOff + W * 1.5, 60);
+  ctx.rotate(fanAngle);
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 6;
+  for (let i = 0; i < 4; i++) {
+    ctx.save();
+    ctx.rotate(i * Math.PI / 2);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -70);
+    ctx.stroke();
+    ctx.restore();
+  }
+  ctx.beginPath();
+  ctx.arc(0, 0, 12, 0, Math.PI * 2);
+  ctx.fillStyle = '#222';
+  ctx.fill();
+  ctx.restore();
+  
+  // ===== البابان =====
+  // الباب اليسار
+  const leftDoorX = sceneOff + W * 0.05;
+  const leftDoorY = H * 0.1;
+  const doorW = W * 0.22;
+  const doorH = H * 0.8;
+  
+  if (G.leftDoorClosed) {
+    ctx.fillStyle = '#3a2015';
+    ctx.fillRect(leftDoorX, leftDoorY, doorW, doorH);
+    ctx.strokeStyle = '#1a0805';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(leftDoorX, leftDoorY, doorW, doorH);
+    // تفاصيل الباب
+    ctx.fillStyle = '#2a1510';
+    ctx.fillRect(leftDoorX + 10, leftDoorY + 40, doorW - 20, doorH * 0.35);
+    ctx.fillRect(leftDoorX + 10, leftDoorY + doorH * 0.5, doorW - 20, doorH * 0.4);
+    // مقبض
+    ctx.fillStyle = '#aa8844';
+    ctx.beginPath();
+    ctx.arc(leftDoorX + doorW - 20, leftDoorY + doorH / 2, 6, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    // الباب مفتوح — نرى المدخل المظلم
+    ctx.fillStyle = '#000';
+    ctx.fillRect(leftDoorX, leftDoorY, doorW, doorH);
+    // إطار
+    ctx.strokeStyle = '#3a2015';
+    ctx.lineWidth = 15;
+    ctx.strokeRect(leftDoorX, leftDoorY, doorW, doorH);
+    // ضوء الكشاف
+    if (G.lightOn && G.view < -0.3) {
+      // إضاءة قوية على المنطقة
+      const lightGrad = ctx.createRadialGradient(leftDoorX + doorW/2, leftDoorY + doorH/2, 20, leftDoorX + doorW/2, leftDoorY + doorH/2, doorH);
+      lightGrad.addColorStop(0, 'rgba(255,240,200,0.3)');
+      lightGrad.addColorStop(1, 'rgba(255,240,200,0)');
+      ctx.fillStyle = lightGrad;
+      ctx.fillRect(leftDoorX - doorW, leftDoorY - 50, doorW * 3, doorH + 100);
+      
+      // العدو (لو قريب)
+      if (G.enemyLeft > 50) {
+        drawEnemy(leftDoorX + doorW/2, leftDoorY + doorH * 0.55, doorH * 0.25, G.enemyLeft / 100);
+      }
+    }
+  }
+  
+  // الباب اليمين
+  const rightDoorX = sceneOff + sceneW - W * 0.05 - W * 0.22;
+  const rightDoorY = H * 0.1;
+  
+  if (G.rightDoorClosed) {
+    ctx.fillStyle = '#3a2015';
+    ctx.fillRect(rightDoorX, rightDoorY, doorW, doorH);
+    ctx.strokeStyle = '#1a0805';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(rightDoorX, rightDoorY, doorW, doorH);
+    ctx.fillStyle = '#2a1510';
+    ctx.fillRect(rightDoorX + 10, rightDoorY + 40, doorW - 20, doorH * 0.35);
+    ctx.fillRect(rightDoorX + 10, rightDoorY + doorH * 0.5, doorW - 20, doorH * 0.4);
+    ctx.fillStyle = '#aa8844';
+    ctx.beginPath();
+    ctx.arc(rightDoorX + 20, rightDoorY + doorH / 2, 6, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(rightDoorX, rightDoorY, doorW, doorH);
+    ctx.strokeStyle = '#3a2015';
+    ctx.lineWidth = 15;
+    ctx.strokeRect(rightDoorX, rightDoorY, doorW, doorH);
+    if (G.lightOn && G.view > 0.3) {
+      const lightGrad = ctx.createRadialGradient(rightDoorX + doorW/2, rightDoorY + doorH/2, 20, rightDoorX + doorW/2, rightDoorY + doorH/2, doorH);
+      lightGrad.addColorStop(0, 'rgba(255,240,200,0.3)');
+      lightGrad.addColorStop(1, 'rgba(255,240,200,0)');
+      ctx.fillStyle = lightGrad;
+      ctx.fillRect(rightDoorX - doorW, rightDoorY - 50, doorW * 3, doorH + 100);
+      
+      if (G.enemyRight > 50) {
+        drawEnemy(rightDoorX + doorW/2, rightDoorY + doorH * 0.55, doorH * 0.25, G.enemyRight / 100);
+      }
+    }
+  }
+  
+  // ===== إضاءة الكشاف العامة =====
+  if (G.lightOn && !G.powerOut) {
+    const cLight = ctx.createRadialGradient(W/2 + viewOff, H * 0.5, 100, W/2 + viewOff, H * 0.5, W * 0.9);
+    cLight.addColorStop(0, 'rgba(255,220,150,0.08)');
+    cLight.addColorStop(1, 'rgba(255,220,150,0)');
+    ctx.fillStyle = cLight;
+    ctx.fillRect(0, 0, W, H);
+  }
+  
+  // ===== الظلام العام (vignette) =====
+  const dark = ctx.createRadialGradient(W/2, H/2, H * 0.2, W/2, H/2, H * 0.9);
+  dark.addColorStop(0, 'rgba(0,0,0,0)');
+  dark.addColorStop(0.7, 'rgba(0,0,0,0.4)');
+  dark.addColorStop(1, 'rgba(0,0,0,0.95)');
+  ctx.fillStyle = dark;
+  ctx.fillRect(0, 0, W, H);
+  
+  // ===== تشويش =====
+  if (G.powerOut) {
+    // تشويش قوي
+    ctx.fillStyle = 'rgba(0,0,0,0.9)';
+    ctx.fillRect(0, 0, W, H);
+    // وميض عيون
+    if (Math.random() < 0.3 && G.powerOutTimer > 3) {
+      ctx.fillStyle = 'rgba(255,0,0,0.5)';
+      ctx.beginPath();
+      ctx.arc(W * 0.15, H * 0.5, 15, 0, Math.PI * 2);
+      ctx.arc(W * 0.85, H * 0.5, 15, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  
+  // خطوط تشويش
+  for (let i = 0; i < 8; i++) {
+    if (Math.random() < 0.3) {
+      ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.05})`;
+      ctx.fillRect(0, Math.random() * H, W, 1 + Math.random() * 3);
+    }
+  }
+  
+  // ===== مؤشر الاتجاه =====
+  // سهم يسار
+  if (G.view > -0.9) {
+    ctx.fillStyle = `rgba(255,255,255,${0.4 * (1 - Math.abs(G.view))})`;
+    ctx.font = '30px Arial';
+    ctx.fillText('◄', 15, H/2);
+  }
+  if (G.view < 0.9) {
+    ctx.fillStyle = `rgba(255,255,255,${0.4 * (1 - Math.abs(G.view))})`;
+    ctx.font = '30px Arial';
+    ctx.fillText('►', W - 45, H/2);
+  }
+}
+
+function drawEnemy(x, y, size, closeness) {
+  ctx.save();
+  // هالة
+  ctx.shadowBlur = 30;
+  ctx.shadowColor = '#ff0000';
+  
+  // جسم
+  ctx.fillStyle = '#0a0505';
+  ctx.beginPath();
+  ctx.ellipse(x, y, size * 0.8, size, 0, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // رأس
+  ctx.fillStyle = '#1a0a0a';
+  ctx.beginPath();
+  ctx.arc(x, y - size * 0.9, size * 0.5, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // عيون حمراء
+  ctx.shadowBlur = 40;
+  ctx.shadowColor = '#ff0000';
+  ctx.fillStyle = '#ff0000';
+  ctx.beginPath();
+  ctx.arc(x - size * 0.2, y - size * 0.95, size * 0.12, 0, Math.PI * 2);
+  ctx.arc(x + size * 0.2, y - size * 0.95, size * 0.12, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // فم
+  ctx.fillStyle = '#000';
+  ctx.beginPath();
+  ctx.ellipse(x, y - size * 0.5, size * 0.25, size * 0.15, 0, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // أسنان
+  ctx.fillStyle = '#fff';
+  for (let i = 0; i < 5; i++) {
+    const toothX = x - size * 0.2 + i * size * 0.1;
+    ctx.beginPath();
+    ctx.moveTo(toothX, y - size * 0.5 - size * 0.12);
+    ctx.lineTo(toothX + size * 0.05, y - size * 0.4);
+    ctx.lineTo(toothX + size * 0.1, y - size * 0.5 - size * 0.12);
+    ctx.fill();
+  }
+  
+  // أيدي
+  ctx.strokeStyle = '#0a0505';
+  ctx.lineWidth = size * 0.2;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x - size * 0.7, y);
+  ctx.lineTo(x - size * 1.3, y + size * 0.4);
+  ctx.moveTo(x + size * 0.7, y);
+  ctx.lineTo(x + size * 1.3, y + size * 0.4);
+  ctx.stroke();
+  
+  ctx.restore();
+}
+
+// ==========================================
+// LOOP
+// ==========================================
+let lastTime = performance.now();
+function loop(now) {
+  const dt = Math.min(0.05, (now - lastTime) / 1000);
+  lastTime = now;
+  if (G.running) update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// ==========================================
+// JUMPSCARE
+// ==========================================
+function triggerJumpscare() {
+  if (G.jumpscareActive) return;
+  G.jumpscareActive = true;
+  G.running = false;
+  playSfx('scare');
+  
+  const js = document.getElementById('jumpscare');
+  const sc = document.getElementById('scareCanvas');
+  sc.width = W;
+  sc.height = H;
+  const sctx = sc.getContext('2d');
+  js.style.display = 'flex';
+  
+  let frame = 0;
+  const totalFrames = 60;
+  
+  function drawScare() {
+    sctx.fillStyle = '#000';
+    sctx.fillRect(0, 0, W, H);
+    
+    // اهتزاز
+    const shakeX = (Math.random() - 0.5) * 20;
+    const shakeY = (Math.random() - 0.5) * 20;
+    sctx.save();
+    sctx.translate(shakeX, shakeY);
+    
+    // الوجه — قريب جداً
+    const size = H * 0.6;
+    const cx = W / 2;
+    const cy = H / 2;
+    
+    // الرأس
+    sctx.fillStyle = '#0a0303';
+    sctx.beginPath();
+    sctx.ellipse(cx, cy, size * 0.7, size, 0, 0, Math.PI * 2);
+    sctx.fill();
+    
+    // عيون متوهجة حمراء
+    sctx.shadowBlur = 60;
+    sctx.shadowColor = '#ff0000';
+    sctx.fillStyle = '#ff0000';
+    sctx.beginPath();
+    sctx.arc(cx - size * 0.3, cy - size * 0.2, size * 0.12, 0, Math.PI * 2);
+    sctx.arc(cx + size * 0.3, cy - size * 0.2, size * 0.12, 0, Math.PI * 2);
+    sctx.fill();
+    
+    // بؤبؤ
+    sctx.shadowBlur = 0;
+    sctx.fillStyle = '#000';
+    sctx.beginPath();
+    sctx.arc(cx - size * 0.3, cy - size * 0.2, size * 0.05, 0, Math.PI * 2);
+    sctx.arc(cx + size * 0.3, cy - size * 0.2, size * 0.05, 0, Math.PI * 2);
+    sctx.fill();
+    
+    // الفم — مفتوح
+    sctx.fillStyle = '#000';
+    sctx.beginPath();
+    sctx.ellipse(cx, cy + size * 0.35, size * 0.35, size * 0.5 + Math.sin(frame * 0.5) * 20, 0, 0, Math.PI * 2);
+    sctx.fill();
+    
+    // أسنان
+    sctx.fillStyle = '#fff';
+    for (let i = 0; i < 8; i++) {
+      const tx = cx - size * 0.3 + i * size * 0.08;
+      sctx.beginPath();
+      sctx.moveTo(tx, cy + size * 0.05);
+      sctx.lineTo(tx + size * 0.04, cy + size * 0.18);
+      sctx.lineTo(tx + size * 0.08, cy + size * 0.05);
+      sctx.fill();
+      
+      sctx.beginPath();
+      sctx.moveTo(tx, cy + size * 0.7);
+      sctx.lineTo(tx + size * 0.04, cy + size * 0.55);
+      sctx.lineTo(tx + size * 0.08, cy + size * 0.7);
+      sctx.fill();
+    }
+    
+    // تشويش
+    for (let i = 0; i < 100; i++) {
+      sctx.fillStyle = `rgba(255,${Math.random()*100},${Math.random()*100},${Math.random() * 0.3})`;
+      sctx.fillRect(Math.random() * W, Math.random() * H, Math.random() * 20, 1 + Math.random() * 3);
+    }
+    
+    sctx.restore();
+    
+    frame++;
+    if (frame < totalFrames) {
+      requestAnimationFrame(drawScare);
+    } else {
+      js.style.display = 'none';
+      gameOver();
+    }
+  }
+  drawScare();
+}
+
+// ==========================================
+// START / END
+// ==========================================
+function startNight() {
+  initAudio();
+  G.running = true;
+  G.time = 0;
+  G.power = 100;
+  G.view = 0;
+  G.targetView = 0;
+  G.leftDoorClosed = false;
+  G.rightDoorClosed = false;
+  G.lightOn = false;
+  G.enemyLeft = -1;
+  G.enemyRight = -1;
+  G.enemyNextMove = 3;
+  G.jumpscareActive = false;
+  G.survived = false;
+  G.dead = false;
+  G.powerOut = false;
+  G.powerOutTimer = 0;
+  
+  document.getElementById('night').textContent = 'NIGHT ' + G.night;
+  document.getElementById('menu').style.display = 'none';
+  document.getElementById('win').style.display = 'none';
+  document.getElementById('dead').style.display = 'none';
+  document.getElementById('jumpscare').style.display = 'none';
+  document.getElementById('powerV').textContent = '100%';
+  document.getElementById('usageV').textContent = '1';
+  document.getElementById('time').textContent = '12 AM';
+  document.getElementById('hint').style.display = 'block';
+  updateButtons();
+  
+  setTimeout(() => {
+    if (G.running) document.getElementById('hint').style.display = 'none';
+  }, 6000);
+}
+
+function gameOver() {
+  G.running = false;
+  G.dead = true;
+  document.getElementById('dead').style.display = 'flex';
+}
+
+function winNight() {
+  G.running = false;
+  G.survived = true;
+  playSfx('clock');
+  document.getElementById('win').style.display = 'flex';
+}
+
+document.getElementById('startBtn').addEventListener('click', startNight);
+document.getElementById('retryBtn').addEventListener('click', () => { G.night = 1; startNight(); });
+document.getElementById('nextNight').addEventListener('click', () => {
+  G.night++;
+  startNight();
+});
+
+requestAnimationFrame(loop);
 </script>
 </body>
-</html>
+  </html>
