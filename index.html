@@ -13,61 +13,45 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;touc
 #vignette{position:absolute;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 0%,rgba(0,0,0,.5) 40%,rgba(0,0,0,.95) 85%,#000 100%)}
 #bloodScreen{position:absolute;inset:0;pointer-events:none;z-index:7;opacity:0;background:radial-gradient(ellipse at center,transparent 10%,rgba(80,0,0,.7) 60%,rgba(30,0,0,.95) 100%);transition:opacity .5s}
 #flash{position:absolute;inset:0;background:#fff;z-index:20;opacity:0;pointer-events:none;transition:opacity .1s}
-
-#ui{position:absolute;inset:0;pointer-events:none;z-index:10;font-family:'Courier New',monospace}
+#ui{position:absolute;inset:0;pointer-events:none;z-index:10}
 #crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:0 0 8px #fff;opacity:.5}
-
-.hud{position:absolute;bottom:20px;padding:10px 16px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(4px);font-size:12px;letter-spacing:2px}
+.hud{position:absolute;bottom:20px;padding:10px 16px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);font-size:12px;letter-spacing:2px}
 #hpBox{bottom:20px;right:20px;color:#ff2222}
 #hpBox .v{color:#ff4444;font-size:18px;font-weight:bold;margin-left:8px}
 #batteryBox{bottom:20px;left:20px;color:#ffcc00}
 #batteryBox .v{color:#ffdd44;font-size:18px;font-weight:bold;margin-left:8px}
-
-#objective{position:absolute;top:20px;left:50%;transform:translateX(-50%);padding:8px 20px;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.15);font-size:12px;letter-spacing:3px;color:#cccccc;text-align:center;max-width:90%}
-
-#whisper{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);font-size:22px;color:rgba(255,255,255,.85);text-shadow:0 0 20px #000,0 0 40px #000;letter-spacing:4px;opacity:0;transition:opacity 1s;pointer-events:none;font-style:italic}
-
+#objective{position:absolute;top:20px;left:50%;transform:translateX(-50%);padding:8px 20px;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.15);font-size:12px;letter-spacing:3px;color:#ccc;text-align:center;max-width:90%}
+#whisper{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);font-size:22px;color:rgba(255,255,255,.85);text-shadow:0 0 20px #000;letter-spacing:4px;opacity:0;transition:opacity 1s;pointer-events:none;font-style:italic}
 #scare{position:absolute;inset:0;background:#000;z-index:30;display:none;align-items:center;justify-content:center;overflow:hidden}
-#scare img{width:100%;height:100%;object-fit:cover;animation:scareShake .08s infinite}
-@keyframes scareShake{0%{transform:translate(0,0) scale(1.1)}25%{transform:translate(-3px,2px) scale(1.15)}50%{transform:translate(2px,-3px) scale(1.12)}75%{transform:translate(-2px,3px) scale(1.14)}100%{transform:translate(3px,-2px) scale(1.1)}}
-
+#scare svg{width:100%;height:100%}
 #joy{position:absolute;bottom:100px;left:25px;width:130px;height:130px;border-radius:50%;border:2px solid rgba(255,255,255,.15);background:radial-gradient(circle,rgba(20,20,20,.4),rgba(0,0,0,.7));pointer-events:auto}
 #joyk{position:absolute;top:50%;left:50%;width:55px;height:55px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.6),rgba(120,120,120,.3));transform:translate(-50%,-50%);box-shadow:0 0 15px rgba(255,255,255,.3);pointer-events:none}
-
 #btnShoot{position:absolute;bottom:120px;right:30px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(200,30,30,.7),rgba(80,0,0,.9));border:2px solid rgba(255,100,100,.5);display:flex;align-items:center;justify-content:center;font-size:42px;pointer-events:auto;box-shadow:0 0 30px rgba(200,0,0,.5);color:#fff}
-#btnShoot:active{transform:scale(.9);box-shadow:0 0 60px rgba(255,0,0,.9)}
-
-#menu{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:30px;text-align:center;overflow:hidden}
-#menu::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.7'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");opacity:.15;animation:staticAnim .1s infinite;pointer-events:none}
-#menu h1{font-size:52px;font-weight:900;color:#fff;letter-spacing:14px;text-shadow:0 0 20px #ff2222,0 0 40px #880000;margin-bottom:8px;animation:flicker 3s infinite;font-family:'Courier New',monospace}
+#btnShoot:active{transform:scale(.9)}
+#menu{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:30px;text-align:center}
+#menu h1{font-size:52px;font-weight:900;color:#fff;letter-spacing:14px;text-shadow:0 0 20px #ff2222,0 0 40px #880000;margin-bottom:8px;animation:flicker 3s infinite}
 @keyframes flicker{0%,90%,100%{opacity:1}91%{opacity:.3}92%{opacity:1}93%{opacity:.2}94%{opacity:1}}
 #menu .sub{color:#666;font-size:12px;letter-spacing:8px;margin-bottom:35px}
-#menu .arabic{color:#444;font-size:14px;letter-spacing:6px;margin-bottom:50px;font-family:'Segoe UI',sans-serif}
+#menu .arabic{color:#444;font-size:14px;letter-spacing:6px;margin-bottom:50px}
 #menu .warnbox{max-width:480px;padding:20px 25px;border:1px solid #550000;background:rgba(20,0,0,.5);margin-bottom:40px;position:relative}
-#menu .warnbox p{color:#888;line-height:1.9;font-size:13px;letter-spacing:1px}
+#menu .warnbox p{color:#888;line-height:1.9;font-size:13px}
 #menu .warnbox .r{color:#ff2222;font-weight:bold}
 #menu .headphone{color:#ffcc00;font-size:11px;letter-spacing:4px;margin-top:15px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
-#startBtn{background:transparent;color:#fff;border:2px solid #ff2222;padding:18px 60px;border-radius:4px;font-size:18px;font-weight:bold;cursor:pointer;font-family:'Courier New',monospace;letter-spacing:6px;box-shadow:0 0 30px rgba(255,0,0,.5),inset 0 0 20px rgba(255,0,0,.1);transition:all .3s;position:relative}
-#startBtn:hover{background:#200000;box-shadow:0 0 60px rgba(255,0,0,.8),inset 0 0 30px rgba(255,0,0,.3)}
+#startBtn{background:transparent;color:#fff;border:2px solid #ff2222;padding:18px 60px;border-radius:4px;font-size:18px;font-weight:bold;cursor:pointer;letter-spacing:6px;box-shadow:0 0 30px rgba(255,0,0,.5);transition:all .3s}
 #startBtn:active{transform:scale(.95)}
-
 #gameover{position:absolute;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:30px;text-align:center}
-#gameover h2{font-size:60px;color:#ff0000;letter-spacing:14px;text-shadow:0 0 40px #ff0000,0 0 80px #880000;font-family:'Courier New',monospace;margin-bottom:30px;animation:deadShake .5s infinite}
-@keyframes deadShake{0%,100%{transform:translate(0,0)}50%{transform:translate(-3px,3px)}}
-#gameover .quote{color:#666;font-style:italic;font-size:14px;letter-spacing:2px;margin-bottom:40px;max-width:400px;line-height:1.8}
+#gameover h2{font-size:60px;color:#ff0000;letter-spacing:14px;text-shadow:0 0 40px #ff0000;margin-bottom:30px}
+#gameover .quote{color:#666;font-style:italic;font-size:14px;margin-bottom:40px;max-width:400px;line-height:1.8}
 #gameover .stats{color:#888;font-size:13px;letter-spacing:3px;margin-bottom:35px;line-height:2.2}
 #gameover .stats b{color:#ff2222}
-#retryBtn{background:transparent;color:#fff;border:2px solid #ff2222;padding:16px 50px;border-radius:4px;font-size:16px;letter-spacing:5px;font-family:'Courier New',monospace;cursor:pointer}
-#retryBtn:active{transform:scale(.95)}
-
-#loading{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;color:#ff2222;font-family:'Courier New',monospace}
+#retryBtn{background:transparent;color:#fff;border:2px solid #ff2222;padding:16px 50px;border-radius:4px;font-size:16px;letter-spacing:5px;cursor:pointer}
+#loading{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;color:#ff2222}
 #loading .t{letter-spacing:12px;font-size:16px;animation:pulse 1.5s infinite;margin-bottom:20px}
-#loading .dots{font-size:24px}
 </style>
 </head>
 <body>
-<div id="loading"><div class="t">ENTERING...</div><div class="dots">. . .</div></div>
+<div id="loading"><div class="t">ENTERING...</div><div style="font-size:24px">. . .</div></div>
 <canvas id="c"></canvas>
 <div id="vignette"></div>
 <div id="static"></div>
@@ -113,7 +97,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;touc
   <button id="retryBtn">⟳ حاول مرة أخرى</button>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
 <script>
 // ==========================================
 // SETUP
@@ -124,8 +108,6 @@ renderer.setSize(innerWidth, innerHeight);
 renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.6;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
@@ -139,13 +121,9 @@ addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
 });
 
-// ==========================================
-// LIGHTING — فقط الكشاف
-// ==========================================
-const ambient = new THREE.AmbientLight(0x0a0a0a, 0.3);
-scene.add(ambient);
+// LIGHTING
+scene.add(new THREE.AmbientLight(0x0a0a0a, 0.3));
 
-// كشاف ضيق
 const flashlight = new THREE.SpotLight(0xffeecc, 3.5, 18, Math.PI/9, 0.5, 1.6);
 flashlight.castShadow = true;
 flashlight.shadow.mapSize.set(1024, 1024);
@@ -155,13 +133,10 @@ flashlight.shadow.bias = -0.0005;
 scene.add(flashlight);
 scene.add(flashlight.target);
 
-// توهج ضعيف جداً حول اللاعب
 const playerGlow = new THREE.PointLight(0xffdd88, 0.15, 3);
 scene.add(playerGlow);
 
-// ==========================================
-// WALL MATERIAL
-// ==========================================
+// WALL TEXTURE
 function concreteTex() {
   const cv = document.createElement('canvas');
   cv.width = cv.height = 512;
@@ -173,26 +148,11 @@ function concreteTex() {
     c.fillStyle = `rgba(${v},${v-3},${v-5},${0.3+Math.random()*0.5})`;
     c.fillRect(Math.random()*512, Math.random()*512, 1+Math.random()*3, 1+Math.random()*3);
   }
-  // بقع
   for (let i = 0; i < 40; i++) {
     c.fillStyle = `rgba(${40+Math.random()*30},${20+Math.random()*15},${15+Math.random()*10},.4)`;
     c.beginPath();
     c.arc(Math.random()*512, Math.random()*512, 5+Math.random()*30, 0, Math.PI*2);
     c.fill();
-  }
-  // شقوق
-  c.strokeStyle = 'rgba(0,0,0,.7)';
-  c.lineWidth = 1;
-  for (let i = 0; i < 30; i++) {
-    c.beginPath();
-    let x = Math.random()*512, y = Math.random()*512;
-    c.moveTo(x, y);
-    for (let j = 0; j < 8; j++) {
-      x += (Math.random()-.5)*60;
-      y += (Math.random()-.5)*60;
-      c.lineTo(x, y);
-    }
-    c.stroke();
   }
   return new THREE.CanvasTexture(cv);
 }
@@ -200,26 +160,19 @@ function concreteTex() {
 const wallTexture = concreteTex();
 wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
 const wallMat = new THREE.MeshStandardMaterial({ map: wallTexture, roughness: 0.95, metalness: 0.05 });
-const wallMatDark = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 1, metalness: 0 });
 
-// ==========================================
-// MAP — ممرات ضيقة وأبواب
-// ==========================================
+// MAP
 const MAP = [
-  // ممر رئيسي
-  { x: 0, z: -15, w: 4, h: 3.5, d: 30, door: false }, // ممر طويل
-  // غرف جانبية
+  { x: 0, z: -15, w: 4, h: 3.5, d: 30, door: false },
   { x: -10, z: -8, w: 12, h: 3.5, d: 6, door: true },
   { x: 10, z: -8, w: 12, h: 3.5, d: 6, door: true },
   { x: -10, z: 0, w: 12, h: 3.5, d: 6, door: true },
   { x: 10, z: 0, w: 12, h: 3.5, d: 6, door: true },
   { x: -10, z: 8, w: 12, h: 3.5, d: 6, door: true },
   { x: 10, z: 8, w: 12, h: 3.5, d: 6, door: true },
-  // غرفة النهاية
-  { x: 0, z: 20, w: 14, h: 4.5, d: 12, door: true, exit: true }
+  { x: 0, z: 20, w: 14, h: 4.5, d: 12, door: true }
 ];
 
-// الجدران
 function buildWall(x, z, w, h, d) {
   const wall = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), wallMat);
   wall.position.set(x, h/2, z);
@@ -228,13 +181,9 @@ function buildWall(x, z, w, h, d) {
   scene.add(wall);
 }
 
-// الأرضية والسقف
-const floorTex = concreteTex();
-floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping;
-floorTex.repeat.set(6, 6);
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(60, 60),
-  new THREE.MeshStandardMaterial({ map: floorTex, roughness: 1, metalness: 0.05, color: 0x555555 })
+  new THREE.MeshStandardMaterial({ map: concreteTex(), roughness: 1, metalness: 0.05, color: 0x555555 })
 );
 floor.rotation.x = -Math.PI/2;
 floor.receiveShadow = true;
@@ -248,49 +197,30 @@ ceiling.rotation.x = Math.PI/2;
 ceiling.position.y = 4;
 scene.add(ceiling);
 
-// بناء الغرف
-const DOORS = [];
-const ROOMS = [];
-
 MAP.forEach((room, idx) => {
   const { x, z, w, h, d, door } = room;
-  ROOMS.push(room);
-  
-  // الحوائط الأربعة (بتفاصيل الأبواب)
   if (!door) {
-    // جدار بدون باب
-    buildWall(x, z - d/2, w, h, 0.3); // شمال
-    buildWall(x, z + d/2, w, h, 0.3); // جنوب
-    buildWall(x - w/2, z, 0.3, h, d); // غرب
-    buildWall(x + w/2, z, 0.3, h, d); // شرق
-  } else {
-    // جدار بباب في المنتصف
-    const doorW = 1.8;
-    const sideW = (w - doorW) / 2;
-    // جدار شمال كامل
     buildWall(x, z - d/2, w, h, 0.3);
-    // جدار جنوب - فيه باب
-    if (idx === 0) {
-      // الممر — بابه في الأول
-    } else {
-      buildWall(x - (doorW/2 + sideW/2), z + d/2, sideW, h, 0.3);
-      buildWall(x + (doorW/2 + sideW/2), z + d/2, sideW, h, 0.3);
-      // الجزء العلوي من الباب
-      buildWall(x, z + d/2, doorW, h - 2.6, 0.3).position.y = h - (h - 2.6)/2;
-    }
-    // الجانبين
+    buildWall(x, z + d/2, w, h, 0.3);
     buildWall(x - w/2, z, 0.3, h, d);
     buildWall(x + w/2, z, 0.3, h, d);
-    // جدار داخلي بين الغرفة والممر فيه باب
+  } else {
+    const doorW = 1.8;
+    const sideW = (w - doorW) / 2;
+    buildWall(x, z - d/2, w, h, 0.3);
+    if (idx !== 0) {
+      buildWall(x - (doorW/2 + sideW/2), z + d/2, sideW, h, 0.3);
+      buildWall(x + (doorW/2 + sideW/2), z + d/2, sideW, h, 0.3);
+    }
+    buildWall(x - w/2, z, 0.3, h, d);
+    buildWall(x + w/2, z, 0.3, h, d);
     if (idx > 0 && x < 0) {
-      // غرفة يسار — بابها ناحية اليمين
       const doorW2 = 1.8;
       const sideD = (d - doorW2) / 2;
       buildWall(x + w/2, z - (doorW2/2 + sideD/2), 0.3, h, sideD);
       buildWall(x + w/2, z + (doorW2/2 + sideD/2), 0.3, h, sideD);
     }
     if (idx > 0 && x > 0) {
-      // غرفة يمين
       const doorW2 = 1.8;
       const sideD = (d - doorW2) / 2;
       buildWall(x - w/2, z - (doorW2/2 + sideD/2), 0.3, h, sideD);
@@ -299,44 +229,28 @@ MAP.forEach((room, idx) => {
   }
 });
 
-// ==========================================
-// FURNITURE / PROPS
-// ==========================================
+// PROPS
 const props = [];
 function addProp(x, z, type) {
   let mesh;
+  const mat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9, metalness: 0.3 });
+  const mat2 = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 1 });
   if (type === 'bed') {
     const g = new THREE.Group();
-    const frame = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.3, 2), new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9, metalness: 0.3 }));
-    frame.position.y = 0.4;
-    frame.castShadow = true;
-    g.add(frame);
-    const mattress = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.15, 1.95), new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 1 }));
-    mattress.position.y = 0.58;
-    mattress.castShadow = true;
-    g.add(mattress);
-    // بقع دم
-    if (Math.random() < 0.5) {
-      const blood = new THREE.Mesh(new THREE.CircleGeometry(0.25, 12), new THREE.MeshBasicMaterial({ color: 0x440000 }));
-      blood.rotation.x = -Math.PI/2;
-      blood.position.set(0, 0.66, (Math.random()-.5)*1);
-      blood.scale.set(1, Math.random()+0.5, 1);
-      g.add(blood);
-    }
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.3, 2), mat);
+    frame.position.y = 0.4; frame.castShadow = true; g.add(frame);
+    const mattress = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.15, 1.95), mat2);
+    mattress.position.y = 0.58; g.add(mattress);
     g.position.set(x, 0, z);
     mesh = g;
   } else if (type === 'chair') {
     const g = new THREE.Group();
-    const seat = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.5), new THREE.MeshStandardMaterial({ color: 0x2a2018, roughness: 0.9 }));
-    seat.position.y = 0.5;
-    seat.castShadow = true;
-    g.add(seat);
-    const back = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.6, 0.1), new THREE.MeshStandardMaterial({ color: 0x2a2018, roughness: 0.9 }));
-    back.position.set(0, 0.85, -0.2);
-    back.castShadow = true;
-    g.add(back);
+    const seat = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.5), mat);
+    seat.position.y = 0.5; g.add(seat);
+    const back = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.6, 0.1), mat);
+    back.position.set(0, 0.85, -0.2); g.add(back);
     for (let i = 0; i < 4; i++) {
-      const leg = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.5, 0.06), new THREE.MeshStandardMaterial({ color: 0x1a1a1a }));
+      const leg = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.5, 0.06), mat);
       leg.position.set((i%2 ? 0.2 : -0.2), 0.25, (i<2 ? 0.2 : -0.2));
       g.add(leg);
     }
@@ -344,36 +258,26 @@ function addProp(x, z, type) {
     mesh = g;
   } else if (type === 'cart') {
     const g = new THREE.Group();
-    const tray = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.05, 0.4), new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.4, metalness: 0.7 }));
-    tray.position.y = 0.9;
-    tray.castShadow = true;
-    g.add(tray);
-    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.9, 6), new THREE.MeshStandardMaterial({ color: 0x444444, metalness: 0.8, roughness: 0.3 }));
-    pole.position.y = 0.45;
-    g.add(pole);
-    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.05, 8), new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.8 }));
-    base.position.y = 0.03;
-    g.add(base);
+    const tray = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.05, 0.4), mat);
+    tray.position.y = 0.9; g.add(tray);
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.9, 6), mat);
+    pole.position.y = 0.45; g.add(pole);
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.05, 8), mat);
+    base.position.y = 0.03; g.add(base);
     g.position.set(x, 0, z);
     mesh = g;
   } else if (type === 'wheelchair') {
     const g = new THREE.Group();
-    const seat = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.5), new THREE.MeshStandardMaterial({ color: 0x1a1a1a }));
-    seat.position.y = 0.5;
-    seat.castShadow = true;
-    g.add(seat);
-    const back = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.08), new THREE.MeshStandardMaterial({ color: 0x1a1a1a }));
-    back.position.set(0, 0.8, -0.2);
-    g.add(back);
-    const w1 = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.04, 6, 16), new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.6 }));
-    w1.position.set(-0.28, 0.3, 0); w1.rotation.y = Math.PI/2;
-    g.add(w1);
-    const w2 = w1.clone(); w2.position.x = 0.28;
-    g.add(w2);
+    const seat = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.5), mat);
+    seat.position.y = 0.5; g.add(seat);
+    const back = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.08), mat);
+    back.position.set(0, 0.8, -0.2); g.add(back);
+    const w1 = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.04, 6, 16), mat);
+    w1.position.set(-0.28, 0.3, 0); w1.rotation.y = Math.PI/2; g.add(w1);
+    const w2 = w1.clone(); w2.position.x = 0.28; g.add(w2);
     g.position.set(x, 0, z);
     mesh = g;
   }
-  
   if (mesh) {
     mesh.rotation.y = Math.random() * Math.PI * 2;
     scene.add(mesh);
@@ -381,7 +285,6 @@ function addProp(x, z, type) {
   }
 }
 
-// وزّع الأغراض
 const ROOM_ITEMS = {
   1: ['bed', 'cart', 'chair'],
   2: ['wheelchair', 'bed'],
@@ -401,9 +304,7 @@ Object.entries(ROOM_ITEMS).forEach(([idx, items]) => {
   });
 });
 
-// ==========================================
-// ATMOSPHERE — علامات دماء على الجدران
-// ==========================================
+// BLOOD MARKS
 for (let i = 0; i < 25; i++) {
   const a = Math.random() * Math.PI * 2;
   const r = 5 + Math.random() * 20;
@@ -416,9 +317,7 @@ for (let i = 0; i < 25; i++) {
   scene.add(blood);
 }
 
-// ==========================================
 // EXIT DOOR
-// ==========================================
 const exitDoor = new THREE.Mesh(
   new THREE.BoxGeometry(2, 3, 0.15),
   new THREE.MeshStandardMaterial({ color: 0x3a1515, roughness: 0.7, metalness: 0.3, emissive: 0x220000, emissiveIntensity: 0.3 })
@@ -434,26 +333,20 @@ const exitSign = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.5), new THREE.Mes
 exitSign.position.set(0, 3.5, 25.9);
 scene.add(exitSign);
 
-// ==========================================
 // PLAYER
-// ==========================================
 const player = {
   pos: new THREE.Vector3(0, 1.6, 12),
   yaw: 0, pitch: 0,
   hp: 100, maxHp: 100,
-  battery: 100,
-  stamina: 100,
+  battery: 100, stamina: 100,
   flashlightOn: true,
   shootCd: 0, ammo: 6,
-  killCount: 0,
-  gameTime: 0
+  killCount: 0, gameTime: 0
 };
 
 camera.position.copy(player.pos);
 
-// ==========================================
-// WEAPON VIEWMODEL
-// ==========================================
+// WEAPON
 const weaponGroup = new THREE.Group();
 camera.add(weaponGroup);
 scene.add(camera);
@@ -475,41 +368,29 @@ gunGripMesh.position.set(0.18, -0.4, -0.25);
 gunGripMesh.rotation.x = 0.15;
 weaponGroup.add(gunGripMesh);
 
-// ==========================================
-// ENEMIES — كائنات مشوهة
-// ==========================================
+// ENEMIES
 const enemies = [];
 const ENEMY_TYPES = {
-  crawler: { color: 0x1a0505, emissive: 0x660000, hp: 1, speed: 2.2, scale: 0.7, score: 1, sound: 'crawl' },
-  tall: { color: 0x0a0a0a, emissive: 0x440022, hp: 2, speed: 1.6, scale: 1.6, score: 2, sound: 'crawl' },
-  twitcher: { color: 0x2a0a2a, emissive: 0x880088, hp: 1, speed: 4, scale: 1, score: 3, sound: 'crawl' }
+  crawler: { color: 0x1a0505, emissive: 0x660000, hp: 1, speed: 2.2, scale: 0.7 },
+  tall: { color: 0x0a0a0a, emissive: 0x440022, hp: 2, speed: 1.6, scale: 1.6 },
+  twitcher: { color: 0x2a0a2a, emissive: 0x880088, hp: 1, speed: 4, scale: 1 }
 };
 
 function makeEnemy(type, spawnPos) {
   const t = ENEMY_TYPES[type];
   const g = new THREE.Group();
+  const skinMat = new THREE.MeshStandardMaterial({ color: t.color, roughness: 0.9, metalness: 0, emissive: t.emissive, emissiveIntensity: 0.4 });
   
-  const skinMat = new THREE.MeshStandardMaterial({ 
-    color: t.color, 
-    roughness: 0.9, 
-    metalness: 0, 
-    emissive: t.emissive, 
-    emissiveIntensity: 0.4 
-  });
-  
-  // جسم مشوه
-  const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.4, 1.2, 4, 6), skinMat);
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 1.6, 8), skinMat);
   body.position.y = 1.2;
   body.rotation.z = (Math.random() - 0.5) * 0.4;
   g.add(body);
   
-  // رأس مقلوب
   const head = new THREE.Mesh(new THREE.SphereGeometry(0.35, 10, 10), skinMat);
   head.position.y = 2.05;
   head.rotation.z = Math.PI;
   g.add(head);
   
-  // عيون حمراء متوهجة
   const eyeMat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
   const eye1 = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 8), eyeMat);
   eye1.position.set(-0.13, 1.95, 0.3);
@@ -518,13 +399,11 @@ function makeEnemy(type, spawnPos) {
   eye2.position.x = 0.13;
   g.add(eye2);
   
-  // فم مفتوح
   const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.15, 0.1), new THREE.MeshBasicMaterial({ color: 0x000000 }));
   mouth.position.set(0, 1.8, 0.32);
   g.add(mouth);
   
-  // أذرع طويلة غير طبيعية
-  const armL = new THREE.Mesh(new THREE.CapsuleGeometry(0.1, 1.4, 3, 6), skinMat);
+  const armL = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.4, 6), skinMat);
   armL.position.set(-0.55, 1.4, 0.2);
   armL.rotation.x = -Math.PI/2.3;
   armL.rotation.z = 0.3;
@@ -534,10 +413,8 @@ function makeEnemy(type, spawnPos) {
   armR.rotation.z = -0.3;
   g.add(armR);
   
-  // أرجل مشوهة
-  const legL = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 1.1, 3, 6), skinMat);
+  const legL = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 1.1, 6), skinMat);
   legL.position.set(-0.2, 0.6, 0);
-  legL.rotation.z = (Math.random() - 0.5) * 0.3;
   g.add(legL);
   const legR = legL.clone();
   legR.position.x = 0.2;
@@ -546,78 +423,53 @@ function makeEnemy(type, spawnPos) {
   g.scale.setScalar(t.scale);
   g.position.copy(spawnPos);
   
-  // ضوء أحمر خافت
   const redLight = new THREE.PointLight(0xff0000, 0.6, 3, 2);
   redLight.position.y = 1.5;
   g.add(redLight);
   
   scene.add(g);
-  enemies.push({
-    mesh: g, hp: t.hp, speed: t.speed, type, scale: t.scale,
-    animT: Math.random() * 10, target: null,
-    armL, armR, head, body
-  });
+  enemies.push({ mesh: g, hp: t.hp, speed: t.speed, type, scale: t.scale, animT: Math.random() * 10, armL, armR, head, body });
 }
 
-// ==========================================
-// SPOOKY SPAWN LOGIC
-// ==========================================
 function spawnEnemyOutOfSight() {
-  // اختر نقطة بعيدة عن اللاعب وليست في مجال رؤيته
   for (let tries = 0; tries < 20; tries++) {
     const a = Math.random() * Math.PI * 2;
     const r = 8 + Math.random() * 15;
     const x = player.pos.x + Math.cos(a) * r;
     const z = player.pos.z + Math.sin(a) * r;
-    
-    // تحقق أنه في الخريطة
     let inMap = false;
     for (const room of MAP) {
-      if (Math.abs(x - room.x) < room.w/2 && Math.abs(z - room.z) < room.d/2) {
-        inMap = true;
-        break;
-      }
+      if (Math.abs(x - room.x) < room.w/2 && Math.abs(z - room.z) < room.d/2) { inMap = true; break; }
     }
     if (!inMap) continue;
-    
-    // تحقق أنه خلف اللاعب
     const forward = new THREE.Vector3(-Math.sin(player.yaw), 0, -Math.cos(player.yaw));
     const toEnemy = new THREE.Vector3(x - player.pos.x, 0, z - player.pos.z).normalize();
     if (forward.dot(toEnemy) > -0.2) continue;
-    
-    // اختر نوع
     const roll = Math.random();
     let type = 'crawler';
     if (roll < 0.3) type = 'tall';
     else if (roll < 0.5) type = 'twitcher';
-    
     makeEnemy(type, new THREE.Vector3(x, 0, z));
-    // صوت مفاجئ
     audio.spawnScare();
     break;
   }
 }
 
-// ==========================================
-// AUDIO — همسات، نبضات، صرخات
-// ==========================================
+// AUDIO
 const audio = {
   ctx: null, master: null, heartInterval: null, heartRate: 1.2,
-  ambientGain: null, whisperTimeout: null,
-  
   init() {
     if (this.ctx) return;
-    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-    this.master = this.ctx.createGain();
-    this.master.gain.value = 0.7;
-    this.master.connect(this.ctx.destination);
-    
-    // ضجيج خلفي (ambient drone)
-    this.startAmbient();
-    this.startHeartbeat();
-    this.scheduleWhisper();
+    try {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.7;
+      this.master.connect(this.ctx.destination);
+      this.startAmbient();
+      this.startHeartbeat();
+      this.scheduleWhisper();
+    } catch(e) {}
   },
-  
   startAmbient() {
     const ctx = this.ctx;
     const osc1 = ctx.createOscillator();
@@ -627,128 +479,89 @@ const audio = {
     const g = ctx.createGain();
     g.gain.value = 0.04;
     const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 200;
+    filter.type = 'lowpass'; filter.frequency.value = 200;
     osc1.connect(filter); osc2.connect(filter);
     filter.connect(g); g.connect(this.master);
     osc1.start(); osc2.start();
-    
-    // رياح / ضجيج
-    const noise = ctx.createBufferSource();
-    const buf = ctx.createBuffer(1, ctx.sampleRate * 4, ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * 0.15;
-    noise.buffer = buf;
-    noise.loop = true;
-    const nf = ctx.createBiquadFilter();
-    nf.type = 'bandpass';
-    nf.frequency.value = 300;
-    nf.Q.value = 0.5;
-    const ng = ctx.createGain();
-    ng.gain.value = 0.06;
-    noise.connect(nf); nf.connect(ng); ng.connect(this.master);
-    noise.start();
   },
-  
   startHeartbeat() {
+    const self = this;
     const beat = () => {
-      if (!this.ctx) return;
-      const t = this.ctx.currentTime;
-      const interval = this.heartRate;
-      
-      // نبضة 1
-      const o1 = this.ctx.createOscillator();
-      const g1 = this.ctx.createGain();
+      if (!self.ctx) return;
+      const t = self.ctx.currentTime;
+      const o1 = self.ctx.createOscillator();
+      const g1 = self.ctx.createGain();
       o1.type = 'sine';
       o1.frequency.setValueAtTime(60, t);
       o1.frequency.exponentialRampToValueAtTime(30, t + 0.1);
       g1.gain.setValueAtTime(0.4, t);
       g1.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
-      o1.connect(g1); g1.connect(this.master);
+      o1.connect(g1); g1.connect(self.master);
       o1.start(t); o1.stop(t + 0.15);
-      
-      // نبضة 2
-      const o2 = this.ctx.createOscillator();
-      const g2 = this.ctx.createGain();
+      const o2 = self.ctx.createOscillator();
+      const g2 = self.ctx.createGain();
       o2.type = 'sine';
       o2.frequency.setValueAtTime(55, t + 0.18);
       o2.frequency.exponentialRampToValueAtTime(25, t + 0.28);
       g2.gain.setValueAtTime(0.3, t + 0.18);
       g2.gain.exponentialRampToValueAtTime(0.001, t + 0.33);
-      o2.connect(g2); g2.connect(this.master);
+      o2.connect(g2); g2.connect(self.master);
       o2.start(t + 0.18); o2.stop(t + 0.33);
     };
     beat();
     this.heartInterval = setInterval(beat, 1200);
   },
-  
   setHeartRate(rate) {
     this.heartRate = rate;
-    if (this.heartInterval) {
-      clearInterval(this.heartInterval);
-      const beat = () => {
-        if (!this.ctx) return;
-        const t = this.ctx.currentTime;
-        const o1 = this.ctx.createOscillator();
-        const g1 = this.ctx.createGain();
-        o1.type = 'sine';
-        o1.frequency.setValueAtTime(60, t);
-        o1.frequency.exponentialRampToValueAtTime(30, t + 0.08);
-        g1.gain.setValueAtTime(0.35, t);
-        g1.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
-        o1.connect(g1); g1.connect(this.master);
-        o1.start(t); o1.stop(t + 0.12);
-        
-        const o2 = this.ctx.createOscillator();
-        const g2 = this.ctx.createGain();
-        o2.type = 'sine';
-        o2.frequency.setValueAtTime(55, t + 0.15);
-        o2.frequency.exponentialRampToValueAtTime(25, t + 0.25);
-        g2.gain.setValueAtTime(0.25, t + 0.15);
-        g2.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-        o2.connect(g2); g2.connect(this.master);
-        o2.start(t + 0.15); o2.stop(t + 0.3);
-      };
-      this.heartInterval = setInterval(beat, rate * 1000);
-    }
+    if (this.heartInterval) clearInterval(this.heartInterval);
+    const self = this;
+    const beat = () => {
+      if (!self.ctx) return;
+      const t = self.ctx.currentTime;
+      const o1 = self.ctx.createOscillator();
+      const g1 = self.ctx.createGain();
+      o1.type = 'sine';
+      o1.frequency.setValueAtTime(60, t);
+      o1.frequency.exponentialRampToValueAtTime(30, t + 0.08);
+      g1.gain.setValueAtTime(0.35, t);
+      g1.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+      o1.connect(g1); g1.connect(self.master);
+      o1.start(t); o1.stop(t + 0.12);
+      const o2 = self.ctx.createOscillator();
+      const g2 = self.ctx.createGain();
+      o2.type = 'sine';
+      o2.frequency.setValueAtTime(55, t + 0.15);
+      o2.frequency.exponentialRampToValueAtTime(25, t + 0.25);
+      g2.gain.setValueAtTime(0.25, t + 0.15);
+      g2.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      o2.connect(g2); g2.connect(self.master);
+      o2.start(t + 0.15); o2.stop(t + 0.3);
+    };
+    this.heartInterval = setInterval(beat, rate * 1000);
   },
-  
   scheduleWhisper() {
-    const delay = 4000 + Math.random() * 8000;
-    this.whisperTimeout = setTimeout(() => {
-      this.playWhisper();
-      this.scheduleWhisper();
-    }, delay);
+    setTimeout(() => { this.playWhisper(); this.scheduleWhisper(); }, 4000 + Math.random() * 8000);
   },
-  
   playWhisper() {
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
-    // همسة: صوت مع فلتر
     const noise = this.ctx.createBufferSource();
     const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * 0.8, this.ctx.sampleRate);
     const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) {
-      d[i] = (Math.random()*2-1) * Math.sin(i / d.length * Math.PI) * 0.3;
-    }
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.sin(i / d.length * Math.PI) * 0.3;
     noise.buffer = buf;
     const filt = this.ctx.createBiquadFilter();
-    filt.type = 'bandpass';
-    filt.frequency.value = 800 + Math.random() * 400;
-    filt.Q.value = 8;
+    filt.type = 'bandpass'; filt.frequency.value = 800 + Math.random() * 400; filt.Q.value = 8;
     const g = this.ctx.createGain();
     g.gain.value = 0.12;
     noise.connect(filt); filt.connect(g); g.connect(this.master);
     noise.start(t);
-    
-    // عرض نصي بسيط
     const words = ['...تعال...', '...خلفك...', '...لا تقاوم...', '...نحن هنا...', '...انظر...'];
     const el = document.getElementById('whisper');
     el.textContent = words[Math.floor(Math.random() * words.length)];
     el.style.opacity = '1';
     setTimeout(() => { el.style.opacity = '0'; }, 1500);
   },
-  
   shoot() {
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -758,15 +571,13 @@ const audio = {
     for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 3);
     noise.buffer = buf;
     const filt = this.ctx.createBiquadFilter();
-    filt.type = 'lowpass';
-    filt.frequency.value = 900;
+    filt.type = 'lowpass'; filt.frequency.value = 900;
     const g = this.ctx.createGain();
     g.gain.setValueAtTime(0.4, t);
     g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
     noise.connect(filt); filt.connect(g); g.connect(this.master);
     noise.start(t);
   },
-  
   hit() {
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -780,11 +591,9 @@ const audio = {
     o.connect(g); g.connect(this.master);
     o.start(t); o.stop(t + 0.4);
   },
-  
   spawnScare() {
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
-    // صوت غريب مفاجئ
     const o = this.ctx.createOscillator();
     const g = this.ctx.createGain();
     o.type = 'sawtooth';
@@ -795,7 +604,6 @@ const audio = {
     o.connect(g); g.connect(this.master);
     o.start(t); o.stop(t + 0.5);
   },
-  
   death() {
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -809,11 +617,9 @@ const audio = {
     o.connect(g); g.connect(this.master);
     o.start(t); o.stop(t + 2);
   },
-  
   jumpScare() {
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
-    // صرخة عالية
     const o = this.ctx.createOscillator();
     const g = this.ctx.createGain();
     o.type = 'sawtooth';
@@ -823,55 +629,22 @@ const audio = {
     g.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
     o.connect(g); g.connect(this.master);
     o.start(t); o.stop(t + 0.8);
-    
-    // ضجيج عالي
-    const noise = this.ctx.createBufferSource();
-    const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * 0.8, this.ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 1.5);
-    noise.buffer = buf;
-    const ng = this.ctx.createGain();
-    ng.gain.setValueAtTime(0.4, t);
-    ng.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
-    noise.connect(ng); ng.connect(this.master);
-    noise.start(t);
   }
 };
 
-// ==========================================
 // JUMP SCARE
-// ==========================================
 function triggerJumpScare() {
   const scare = document.getElementById('scare');
-  // صورة مرعبة SVG (رسم بسيط)
-  scare.innerHTML = `
-    <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;background:#000">
-      <rect width="500" height="500" fill="#0a0000"/>
-      <ellipse cx="250" cy="220" rx="180" ry="220" fill="#1a0505"/>
-      <circle cx="160" cy="180" r="30" fill="#000"/>
-      <circle cx="340" cy="180" r="30" fill="#000"/>
-      <circle cx="160" cy="180" r="10" fill="#ff0000"/>
-      <circle cx="340" cy="180" r="10" fill="#ff0000"/>
-      <circle cx="160" cy="180" r="5" fill="#fff"/>
-      <circle cx="340" cy="180" r="5" fill="#fff"/>
-      <path d="M120 320 Q250 420 380 320 Q250 380 120 320 Z" fill="#000"/>
-      <path d="M140 330 L160 360 L180 330 L200 360 L220 330 L240 360 L260 330 L280 360 L300 330 L320 360 L340 330 L360 360" stroke="#fff" stroke-width="4" fill="none"/>
-      <path d="M100 100 L80 40 M400 100 L420 40 M150 60 L130 10 M350 60 L370 10" stroke="#1a0000" stroke-width="8"/>
-    </svg>
-  `;
+  scare.innerHTML = '<svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;background:#000"><rect width="500" height="500" fill="#0a0000"/><ellipse cx="250" cy="220" rx="180" ry="220" fill="#1a0505"/><circle cx="160" cy="180" r="30" fill="#000"/><circle cx="340" cy="180" r="30" fill="#000"/><circle cx="160" cy="180" r="12" fill="#ff0000"/><circle cx="340" cy="180" r="12" fill="#ff0000"/><circle cx="160" cy="180" r="5" fill="#fff"/><circle cx="340" cy="180" r="5" fill="#fff"/><path d="M120 320 Q250 420 380 320 Q250 380 120 320 Z" fill="#000"/><path d="M140 330 L160 360 L180 330 L200 360 L220 330 L240 360 L260 330 L280 360 L300 330 L320 360 L340 330 L360 360" stroke="#fff" stroke-width="5" fill="none"/></svg>';
   scare.style.display = 'flex';
   document.getElementById('flash').style.opacity = '1';
   setTimeout(() => { document.getElementById('flash').style.opacity = '0'; }, 50);
   audio.jumpScare();
-  setTimeout(() => {
-    scare.style.display = 'none';
-  }, 600);
+  setTimeout(() => { scare.style.display = 'none'; }, 600);
 }
 
-// ==========================================
 // INPUT
-// ==========================================
-const input = { moveX: 0, moveY: 0, shoot: false, sprint: false };
+const input = { moveX: 0, moveY: 0, shoot: false };
 const keys = {};
 const joy = document.getElementById('joy');
 const joyk = document.getElementById('joyk');
@@ -903,7 +676,6 @@ document.addEventListener('touchend', () => {
   joyk.style.transform = 'translate(-50%, -50%)';
 });
 
-// كاميرا — سحب على الشاشة
 let lookOn = false, lookX = 0, lookY = 0;
 canvas.addEventListener('touchstart', e => {
   if (e.target === joy || joy.contains(e.target)) return;
@@ -925,12 +697,9 @@ canvas.addEventListener('touchmove', e => {
 
 canvas.addEventListener('touchend', () => { lookOn = false; });
 
-// أزرار
 const btnShoot = document.getElementById('btnShoot');
 btnShoot.addEventListener('touchstart', e => { e.preventDefault(); input.shoot = true; }, { passive: false });
 btnShoot.addEventListener('touchend', e => { e.preventDefault(); input.shoot = false; }, { passive: false });
-btnShoot.addEventListener('mousedown', () => input.shoot = true);
-btnShoot.addEventListener('mouseup', () => input.shoot = false);
 
 addEventListener('keydown', e => {
   keys[e.key.toLowerCase()] = true;
@@ -942,10 +711,10 @@ addEventListener('keyup', e => {
   if (e.key === ' ') input.shoot = false;
 });
 
-// ==========================================
 // SHOOTING
-// ==========================================
 const raycaster = new THREE.Raycaster();
+const bloodParticles = [];
+
 function shoot() {
   if (player.ammo <= 0) return;
   if (player.shootCd > 0) return;
@@ -973,40 +742,28 @@ function shoot() {
   
   if (closest) {
     closest.hp--;
-    // انفجار دم
     const pos = new THREE.Vector3();
     closest.mesh.getWorldPosition(pos);
     pos.y += 1.2;
     for (let i = 0; i < 12; i++) {
-      const p = new THREE.Mesh(
-        new THREE.SphereGeometry(0.05 + Math.random()*0.05, 4, 4),
-        new THREE.MeshBasicMaterial({ color: 0x660000, transparent: true, opacity: 0.9 })
-      );
+      const p = new THREE.Mesh(new THREE.SphereGeometry(0.05 + Math.random()*0.05, 4, 4), new THREE.MeshBasicMaterial({ color: 0x660000, transparent: true, opacity: 0.9 }));
       p.position.copy(pos);
       scene.add(p);
       const v = new THREE.Vector3((Math.random()-.5)*2, Math.random()*0.7+0.2, (Math.random()-.5)*2).normalize().multiplyScalar(3+Math.random()*3);
       bloodParticles.push({ m: p, v, life: 1 });
     }
-    
-    if (closest.hp <= 0) {
-      killEnemy(closest);
-    }
+    if (closest.hp <= 0) killEnemy(closest);
   }
 }
 
-const bloodParticles = [];
 function killEnemy(e) {
   player.killCount++;
   document.getElementById('killS').textContent = player.killCount;
-  // انفجار كبير
   const pos = new THREE.Vector3();
   e.mesh.getWorldPosition(pos);
   pos.y += 1.2;
   for (let i = 0; i < 30; i++) {
-    const p = new THREE.Mesh(
-      new THREE.SphereGeometry(0.06 + Math.random()*0.08, 4, 4),
-      new THREE.MeshBasicMaterial({ color: 0x880000, transparent: true, opacity: 0.95 })
-    );
+    const p = new THREE.Mesh(new THREE.SphereGeometry(0.06 + Math.random()*0.08, 4, 4), new THREE.MeshBasicMaterial({ color: 0x880000, transparent: true, opacity: 0.95 }));
     p.position.copy(pos);
     scene.add(p);
     const v = new THREE.Vector3((Math.random()-.5)*2, Math.random()*1.2, (Math.random()-.5)*2).normalize().multiplyScalar(4+Math.random()*5);
@@ -1017,18 +774,13 @@ function killEnemy(e) {
   if (idx >= 0) enemies.splice(idx, 1);
 }
 
-// ==========================================
 // UPDATE
-// ==========================================
-const clock = new THREE.Clock();
 let bobT = 0;
 let spawnT = 5;
 let jumpedRecently = false;
 
 function update(dt) {
   player.gameTime += dt;
-  
-  // حركة
   let mx = input.moveX, my = input.moveY;
   if (keys['w'] || keys['arrowup']) my = -1;
   if (keys['s'] || keys['arrowdown']) my = 1;
@@ -1049,99 +801,64 @@ function update(dt) {
     const forward = new THREE.Vector3(-Math.sin(player.yaw), 0, -Math.cos(player.yaw));
     const right = new THREE.Vector3(Math.cos(player.yaw), 0, -Math.sin(player.yaw));
     const move = forward.multiplyScalar(-my).add(right.multiplyScalar(mx));
-    
     const newX = player.pos.x + move.x * speed * dt;
     const newZ = player.pos.z + move.z * speed * dt;
-    
-    // كشف التصادم مع الجدران والأثاث
     let canX = true, canZ = true;
-    
     for (const p of props) {
-      const dx = newX - p.x, dz = player.pos.z - p.z;
-      if (Math.hypot(dx, dz) < p.r) canX = false;
-      const dx2 = player.pos.x - p.x, dz2 = newZ - p.z;
-      if (Math.hypot(dx2, dz2) < p.r) canZ = false;
+      if (Math.hypot(newX - p.x, player.pos.z - p.z) < p.r) canX = false;
+      if (Math.hypot(player.pos.x - p.x, newZ - p.z) < p.r) canZ = false;
     }
-    
-    // حدود الخريطة البسيطة
-    const distFromCenter = Math.hypot(newX, newZ);
-    if (distFromCenter > 28) { canX = false; canZ = false; }
-    
+    if (Math.hypot(newX, newZ) > 28) { canX = false; canZ = false; }
     if (canX) player.pos.x = newX;
     if (canZ) player.pos.z = newZ;
-    
     bobT += dt * (keys['shift'] ? 12 : 8);
   }
   
-  // موقع الكاميرا
   const bobY = Math.sin(bobT * 2) * 0.04 * (mag > 0.1 ? 1 : 0);
   const bobX = Math.cos(bobT) * 0.03 * (mag > 0.1 ? 1 : 0);
-  camera.position.set(
-    player.pos.x + bobX,
-    1.6 + bobY,
-    player.pos.z
-  );
+  camera.position.set(player.pos.x + bobX, 1.6 + bobY, player.pos.z);
   camera.rotation.order = 'YXZ';
   camera.rotation.y = player.yaw;
   camera.rotation.x = player.pitch;
   
-  // كشاف
   flashlight.position.copy(camera.position);
   const fdir = new THREE.Vector3(0, 0, -1).applyEuler(camera.rotation);
   flashlight.target.position.copy(camera.position.clone().add(fdir.clone().multiplyScalar(15)));
   flashlight.intensity = player.flashlightOn ? 3.5 * (player.battery / 100) : 0;
-  
   playerGlow.position.copy(camera.position);
   
-  // بطارية
   if (player.flashlightOn) {
     player.battery -= dt * 0.7;
-    if (player.battery <= 0) {
-      player.battery = 0;
-      player.flashlightOn = false;
-    }
+    if (player.battery <= 0) { player.battery = 0; player.flashlightOn = false; }
   }
   document.getElementById('batv').textContent = Math.round(player.battery) + '%';
   
-  // shooting
   if (input.shoot) shoot();
   player.shootCd -= dt;
   
-  // enemies
   for (const e of enemies) {
     const dx = player.pos.x - e.mesh.position.x;
     const dz = player.pos.z - e.mesh.position.z;
     const dd = Math.hypot(dx, dz) || 1;
-    
-    // حركة
     if (dd > 1) {
       e.mesh.position.x += dx/dd * e.speed * dt;
       e.mesh.position.z += dz/dd * e.speed * dt;
     }
-    
-    // دوران نحو اللاعب
     e.mesh.rotation.y = Math.atan2(dx, dz);
-    
-    // أنيميشن
     e.animT += dt * (5 + e.speed);
     e.armL.rotation.z = 0.3 + Math.sin(e.animT * 2) * 0.4;
     e.armR.rotation.z = -0.3 - Math.sin(e.animT * 2) * 0.4;
     e.body.rotation.z = Math.sin(e.animT * 3) * 0.15;
     e.head.rotation.y = Math.sin(e.animT * 4) * 0.4;
     
-    // هجوم
     if (dd < 1.5) {
       const t = performance.now() / 1000;
       if (!e.lastHit || t - e.lastHit > 1.2) {
         e.lastHit = t;
         player.hp -= 15;
         audio.hit();
-        // دم على الشاشة
         document.getElementById('bloodScreen').style.opacity = '1';
-        setTimeout(() => {
-          document.getElementById('bloodScreen').style.opacity = Math.max(0, 1 - player.hp/100);
-        }, 400);
-        // اهتزاز
+        setTimeout(() => { document.getElementById('bloodScreen').style.opacity = Math.max(0, 1 - player.hp/100); }, 400);
         G.shake = 1;
         audio.setHeartRate(0.5);
         if (player.hp <= 0) { gameOver(); return; }
@@ -1149,10 +866,8 @@ function update(dt) {
     }
   }
   
-  // HP UI
   document.getElementById('hpv').textContent = Math.max(0, Math.round(player.hp));
   
-  // blood particles
   for (let i = bloodParticles.length - 1; i >= 0; i--) {
     const p = bloodParticles[i];
     p.m.position.add(p.v.clone().multiplyScalar(dt));
@@ -1168,48 +883,32 @@ function update(dt) {
     }
   }
   
-  // spawn enemies
   spawnT -= dt;
   if (spawnT <= 0 && enemies.length < 4) {
     spawnT = 4 + Math.random() * 5;
     spawnEnemyOutOfSight();
-    // زيادة نبضات القلب
     audio.setHeartRate(Math.max(0.55, 1.2 - enemies.length * 0.12));
   }
   
-  // زيادة التوتر مع اقتراب العدو
   let minDist = Infinity;
   for (const e of enemies) {
     const d = Math.hypot(player.pos.x - e.mesh.position.x, player.pos.z - e.mesh.position.z);
     if (d < minDist) minDist = d;
   }
-  if (minDist < 6) {
-    audio.setHeartRate(0.55);
-    document.getElementById('static').style.opacity = '0.15';
-  } else if (minDist < 12) {
-    document.getElementById('static').style.opacity = '0.08';
-  } else {
-    document.getElementById('static').style.opacity = '0.06';
-  }
+  if (minDist < 6) document.getElementById('static').style.opacity = '0.15';
+  else if (minDist < 12) document.getElementById('static').style.opacity = '0.08';
+  else document.getElementById('static').style.opacity = '0.06';
   
-  // كشف الباب (exit)
   const distExit = Math.hypot(player.pos.x - 0, player.pos.z - 25);
-  if (distExit < 3) {
-    document.getElementById('objective').textContent = 'اخرج من الباب!';
-    // نهاية اللعبة
-    if (distExit < 1.5) {
-      winGame();
-    }
-  }
+  if (distExit < 3) document.getElementById('objective').textContent = 'اخرج من الباب!';
+  if (distExit < 1.5) winGame();
   
-  // jump scare عشوائي
   if (Math.random() < 0.0008 && !jumpedRecently) {
     jumpedRecently = true;
     triggerJumpScare();
     setTimeout(() => jumpedRecently = false, 8000);
   }
   
-  // shake
   if (G.shake > 0) {
     camera.position.x += (Math.random() - 0.5) * G.shake * 0.3;
     camera.position.y += (Math.random() - 0.5) * G.shake * 0.3;
@@ -1217,11 +916,7 @@ function update(dt) {
   }
 }
 
-// ==========================================
-// GAME STATE
-// ==========================================
 const G = { running: false, shake: 0 };
-
 const clock2 = new THREE.Clock();
 
 function loop() {
@@ -1231,13 +926,9 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
-// ==========================================
-// START / END
-// ==========================================
 function startGame() {
   audio.init();
-  if (audio.ctx.state === 'suspended') audio.ctx.resume();
-  
+  if (audio.ctx && audio.ctx.state === 'suspended') audio.ctx.resume();
   G.running = true;
   G.shake = 0;
   player.pos.set(0, 1.6, 12);
@@ -1247,20 +938,16 @@ function startGame() {
   player.gameTime = 0;
   player.flashlightOn = true;
   spawnT = 3;
-  
   document.getElementById('menu').style.display = 'none';
   document.getElementById('gameover').style.display = 'none';
   document.getElementById('bloodScreen').style.opacity = '0';
   document.getElementById('objective').textContent = 'ابحث عن الباب... واخرج من هنا';
   document.getElementById('hpv').textContent = '100';
   document.getElementById('batv').textContent = '100%';
-  
-  // clear enemies
   enemies.forEach(e => scene.remove(e.mesh));
   enemies.length = 0;
   bloodParticles.forEach(p => scene.remove(p.m));
   bloodParticles.length = 0;
-  
   audio.setHeartRate(1.2);
 }
 
@@ -1268,23 +955,19 @@ function gameOver() {
   G.running = false;
   audio.death();
   document.getElementById('bloodScreen').style.opacity = '1';
-  
   const m = Math.floor(player.gameTime / 60);
   const s = Math.floor(player.gameTime % 60);
   document.getElementById('timeS').textContent = m + ':' + (s < 10 ? '0' + s : s);
   document.getElementById('killS').textContent = player.killCount;
   document.getElementById('roomS').textContent = Math.floor(Math.random() * 3) + 1;
-  
-  setTimeout(() => {
-    document.getElementById('gameover').style.display = 'flex';
-  }, 2000);
+  setTimeout(() => { document.getElementById('gameover').style.display = 'flex'; }, 2000);
 }
 
 function winGame() {
   G.running = false;
   document.getElementById('objective').textContent = '🎉 نجوت!';
   setTimeout(() => {
-    alert('🎉 نجحت!\n\nخرجت من الملجأ المهجور.\n\nالوقت: ' + Math.floor(player.gameTime) + ' ثانية\nقتلت: ' + player.killCount + ' كائن');
+    alert('🎉 نجحت!\nخرجت من الملجأ.\nالوقت: ' + Math.floor(player.gameTime) + ' ثانية\nقتلت: ' + player.killCount);
     location.reload();
   }, 500);
 }
@@ -1292,10 +975,9 @@ function winGame() {
 document.getElementById('startBtn').addEventListener('click', startGame);
 document.getElementById('retryBtn').addEventListener('click', startGame);
 
-setTimeout(() => {
-  document.getElementById('loading').style.display = 'none';
-  loop();
-}, 1500);
+// Hide loading and START loop immediately
+document.getElementById('loading').style.display = 'none';
+loop();
 </script>
 </body>
-  </html>
+</html>
