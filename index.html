@@ -3,204 +3,135 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>LAST STAND</title>
+<title>THE ABANDONED</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;font-family:'Courier New',monospace}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;touch-action:none;cursor:crosshair}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;touch-action:none}
 #c{display:block;position:absolute;inset:0}
-#ui{position:absolute;inset:0;pointer-events:none;z-index:10}
-#vign{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 20%,rgba(0,0,0,.9) 90%);pointer-events:none}
-#blood{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(120,0,0,.6) 100%);opacity:0;transition:opacity .3s;pointer-events:none}
-#crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:26px;height:26px;pointer-events:none}
-#crosshair::before,#crosshair::after{content:'';position:absolute;background:#00ff88;box-shadow:0 0 6px #00ff88}
-#crosshair::before{width:2px;height:100%;left:50%;transform:translateX(-50%)}
-#crosshair::after{width:100%;height:2px;top:50%;transform:translateY(-50%)}
-#hitmark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);width:36px;height:36px;pointer-events:none}
-#hitmark::before,#hitmark::after{content:'';position:absolute;width:14px;height:2px;background:#ff0000;box-shadow:0 0 10px #ff0000;top:50%;left:50%}
-#hitmark::before{transform:translate(-50%,-50%) rotate(45deg)}
-#hitmark::after{transform:translate(-50%,-50%) rotate(-45deg)}
-#hitmark.show{animation:hm .3s}
-@keyframes hm{0%{transform:translate(-50%,-50%) scale(1.5);opacity:1}100%{transform:translate(-50%,-50%) scale(0);opacity:0}}
+#static{position:absolute;inset:0;pointer-events:none;z-index:8;opacity:0.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");animation:staticAnim .15s infinite}
+@keyframes staticAnim{0%{transform:translate(0,0)}25%{transform:translate(-5%,3%)}50%{transform:translate(3%,-5%)}75%{transform:translate(-3%,5%)}100%{transform:translate(5%,-3%)}}
+#vignette{position:absolute;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 0%,rgba(0,0,0,.5) 40%,rgba(0,0,0,.95) 85%,#000 100%)}
+#bloodScreen{position:absolute;inset:0;pointer-events:none;z-index:7;opacity:0;background:radial-gradient(ellipse at center,transparent 10%,rgba(80,0,0,.7) 60%,rgba(30,0,0,.95) 100%);transition:opacity .5s}
+#flash{position:absolute;inset:0;background:#fff;z-index:20;opacity:0;pointer-events:none;transition:opacity .1s}
 
-.top{padding:16px;display:flex;justify-content:space-between;align-items:flex-start;position:absolute;top:0;left:0;right:0}
-.hpwrap{display:flex;flex-direction:column;gap:5px}
-.hpbar{width:180px;height:20px;background:linear-gradient(180deg,#1a0000,#000);border:2px solid #8b0000;border-radius:4px;overflow:hidden;position:relative;box-shadow:0 0 15px rgba(255,0,0,.5),inset 0 0 10px rgba(0,0,0,.9)}
-.hpfill{height:100%;background:linear-gradient(90deg,#ff0000,#ff4400,#ffaa00);transition:width .3s;box-shadow:inset 0 -4px 8px rgba(0,0,0,.5)}
-.hpbar::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent 18px,rgba(0,0,0,.4) 18px,rgba(0,0,0,.4) 20px)}
-.staminabar{width:180px;height:8px;background:rgba(0,0,0,.8);border:1px solid #00ff88;border-radius:4px;overflow:hidden}
-.staminafill{height:100%;background:linear-gradient(90deg,#00ff88,#00aaff);transition:width .2s}
-.hud-r{text-align:left;font-family:'Courier New',monospace}
-.stat{background:rgba(0,0,0,.75);padding:6px 14px;border:1px solid rgba(255,50,50,.5);border-radius:3px;font-size:12px;letter-spacing:2px;margin-bottom:5px;color:#ff4444}
-.stat b{color:#ffcc00;font-size:16px}
-.center-top{position:absolute;top:16px;left:50%;transform:translateX(-50%);text-align:center;font-family:'Courier New',monospace}
-.wavelbl{color:#ff4444;font-size:11px;letter-spacing:6px;text-shadow:0 0 8px #ff0000}
-.wavenum{font-size:26px;font-weight:900;color:#fff;text-shadow:0 0 15px #ff0000;letter-spacing:3px}
-#ammo{position:absolute;bottom:22px;right:24px;text-align:left;font-family:'Courier New',monospace}
-#ammo .cnt{font-size:38px;font-weight:900;color:#ffcc00;text-shadow:0 0 20px #ff8800;letter-spacing:2px}
-#ammo .max{font-size:16px;color:#888;margin-left:4px}
-#ammo .wname{font-size:11px;color:#ff4444;letter-spacing:3px;margin-bottom:2px}
-#ammo .reload{color:#ff0000;font-size:14px;letter-spacing:3px;display:none;animation:blink .5s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-#score{position:absolute;bottom:22px;left:24px;font-family:'Courier New',monospace}
-#score .lbl{font-size:10px;color:#666;letter-spacing:3px}
-#score .val{font-size:28px;font-weight:900;color:#00ff88;text-shadow:0 0 15px #00ff88}
-#kills{font-size:12px;color:#ff4444;letter-spacing:2px;margin-top:4px}
-#ctrl{position:absolute;bottom:22px;left:22px;right:22px;display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none}
-#joy{width:150px;height:150px;border-radius:50%;border:2px solid rgba(255,50,50,.4);background:radial-gradient(circle,rgba(50,0,0,.5),rgba(0,0,0,.7));position:relative;pointer-events:auto;box-shadow:inset 0 0 30px rgba(255,0,0,.2)}
-#joyk{width:65px;height:65px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ff6666,#660000 70%);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 25px rgba(255,50,50,.9),inset 0 -6px 12px rgba(0,0,0,.6);pointer-events:none}
-.btns{display:flex;gap:16px;align-items:flex-end}
-.btn{width:90px;height:90px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;pointer-events:auto;cursor:pointer;transition:transform .08s;border:3px solid rgba(255,255,255,.6);position:relative}
-.btn:active{transform:scale(.85)}
-.bshoot{background:radial-gradient(circle at 30% 30%,#ff8844,#8b0000 70%);box-shadow:0 0 30px rgba(255,80,0,.8),inset 0 -6px 15px rgba(0,0,0,.6);font-size:44px}
-.breload{background:radial-gradient(circle at 30% 30%,#88ddff,#003366 70%);box-shadow:0 0 30px rgba(0,150,255,.7),inset 0 -6px 15px rgba(0,0,0,.6);width:70px;height:70px;font-size:28px}
-.bswap{background:radial-gradient(circle at 30% 30%,#aaff88,#004400 70%);box-shadow:0 0 30px rgba(0,255,100,.7),inset 0 -6px 15px rgba(0,0,0,.6);width:70px;height:70px;font-size:26px}
-#damage{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,transparent 20%,rgba(255,0,0,.7) 100%);transition:opacity .15s}
-#reload-circle{position:absolute;bottom:80px;right:60px;width:60px;height:60px;border-radius:50%;border:4px solid transparent;display:none;pointer-events:none}
-#reload-circle::before{content:'';position:absolute;inset:0;border-radius:50%;border:4px solid #ffcc00;border-top-color:transparent;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+#ui{position:absolute;inset:0;pointer-events:none;z-index:10;font-family:'Courier New',monospace}
+#crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:0 0 8px #fff;opacity:.5}
 
-#menu{position:absolute;inset:0;background:linear-gradient(180deg,#0a0000 0%,#1a0505 50%,#000 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:30px;text-align:center;overflow:hidden}
-#menu::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 L100 50 L50 100 L0 50 Z' fill='none' stroke='%23ff0000' stroke-width='0.3' opacity='0.15'/%3E%3C/svg%3E");pointer-events:none;animation:bgmove 60s linear infinite}
-@keyframes bgmove{to{background-position:1000px 1000px}}
-#menu h1{font-size:64px;font-weight:900;color:#fff;text-shadow:0 0 30px #ff0000,0 0 60px #8b0000,4px 4px 0 #000;letter-spacing:8px;margin-bottom:4px;font-family:'Courier New',monospace;position:relative;animation:flicker 4s infinite}
-@keyframes flicker{0%,95%,100%{opacity:1}96%{opacity:.7}97%{opacity:1}98%{opacity:.4}99%{opacity:1}}
-#menu .sub{color:#ff4444;font-size:14px;letter-spacing:12px;margin-bottom:8px;text-shadow:0 0 10px #ff0000}
-#menu .arabic{color:#888;font-size:14px;letter-spacing:6px;margin-bottom:40px}
-.warn{max-width:480px;padding:22px 28px;background:rgba(30,0,0,.7);border:2px solid #8b0000;border-radius:4px;margin-bottom:35px;box-shadow:0 0 40px rgba(255,0,0,.3),inset 0 0 30px rgba(0,0,0,.8);position:relative}
-.warn::before{content:'⚠';position:absolute;top:-18px;left:50%;transform:translateX(-50%);background:#000;padding:0 16px;color:#ff0000;font-size:24px}
-.warn p{color:#ccc;line-height:1.9;font-size:14px;font-family:'Courier New',monospace}
-.warn .red{color:#ff2222;font-weight:bold;letter-spacing:2px}
-#startBtn{background:linear-gradient(180deg,#8b0000,#3a0000);color:#fff;border:2px solid #ff2222;padding:20px 70px;border-radius:4px;font-size:22px;font-weight:900;cursor:pointer;font-family:'Courier New',monospace;letter-spacing:8px;box-shadow:0 0 40px rgba(255,0,0,.7),inset 0 0 20px rgba(255,0,0,.3);position:relative;text-shadow:0 0 10px #ff0000;transition:all .2s}
-#startBtn:hover{background:linear-gradient(180deg,#aa0000,#4a0000);box-shadow:0 0 60px rgba(255,0,0,1),inset 0 0 30px rgba(255,0,0,.5)}
-#startBtn:active{transform:scale(.95)}
-.hi{margin-top:28px;color:#ffcc00;font-size:12px;letter-spacing:4px;font-family:'Courier New',monospace}
+.hud{position:absolute;bottom:20px;padding:10px 16px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(4px);font-size:12px;letter-spacing:2px}
+#hpBox{bottom:20px;right:20px;color:#ff2222}
+#hpBox .v{color:#ff4444;font-size:18px;font-weight:bold;margin-left:8px}
+#batteryBox{bottom:20px;left:20px;color:#ffcc00}
+#batteryBox .v{color:#ffdd44;font-size:18px;font-weight:bold;margin-left:8px}
 
-#gameover{position:absolute;inset:0;background:linear-gradient(180deg,#200000 0%,#000 100%);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:28px;text-align:center}
-#gameover h2{font-size:56px;color:#ff0000;text-shadow:0 0 40px #ff0000,0 0 80px #8b0000;font-weight:900;letter-spacing:10px;margin-bottom:30px;font-family:'Courier New',monospace;animation:dead 2s infinite}
-@keyframes dead{0%,100%{opacity:1}50%{opacity:.7}}
-.gostats{display:flex;gap:40px;margin-bottom:35px;flex-wrap:wrap;justify-content:center}
-.gostat{text-align:center;padding:14px 24px;background:rgba(30,0,0,.6);border:1px solid #8b0000;border-radius:4px}
-.gostat .lbl{color:#666;font-size:11px;letter-spacing:4px;margin-bottom:6px;font-family:'Courier New',monospace}
-.gostat .val{font-size:40px;font-weight:900;color:#ffcc00;text-shadow:0 0 20px #ff8800;font-family:'Courier New',monospace}
-#rank{font-size:20px;color:#fff;letter-spacing:4px;margin-bottom:30px;padding:14px 36px;background:rgba(50,0,0,.7);border:2px solid #8b0000;border-radius:4px;font-family:'Courier New',monospace;text-shadow:0 0 15px #ff0000}
-#rank b{color:#ff2222}
-#restartBtn{background:linear-gradient(180deg,#8b0000,#3a0000);color:#fff;border:2px solid #ff2222;padding:18px 60px;border-radius:4px;font-size:20px;font-weight:900;cursor:pointer;font-family:'Courier New',monospace;letter-spacing:6px;box-shadow:0 0 40px rgba(255,0,0,.7);text-shadow:0 0 10px #ff0000}
-#restartBtn:active{transform:scale(.95)}
+#objective{position:absolute;top:20px;left:50%;transform:translateX(-50%);padding:8px 20px;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.15);font-size:12px;letter-spacing:3px;color:#cccccc;text-align:center;max-width:90%}
 
-#story{position:absolute;inset:0;background:rgba(0,0,0,.95);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:80;padding:40px;text-align:center}
-#story h3{font-size:32px;color:#ff2222;letter-spacing:8px;margin-bottom:24px;text-shadow:0 0 20px #ff0000;font-family:'Courier New',monospace}
-#story p{font-size:16px;color:#ccc;line-height:2;max-width:520px;letter-spacing:1px;font-family:'Courier New',monospace}
-#story .k{color:#ffcc00;font-weight:bold}
+#whisper{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);font-size:22px;color:rgba(255,255,255,.85);text-shadow:0 0 20px #000,0 0 40px #000;letter-spacing:4px;opacity:0;transition:opacity 1s;pointer-events:none;font-style:italic}
 
-#loading{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;font-family:'Courier New',monospace}
-#loading .t{color:#ff2222;font-size:18px;letter-spacing:12px;margin-bottom:20px;animation:pulse 1.5s infinite}
-#loading .bar{width:240px;height:3px;background:rgba(139,0,0,.3);position:relative;overflow:hidden}
-#loading .f{position:absolute;inset:0;width:0;background:#ff2222;box-shadow:0 0 15px #ff2222;animation:load 2s ease-in-out forwards}
-@keyframes load{to{width:100%}}
+#scare{position:absolute;inset:0;background:#000;z-index:30;display:none;align-items:center;justify-content:center;overflow:hidden}
+#scare img{width:100%;height:100%;object-fit:cover;animation:scareShake .08s infinite}
+@keyframes scareShake{0%{transform:translate(0,0) scale(1.1)}25%{transform:translate(-3px,2px) scale(1.15)}50%{transform:translate(2px,-3px) scale(1.12)}75%{transform:translate(-2px,3px) scale(1.14)}100%{transform:translate(3px,-2px) scale(1.1)}}
+
+#joy{position:absolute;bottom:100px;left:25px;width:130px;height:130px;border-radius:50%;border:2px solid rgba(255,255,255,.15);background:radial-gradient(circle,rgba(20,20,20,.4),rgba(0,0,0,.7));pointer-events:auto}
+#joyk{position:absolute;top:50%;left:50%;width:55px;height:55px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.6),rgba(120,120,120,.3));transform:translate(-50%,-50%);box-shadow:0 0 15px rgba(255,255,255,.3);pointer-events:none}
+
+#btnShoot{position:absolute;bottom:120px;right:30px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(200,30,30,.7),rgba(80,0,0,.9));border:2px solid rgba(255,100,100,.5);display:flex;align-items:center;justify-content:center;font-size:42px;pointer-events:auto;box-shadow:0 0 30px rgba(200,0,0,.5);color:#fff}
+#btnShoot:active{transform:scale(.9);box-shadow:0 0 60px rgba(255,0,0,.9)}
+
+#menu{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:30px;text-align:center;overflow:hidden}
+#menu::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.7'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");opacity:.15;animation:staticAnim .1s infinite;pointer-events:none}
+#menu h1{font-size:52px;font-weight:900;color:#fff;letter-spacing:14px;text-shadow:0 0 20px #ff2222,0 0 40px #880000;margin-bottom:8px;animation:flicker 3s infinite;font-family:'Courier New',monospace}
+@keyframes flicker{0%,90%,100%{opacity:1}91%{opacity:.3}92%{opacity:1}93%{opacity:.2}94%{opacity:1}}
+#menu .sub{color:#666;font-size:12px;letter-spacing:8px;margin-bottom:35px}
+#menu .arabic{color:#444;font-size:14px;letter-spacing:6px;margin-bottom:50px;font-family:'Segoe UI',sans-serif}
+#menu .warnbox{max-width:480px;padding:20px 25px;border:1px solid #550000;background:rgba(20,0,0,.5);margin-bottom:40px;position:relative}
+#menu .warnbox p{color:#888;line-height:1.9;font-size:13px;letter-spacing:1px}
+#menu .warnbox .r{color:#ff2222;font-weight:bold}
+#menu .headphone{color:#ffcc00;font-size:11px;letter-spacing:4px;margin-top:15px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+#startBtn{background:transparent;color:#fff;border:2px solid #ff2222;padding:18px 60px;border-radius:4px;font-size:18px;font-weight:bold;cursor:pointer;font-family:'Courier New',monospace;letter-spacing:6px;box-shadow:0 0 30px rgba(255,0,0,.5),inset 0 0 20px rgba(255,0,0,.1);transition:all .3s;position:relative}
+#startBtn:hover{background:#200000;box-shadow:0 0 60px rgba(255,0,0,.8),inset 0 0 30px rgba(255,0,0,.3)}
+#startBtn:active{transform:scale(.95)}
 
-#warning-flash{position:absolute;inset:0;background:#ff0000;opacity:0;pointer-events:none}
+#gameover{position:absolute;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:30px;text-align:center}
+#gameover h2{font-size:60px;color:#ff0000;letter-spacing:14px;text-shadow:0 0 40px #ff0000,0 0 80px #880000;font-family:'Courier New',monospace;margin-bottom:30px;animation:deadShake .5s infinite}
+@keyframes deadShake{0%,100%{transform:translate(0,0)}50%{transform:translate(-3px,3px)}}
+#gameover .quote{color:#666;font-style:italic;font-size:14px;letter-spacing:2px;margin-bottom:40px;max-width:400px;line-height:1.8}
+#gameover .stats{color:#888;font-size:13px;letter-spacing:3px;margin-bottom:35px;line-height:2.2}
+#gameover .stats b{color:#ff2222}
+#retryBtn{background:transparent;color:#fff;border:2px solid #ff2222;padding:16px 50px;border-radius:4px;font-size:16px;letter-spacing:5px;font-family:'Courier New',monospace;cursor:pointer}
+#retryBtn:active{transform:scale(.95)}
+
+#loading{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;color:#ff2222;font-family:'Courier New',monospace}
+#loading .t{letter-spacing:12px;font-size:16px;animation:pulse 1.5s infinite;margin-bottom:20px}
+#loading .dots{font-size:24px}
 </style>
 </head>
 <body>
-<div id="loading"><div class="t">LOADING</div><div class="bar"><div class="f"></div></div></div>
+<div id="loading"><div class="t">ENTERING...</div><div class="dots">. . .</div></div>
 <canvas id="c"></canvas>
-<div id="vign"></div>
-<div id="blood"></div>
-<div id="damage"></div>
-<div id="warning-flash"></div>
+<div id="vignette"></div>
+<div id="static"></div>
+<div id="bloodScreen"></div>
+<div id="flash"></div>
 
 <div id="ui">
-  <div class="top">
-    <div class="hpwrap">
-      <div class="hpbar"><div class="hpfill" id="hpf" style="width:100%"></div></div>
-      <div class="staminabar"><div class="staminafill" id="stf" style="width:100%"></div></div>
-    </div>
-    <div class="center-top">
-      <div class="wavelbl">WAVE</div>
-      <div class="wavenum" id="wn">1</div>
-    </div>
-    <div class="hud-r">
-      <div class="stat">SCORE: <b id="sc">0</b></div>
-      <div class="stat">KILLS: <b id="kl">0</b></div>
-    </div>
-  </div>
   <div id="crosshair"></div>
-  <div id="hitmark"></div>
-  <div id="ammo">
-    <div class="reload" id="rld">RELOADING...</div>
-    <div class="wname" id="wname">PISTOL</div>
-    <div><span class="cnt" id="ac">12</span><span class="max" id="am">/ ∞</span></div>
-  </div>
-  <div id="score">
-    <div class="lbl">SCORE</div>
-    <div class="val" id="sc2">0</div>
-    <div id="kills">KILLS: 0</div>
-  </div>
-  <div id="ctrl">
-    <div id="joy"><div id="joyk"></div></div>
-    <div class="btns">
-      <div class="btn breload" id="breload">⟳</div>
-      <div class="btn bswap" id="bswap">⇄</div>
-      <div class="btn bshoot" id="bshoot">🔫</div>
-    </div>
-  </div>
-  <div id="reload-circle"></div>
+  <div id="objective">ابحث عن الباب... واخرج من هنا</div>
+  <div id="whisper"></div>
+  <div id="hpBox" class="hud">HEALTH <span class="v" id="hpv">100</span></div>
+  <div id="batteryBox" class="hud">BATTERY <span class="v" id="batv">100%</span></div>
+  <div id="joy"><div id="joyk"></div></div>
+  <div id="btnShoot">🔫</div>
 </div>
 
 <div id="menu">
-  <div class="sub">SURVIVAL HORROR</div>
-  <h1>LAST STAND</h1>
-  <div class="arabic">آخر من يقف</div>
-  <div class="warn">
+  <h1>ABANDONED</h1>
+  <div class="sub">THE LAST PATIENT</div>
+  <div class="arabic">— الملجأ المهجور —</div>
+  <div class="warnbox">
     <p>
-      <span class="red">تحذير:</span> الموجات القادمة ستقتلك.<br>
-      أنت محاصر في ملجأ مهجور.<br>
-      الزومبي يعرفون مكانك... وهم قادمون.<br>
-      <span class="k">لا رحمة. لا نجاة. فقط صمود.</span><br>
-      اصمد حتى الفجر.
+      <span class="r">⚠</span> أنت محبوس داخل ملجأ نفسي مهجور.<br>
+      <span class="r">⚠</span> لا توجد إضاءة. كشافك هو سلاحك.<br>
+      <span class="r">⚠</span> شيء ما يتحرك في الظلام...<br>
+      <span class="r">⚠</span> لا تنظر خلفك.
     </p>
+    <div class="headphone">🎧 استخدم سماعات - مهم جداً</div>
   </div>
-  <button id="startBtn">▶ ابدأ</button>
-  <div class="hi">HIGH SCORE: <span id="hisc">0</span></div>
+  <button id="startBtn">▶ ادخل</button>
 </div>
 
-<div id="story">
-  <h3 id="storyT">WAVE 1</h3>
-  <p id="storyP"></p>
-</div>
+<div id="scare"></div>
 
 <div id="gameover">
   <h2>YOU DIED</h2>
-  <div class="gostats">
-    <div class="gostat"><div class="lbl">WAVE</div><div class="val" id="fw">1</div></div>
-    <div class="gostat"><div class="lbl">SCORE</div><div class="val" id="fs">0</div></div>
-    <div class="gostat"><div class="lbl">KILLS</div><div class="val" id="fk">0</div></div>
+  <div class="quote" id="deathQuote">"لم يتوقفوا يوماً عن الصراخ... لكن لا أحد سمعه."</div>
+  <div class="stats">
+    الوقت: <b id="timeS">0:00</b><br>
+    قُتلت: <b id="killS">0</b> كائنات<br>
+    الأبواب المكتشفة: <b id="roomS">0</b>
   </div>
-  <div id="rank">RANK: <b>ROOKIE</b></div>
-  <button id="restartBtn">⟳ حاول مرة أخرى</button>
+  <button id="retryBtn">⟳ حاول مرة أخرى</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// =============================================
-// CORE
-// =============================================
+// ==========================================
+// SETUP
+// ==========================================
 const canvas = document.getElementById('c');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
 renderer.setSize(innerWidth, innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.9;
+renderer.toneMappingExposure = 0.6;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x050305);
-scene.fog = new THREE.FogExp2(0x0a0505, 0.09);
+scene.background = new THREE.Color(0x000000);
+scene.fog = new THREE.FogExp2(0x000000, 0.18);
 
-const camera = new THREE.PerspectiveCamera(72, innerWidth/innerHeight, 0.1, 150);
-camera.position.set(0, 1.7, 0);
+const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.05, 60);
 
 addEventListener('resize', () => {
   camera.aspect = innerWidth/innerHeight;
@@ -208,277 +139,750 @@ addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
 });
 
-// =============================================
-// LIGHTING - DARK & MOODY
-// =============================================
-scene.add(new THREE.AmbientLight(0x1a0a0a, 0.4));
+// ==========================================
+// LIGHTING — فقط الكشاف
+// ==========================================
+const ambient = new THREE.AmbientLight(0x0a0a0a, 0.3);
+scene.add(ambient);
 
-// كشاف اللاعب
-const flashlight = new THREE.SpotLight(0xffffee, 3, 40, Math.PI/6, 0.4, 1.2);
-flashlight.position.set(0, 1.7, 0);
+// كشاف ضيق
+const flashlight = new THREE.SpotLight(0xffeecc, 3.5, 18, Math.PI/9, 0.5, 1.6);
 flashlight.castShadow = true;
 flashlight.shadow.mapSize.set(1024, 1024);
+flashlight.shadow.camera.near = 0.5;
+flashlight.shadow.camera.far = 20;
+flashlight.shadow.bias = -0.0005;
 scene.add(flashlight);
 scene.add(flashlight.target);
 
-// قمر خفيف
-const moon = new THREE.DirectionalLight(0x4466aa, 0.35);
-moon.position.set(-20, 40, -30);
-scene.add(moon);
+// توهج ضعيف جداً حول اللاعب
+const playerGlow = new THREE.PointLight(0xffdd88, 0.15, 3);
+scene.add(playerGlow);
 
-// ضوء أحمر بعيد (رعب)
-const redLight = new THREE.PointLight(0xff0000, 0.8, 25);
-redLight.position.set(0, 3, -15);
-scene.add(redLight);
-
-// =============================================
-// ENVIRONMENT
-// =============================================
-// الأرضية
-function dirtTex() {
+// ==========================================
+// WALL MATERIAL
+// ==========================================
+function concreteTex() {
   const cv = document.createElement('canvas');
   cv.width = cv.height = 512;
   const c = cv.getContext('2d');
-  c.fillStyle = '#1a0f0a';
+  c.fillStyle = '#2a2826';
   c.fillRect(0, 0, 512, 512);
-  for (let i = 0; i < 2000; i++) {
-    c.fillStyle = `rgba(${20+Math.random()*40},${10+Math.random()*20},${5+Math.random()*15},${0.3+Math.random()*0.4})`;
+  for (let i = 0; i < 3000; i++) {
+    const v = 20 + Math.random()*30;
+    c.fillStyle = `rgba(${v},${v-3},${v-5},${0.3+Math.random()*0.5})`;
+    c.fillRect(Math.random()*512, Math.random()*512, 1+Math.random()*3, 1+Math.random()*3);
+  }
+  // بقع
+  for (let i = 0; i < 40; i++) {
+    c.fillStyle = `rgba(${40+Math.random()*30},${20+Math.random()*15},${15+Math.random()*10},.4)`;
     c.beginPath();
-    c.arc(Math.random()*512, Math.random()*512, 1+Math.random()*4, 0, Math.PI*2);
+    c.arc(Math.random()*512, Math.random()*512, 5+Math.random()*30, 0, Math.PI*2);
     c.fill();
   }
-  // بقع دم
-  for (let i = 0; i < 15; i++) {
-    c.fillStyle = `rgba(${80+Math.random()*60},0,0,${0.2+Math.random()*0.3})`;
+  // شقوق
+  c.strokeStyle = 'rgba(0,0,0,.7)';
+  c.lineWidth = 1;
+  for (let i = 0; i < 30; i++) {
     c.beginPath();
-    c.arc(Math.random()*512, Math.random()*512, 8+Math.random()*25, 0, Math.PI*2);
-    c.fill();
+    let x = Math.random()*512, y = Math.random()*512;
+    c.moveTo(x, y);
+    for (let j = 0; j < 8; j++) {
+      x += (Math.random()-.5)*60;
+      y += (Math.random()-.5)*60;
+      c.lineTo(x, y);
+    }
+    c.stroke();
   }
   return new THREE.CanvasTexture(cv);
 }
-const groundTex = dirtTex();
-groundTex.wrapS = groundTex.wrapT = THREE.RepeatWrapping;
-groundTex.repeat.set(6, 6);
-const ground = new THREE.Mesh(
-  new THREE.CircleGeometry(45, 64),
-  new THREE.MeshStandardMaterial({ map: groundTex, roughness: 0.95, metalness: 0.05 })
+
+const wallTexture = concreteTex();
+wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
+const wallMat = new THREE.MeshStandardMaterial({ map: wallTexture, roughness: 0.95, metalness: 0.05 });
+const wallMatDark = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 1, metalness: 0 });
+
+// ==========================================
+// MAP — ممرات ضيقة وأبواب
+// ==========================================
+const MAP = [
+  // ممر رئيسي
+  { x: 0, z: -15, w: 4, h: 3.5, d: 30, door: false }, // ممر طويل
+  // غرف جانبية
+  { x: -10, z: -8, w: 12, h: 3.5, d: 6, door: true },
+  { x: 10, z: -8, w: 12, h: 3.5, d: 6, door: true },
+  { x: -10, z: 0, w: 12, h: 3.5, d: 6, door: true },
+  { x: 10, z: 0, w: 12, h: 3.5, d: 6, door: true },
+  { x: -10, z: 8, w: 12, h: 3.5, d: 6, door: true },
+  { x: 10, z: 8, w: 12, h: 3.5, d: 6, door: true },
+  // غرفة النهاية
+  { x: 0, z: 20, w: 14, h: 4.5, d: 12, door: true, exit: true }
+];
+
+// الجدران
+function buildWall(x, z, w, h, d) {
+  const wall = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), wallMat);
+  wall.position.set(x, h/2, z);
+  wall.castShadow = true;
+  wall.receiveShadow = true;
+  scene.add(wall);
+}
+
+// الأرضية والسقف
+const floorTex = concreteTex();
+floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping;
+floorTex.repeat.set(6, 6);
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(60, 60),
+  new THREE.MeshStandardMaterial({ map: floorTex, roughness: 1, metalness: 0.05, color: 0x555555 })
 );
-ground.rotation.x = -Math.PI / 2;
-ground.receiveShadow = true;
-scene.add(ground);
+floor.rotation.x = -Math.PI/2;
+floor.receiveShadow = true;
+scene.add(floor);
 
-// جدران خرسانية
-const wallMat = new THREE.MeshStandardMaterial({ color: 0x2a1a1a, roughness: 0.9, metalness: 0.1, map: (() => {
-  const cv = document.createElement('canvas');
-  cv.width = cv.height = 256;
-  const c = cv.getContext('2d');
-  c.fillStyle = '#2a1a1a'; c.fillRect(0, 0, 256, 256);
-  for (let i = 0; i < 300; i++) {
-    c.fillStyle = `rgba(${20+Math.random()*30},${10+Math.random()*15},${10+Math.random()*15},.7)`;
-    c.beginPath(); c.arc(Math.random()*256, Math.random()*256, 2+Math.random()*8, 0, Math.PI*2); c.fill();
-  }
-  return new THREE.CanvasTexture(cv);
-})() });
+const ceiling = new THREE.Mesh(
+  new THREE.PlaneGeometry(60, 60),
+  new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 1 })
+);
+ceiling.rotation.x = Math.PI/2;
+ceiling.position.y = 4;
+scene.add(ceiling);
 
-for (let i = 0; i < 12; i++) {
-  const a = (i / 12) * Math.PI * 2;
-  const r = 32;
-  const w = new THREE.Mesh(new THREE.BoxGeometry(10, 8, 1.5), wallMat);
-  w.position.set(Math.cos(a) * r, 4, Math.sin(a) * r);
-  w.rotation.y = -a + Math.PI/2;
-  w.castShadow = true;
-  w.receiveShadow = true;
-  scene.add(w);
-}
+// بناء الغرف
+const DOORS = [];
+const ROOMS = [];
 
-// صناديق وحطام
-const crateMat = new THREE.MeshStandardMaterial({ color: 0x3a2515, roughness: 0.9, metalness: 0.1 });
-const barrelMat = new THREE.MeshStandardMaterial({ color: 0x2a3a1a, roughness: 0.8, metalness: 0.4, emissive: 0x0a1000, emissiveIntensity: 0.3 });
-
-for (let i = 0; i < 20; i++) {
-  const a = Math.random() * Math.PI * 2;
-  const r = 8 + Math.random() * 22;
-  const x = Math.cos(a) * r, z = Math.sin(a) * r;
-  const isBarrel = Math.random() < 0.5;
-  let mesh;
-  if (isBarrel) {
-    mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1.1, 12), barrelMat);
-    mesh.position.set(x, 0.55, z);
+MAP.forEach((room, idx) => {
+  const { x, z, w, h, d, door } = room;
+  ROOMS.push(room);
+  
+  // الحوائط الأربعة (بتفاصيل الأبواب)
+  if (!door) {
+    // جدار بدون باب
+    buildWall(x, z - d/2, w, h, 0.3); // شمال
+    buildWall(x, z + d/2, w, h, 0.3); // جنوب
+    buildWall(x - w/2, z, 0.3, h, d); // غرب
+    buildWall(x + w/2, z, 0.3, h, d); // شرق
   } else {
-    mesh = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.1, 1.1), crateMat);
-    mesh.position.set(x, 0.55, z);
+    // جدار بباب في المنتصف
+    const doorW = 1.8;
+    const sideW = (w - doorW) / 2;
+    // جدار شمال كامل
+    buildWall(x, z - d/2, w, h, 0.3);
+    // جدار جنوب - فيه باب
+    if (idx === 0) {
+      // الممر — بابه في الأول
+    } else {
+      buildWall(x - (doorW/2 + sideW/2), z + d/2, sideW, h, 0.3);
+      buildWall(x + (doorW/2 + sideW/2), z + d/2, sideW, h, 0.3);
+      // الجزء العلوي من الباب
+      buildWall(x, z + d/2, doorW, h - 2.6, 0.3).position.y = h - (h - 2.6)/2;
+    }
+    // الجانبين
+    buildWall(x - w/2, z, 0.3, h, d);
+    buildWall(x + w/2, z, 0.3, h, d);
+    // جدار داخلي بين الغرفة والممر فيه باب
+    if (idx > 0 && x < 0) {
+      // غرفة يسار — بابها ناحية اليمين
+      const doorW2 = 1.8;
+      const sideD = (d - doorW2) / 2;
+      buildWall(x + w/2, z - (doorW2/2 + sideD/2), 0.3, h, sideD);
+      buildWall(x + w/2, z + (doorW2/2 + sideD/2), 0.3, h, sideD);
+    }
+    if (idx > 0 && x > 0) {
+      // غرفة يمين
+      const doorW2 = 1.8;
+      const sideD = (d - doorW2) / 2;
+      buildWall(x - w/2, z - (doorW2/2 + sideD/2), 0.3, h, sideD);
+      buildWall(x - w/2, z + (doorW2/2 + sideD/2), 0.3, h, sideD);
+    }
   }
-  mesh.rotation.y = Math.random() * Math.PI;
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  scene.add(mesh);
+});
+
+// ==========================================
+// FURNITURE / PROPS
+// ==========================================
+const props = [];
+function addProp(x, z, type) {
+  let mesh;
+  if (type === 'bed') {
+    const g = new THREE.Group();
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.3, 2), new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9, metalness: 0.3 }));
+    frame.position.y = 0.4;
+    frame.castShadow = true;
+    g.add(frame);
+    const mattress = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.15, 1.95), new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 1 }));
+    mattress.position.y = 0.58;
+    mattress.castShadow = true;
+    g.add(mattress);
+    // بقع دم
+    if (Math.random() < 0.5) {
+      const blood = new THREE.Mesh(new THREE.CircleGeometry(0.25, 12), new THREE.MeshBasicMaterial({ color: 0x440000 }));
+      blood.rotation.x = -Math.PI/2;
+      blood.position.set(0, 0.66, (Math.random()-.5)*1);
+      blood.scale.set(1, Math.random()+0.5, 1);
+      g.add(blood);
+    }
+    g.position.set(x, 0, z);
+    mesh = g;
+  } else if (type === 'chair') {
+    const g = new THREE.Group();
+    const seat = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.5), new THREE.MeshStandardMaterial({ color: 0x2a2018, roughness: 0.9 }));
+    seat.position.y = 0.5;
+    seat.castShadow = true;
+    g.add(seat);
+    const back = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.6, 0.1), new THREE.MeshStandardMaterial({ color: 0x2a2018, roughness: 0.9 }));
+    back.position.set(0, 0.85, -0.2);
+    back.castShadow = true;
+    g.add(back);
+    for (let i = 0; i < 4; i++) {
+      const leg = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.5, 0.06), new THREE.MeshStandardMaterial({ color: 0x1a1a1a }));
+      leg.position.set((i%2 ? 0.2 : -0.2), 0.25, (i<2 ? 0.2 : -0.2));
+      g.add(leg);
+    }
+    g.position.set(x, 0, z);
+    mesh = g;
+  } else if (type === 'cart') {
+    const g = new THREE.Group();
+    const tray = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.05, 0.4), new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.4, metalness: 0.7 }));
+    tray.position.y = 0.9;
+    tray.castShadow = true;
+    g.add(tray);
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.9, 6), new THREE.MeshStandardMaterial({ color: 0x444444, metalness: 0.8, roughness: 0.3 }));
+    pole.position.y = 0.45;
+    g.add(pole);
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.05, 8), new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.8 }));
+    base.position.y = 0.03;
+    g.add(base);
+    g.position.set(x, 0, z);
+    mesh = g;
+  } else if (type === 'wheelchair') {
+    const g = new THREE.Group();
+    const seat = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.5), new THREE.MeshStandardMaterial({ color: 0x1a1a1a }));
+    seat.position.y = 0.5;
+    seat.castShadow = true;
+    g.add(seat);
+    const back = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.08), new THREE.MeshStandardMaterial({ color: 0x1a1a1a }));
+    back.position.set(0, 0.8, -0.2);
+    g.add(back);
+    const w1 = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.04, 6, 16), new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.6 }));
+    w1.position.set(-0.28, 0.3, 0); w1.rotation.y = Math.PI/2;
+    g.add(w1);
+    const w2 = w1.clone(); w2.position.x = 0.28;
+    g.add(w2);
+    g.position.set(x, 0, z);
+    mesh = g;
+  }
+  
+  if (mesh) {
+    mesh.rotation.y = Math.random() * Math.PI * 2;
+    scene.add(mesh);
+    props.push({ mesh, x, z, r: 0.6 });
+  }
 }
 
-// شعلات نار بعيدة
-const fires = [];
-for (let i = 0; i < 4; i++) {
-  const a = (i / 4) * Math.PI * 2 + 0.5;
-  const r = 25;
-  const x = Math.cos(a) * r, z = Math.sin(a) * r;
-  const f = new THREE.PointLight(0xff5500, 3, 18, 2);
-  f.position.set(x, 1.5, z);
-  scene.add(f);
-  const flame = new THREE.Mesh(
-    new THREE.SphereGeometry(0.4, 8, 8),
-    new THREE.MeshBasicMaterial({ color: 0xff6600 })
-  );
-  flame.position.set(x, 0.5, z);
-  scene.add(flame);
-  fires.push({ f, flame, base: 3 });
+// وزّع الأغراض
+const ROOM_ITEMS = {
+  1: ['bed', 'cart', 'chair'],
+  2: ['wheelchair', 'bed'],
+  3: ['cart', 'chair', 'chair'],
+  4: ['bed', 'bed'],
+  5: ['wheelchair', 'cart'],
+  6: ['chair', 'cart', 'bed'],
+  7: ['wheelchair']
+};
+
+Object.entries(ROOM_ITEMS).forEach(([idx, items]) => {
+  const room = MAP[parseInt(idx)];
+  items.forEach(type => {
+    const x = room.x + (Math.random() - 0.5) * (room.w - 3);
+    const z = room.z + (Math.random() - 0.5) * (room.d - 3);
+    addProp(x, z, type);
+  });
+});
+
+// ==========================================
+// ATMOSPHERE — علامات دماء على الجدران
+// ==========================================
+for (let i = 0; i < 25; i++) {
+  const a = Math.random() * Math.PI * 2;
+  const r = 5 + Math.random() * 20;
+  const x = Math.cos(a) * r;
+  const z = Math.sin(a) * r - 5;
+  const bloodMat = new THREE.MeshBasicMaterial({ color: 0x330000, transparent: true, opacity: 0.7, side: THREE.DoubleSide });
+  const blood = new THREE.Mesh(new THREE.PlaneGeometry(0.3 + Math.random()*0.7, 0.8 + Math.random()), bloodMat);
+  blood.position.set(x, 0.5 + Math.random() * 2, z);
+  blood.rotation.y = Math.random() * Math.PI * 2;
+  scene.add(blood);
 }
 
-// =============================================
-// PLAYER WEAPON (First Person)
-// =============================================
+// ==========================================
+// EXIT DOOR
+// ==========================================
+const exitDoor = new THREE.Mesh(
+  new THREE.BoxGeometry(2, 3, 0.15),
+  new THREE.MeshStandardMaterial({ color: 0x3a1515, roughness: 0.7, metalness: 0.3, emissive: 0x220000, emissiveIntensity: 0.3 })
+);
+exitDoor.position.set(0, 1.5, 26);
+scene.add(exitDoor);
+
+const exitLight = new THREE.PointLight(0xff2200, 0.8, 4);
+exitLight.position.set(0, 2, 25.5);
+scene.add(exitLight);
+
+const exitSign = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.5), new THREE.MeshBasicMaterial({ color: 0x00ff00 }));
+exitSign.position.set(0, 3.5, 25.9);
+scene.add(exitSign);
+
+// ==========================================
+// PLAYER
+// ==========================================
+const player = {
+  pos: new THREE.Vector3(0, 1.6, 12),
+  yaw: 0, pitch: 0,
+  hp: 100, maxHp: 100,
+  battery: 100,
+  stamina: 100,
+  flashlightOn: true,
+  shootCd: 0, ammo: 6,
+  killCount: 0,
+  gameTime: 0
+};
+
+camera.position.copy(player.pos);
+
+// ==========================================
+// WEAPON VIEWMODEL
+// ==========================================
 const weaponGroup = new THREE.Group();
 camera.add(weaponGroup);
 scene.add(camera);
 
-function buildPistol() {
-  const g = new THREE.Group();
-  const metal = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.4, metalness: 0.9 });
-  const dark = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.7, metalness: 0.5 });
-  
-  const slide = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 0.5), metal);
-  slide.position.set(0, 0, 0);
-  g.add(slide);
-  
-  const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.4, 8), dark);
-  barrel.rotation.x = Math.PI/2;
-  barrel.position.set(0, -0.02, 0.3);
-  g.add(barrel);
-  
-  const grip = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.28, 0.15), dark);
-  grip.position.set(0, -0.18, -0.15);
-  grip.rotation.x = 0.15;
-  g.add(grip);
-  
-  return g;
-}
+const gunMetal = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.5, metalness: 0.85 });
+const gunGrip = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.9 });
 
-function buildRifle() {
-  const g = new THREE.Group();
-  const metal = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.3, metalness: 0.95 });
-  const wood = new THREE.MeshStandardMaterial({ color: 0x3a2515, roughness: 0.8, metalness: 0.1 });
-  const dark = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.6, metalness: 0.8 });
-  
-  const body = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.14, 1.1), metal);
-  g.add(body);
-  
-  const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.9, 8), dark);
-  barrel.rotation.x = Math.PI/2;
-  barrel.position.set(0, 0, 0.95);
-  g.add(barrel);
-  
-  const stock = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.22, 0.5), wood);
-  stock.position.set(0, -0.05, -0.7);
-  g.add(stock);
-  
-  const grip = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.24, 0.14), dark);
-  grip.position.set(0, -0.19, -0.35);
-  grip.rotation.x = 0.2;
-  g.add(grip);
-  
-  const mag = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.28, 0.18), dark);
-  mag.position.set(0, -0.19, 0.05);
-  g.add(mag);
-  
-  const scope = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.35, 10), dark);
-  scope.rotation.x = Math.PI/2;
-  scope.position.set(0, 0.13, 0.05);
-  g.add(scope);
-  
-  return g;
-}
+const gunBody = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 0.45), gunMetal);
+gunBody.position.set(0.18, -0.2, -0.4);
+weaponGroup.add(gunBody);
 
-function buildSMG() {
-  const g = new THREE.Group();
-  const metal = new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.3, metalness: 0.9 });
-  const dark = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.7, metalness: 0.6 });
-  
-  const body = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.16, 0.65), metal);
-  g.add(body);
-  
-  const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.35, 8), dark);
-  barrel.rotation.x = Math.PI/2;
-  barrel.position.set(0, 0.01, 0.5);
-  g.add(barrel);
-  
-  const grip = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.22, 0.13), dark);
-  grip.position.set(0, -0.17, -0.15);
-  grip.rotation.x = 0.15;
-  g.add(grip);
-  
-  const mag = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.35, 0.14), dark);
-  mag.position.set(0, -0.24, 0.08);
-  g.add(mag);
-  
-  const stock = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.14, 0.35), dark);
-  stock.position.set(0, -0.02, -0.5);
-  g.add(stock);
-  
-  return g;
-}
+const gunBarrel = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.35, 8), gunMetal);
+gunBarrel.rotation.x = Math.PI/2;
+gunBarrel.position.set(0.18, -0.18, -0.7);
+weaponGroup.add(gunBarrel);
 
-const weapons = [
-  { name: 'PISTOL', model: buildPistol(), dmg: 34, ammo: 12, maxAmmo: 12, reserve: Infinity, rate: 0.28, reload: 1.2, hsMult: 2.5, sound: 'pistol' },
-  { name: 'RIFLE', model: buildRifle(), dmg: 65, ammo: 30, maxAmmo: 30, reserve: Infinity, rate: 0.12, reload: 2, hsMult: 3, sound: 'rifle' },
-  { name: 'SMG', model: buildSMG(), dmg: 22, ammo: 40, maxAmmo: 40, reserve: Infinity, rate: 0.07, reload: 1.8, hsMult: 2, sound: 'smg' }
-];
-let currentWeapon = 0;
+const gunGripMesh = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.25, 0.13), gunGrip);
+gunGripMesh.position.set(0.18, -0.4, -0.25);
+gunGripMesh.rotation.x = 0.15;
+weaponGroup.add(gunGripMesh);
 
-function equipWeapon(i) {
-  weapons.forEach(w => weaponGroup.remove(w.model));
-  currentWeapon = i;
-  const w = weapons[i];
-  w.model.position.set(0.28, -0.28, -0.55);
-  w.model.rotation.set(0, -0.05, 0);
-  weaponGroup.add(w.model);
-  updateAmmoHud();
-}
-
-equipWeapon(0);
-
-// =============================================
-// PLAYER STATE
-// =============================================
-const player = {
-  pos: new THREE.Vector3(0, 1.7, 0),
-  vel: new THREE.Vector3(),
-  yaw: 0, pitch: 0,
-  hp: 100, maxHp: 100,
-  stamina: 100, maxStamina: 100,
-  reloading: false, reloadT: 0,
-  shootCd: 0, invuln: 0,
-  killCount: 0, score: 0,
-  recoil: 0, kick: 0,
-  bob: 0, walkAmount: 0
+// ==========================================
+// ENEMIES — كائنات مشوهة
+// ==========================================
+const enemies = [];
+const ENEMY_TYPES = {
+  crawler: { color: 0x1a0505, emissive: 0x660000, hp: 1, speed: 2.2, scale: 0.7, score: 1, sound: 'crawl' },
+  tall: { color: 0x0a0a0a, emissive: 0x440022, hp: 2, speed: 1.6, scale: 1.6, score: 2, sound: 'crawl' },
+  twitcher: { color: 0x2a0a2a, emissive: 0x880088, hp: 1, speed: 4, scale: 1, score: 3, sound: 'crawl' }
 };
 
-// =============================================
+function makeEnemy(type, spawnPos) {
+  const t = ENEMY_TYPES[type];
+  const g = new THREE.Group();
+  
+  const skinMat = new THREE.MeshStandardMaterial({ 
+    color: t.color, 
+    roughness: 0.9, 
+    metalness: 0, 
+    emissive: t.emissive, 
+    emissiveIntensity: 0.4 
+  });
+  
+  // جسم مشوه
+  const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.4, 1.2, 4, 6), skinMat);
+  body.position.y = 1.2;
+  body.rotation.z = (Math.random() - 0.5) * 0.4;
+  g.add(body);
+  
+  // رأس مقلوب
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.35, 10, 10), skinMat);
+  head.position.y = 2.05;
+  head.rotation.z = Math.PI;
+  g.add(head);
+  
+  // عيون حمراء متوهجة
+  const eyeMat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+  const eye1 = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 8), eyeMat);
+  eye1.position.set(-0.13, 1.95, 0.3);
+  g.add(eye1);
+  const eye2 = eye1.clone();
+  eye2.position.x = 0.13;
+  g.add(eye2);
+  
+  // فم مفتوح
+  const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.15, 0.1), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+  mouth.position.set(0, 1.8, 0.32);
+  g.add(mouth);
+  
+  // أذرع طويلة غير طبيعية
+  const armL = new THREE.Mesh(new THREE.CapsuleGeometry(0.1, 1.4, 3, 6), skinMat);
+  armL.position.set(-0.55, 1.4, 0.2);
+  armL.rotation.x = -Math.PI/2.3;
+  armL.rotation.z = 0.3;
+  g.add(armL);
+  const armR = armL.clone();
+  armR.position.x = 0.55;
+  armR.rotation.z = -0.3;
+  g.add(armR);
+  
+  // أرجل مشوهة
+  const legL = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 1.1, 3, 6), skinMat);
+  legL.position.set(-0.2, 0.6, 0);
+  legL.rotation.z = (Math.random() - 0.5) * 0.3;
+  g.add(legL);
+  const legR = legL.clone();
+  legR.position.x = 0.2;
+  g.add(legR);
+  
+  g.scale.setScalar(t.scale);
+  g.position.copy(spawnPos);
+  
+  // ضوء أحمر خافت
+  const redLight = new THREE.PointLight(0xff0000, 0.6, 3, 2);
+  redLight.position.y = 1.5;
+  g.add(redLight);
+  
+  scene.add(g);
+  enemies.push({
+    mesh: g, hp: t.hp, speed: t.speed, type, scale: t.scale,
+    animT: Math.random() * 10, target: null,
+    armL, armR, head, body
+  });
+}
+
+// ==========================================
+// SPOOKY SPAWN LOGIC
+// ==========================================
+function spawnEnemyOutOfSight() {
+  // اختر نقطة بعيدة عن اللاعب وليست في مجال رؤيته
+  for (let tries = 0; tries < 20; tries++) {
+    const a = Math.random() * Math.PI * 2;
+    const r = 8 + Math.random() * 15;
+    const x = player.pos.x + Math.cos(a) * r;
+    const z = player.pos.z + Math.sin(a) * r;
+    
+    // تحقق أنه في الخريطة
+    let inMap = false;
+    for (const room of MAP) {
+      if (Math.abs(x - room.x) < room.w/2 && Math.abs(z - room.z) < room.d/2) {
+        inMap = true;
+        break;
+      }
+    }
+    if (!inMap) continue;
+    
+    // تحقق أنه خلف اللاعب
+    const forward = new THREE.Vector3(-Math.sin(player.yaw), 0, -Math.cos(player.yaw));
+    const toEnemy = new THREE.Vector3(x - player.pos.x, 0, z - player.pos.z).normalize();
+    if (forward.dot(toEnemy) > -0.2) continue;
+    
+    // اختر نوع
+    const roll = Math.random();
+    let type = 'crawler';
+    if (roll < 0.3) type = 'tall';
+    else if (roll < 0.5) type = 'twitcher';
+    
+    makeEnemy(type, new THREE.Vector3(x, 0, z));
+    // صوت مفاجئ
+    audio.spawnScare();
+    break;
+  }
+}
+
+// ==========================================
+// AUDIO — همسات، نبضات، صرخات
+// ==========================================
+const audio = {
+  ctx: null, master: null, heartInterval: null, heartRate: 1.2,
+  ambientGain: null, whisperTimeout: null,
+  
+  init() {
+    if (this.ctx) return;
+    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    this.master = this.ctx.createGain();
+    this.master.gain.value = 0.7;
+    this.master.connect(this.ctx.destination);
+    
+    // ضجيج خلفي (ambient drone)
+    this.startAmbient();
+    this.startHeartbeat();
+    this.scheduleWhisper();
+  },
+  
+  startAmbient() {
+    const ctx = this.ctx;
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    osc1.type = 'sine'; osc1.frequency.value = 55;
+    osc2.type = 'sine'; osc2.frequency.value = 58;
+    const g = ctx.createGain();
+    g.gain.value = 0.04;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 200;
+    osc1.connect(filter); osc2.connect(filter);
+    filter.connect(g); g.connect(this.master);
+    osc1.start(); osc2.start();
+    
+    // رياح / ضجيج
+    const noise = ctx.createBufferSource();
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 4, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * 0.15;
+    noise.buffer = buf;
+    noise.loop = true;
+    const nf = ctx.createBiquadFilter();
+    nf.type = 'bandpass';
+    nf.frequency.value = 300;
+    nf.Q.value = 0.5;
+    const ng = ctx.createGain();
+    ng.gain.value = 0.06;
+    noise.connect(nf); nf.connect(ng); ng.connect(this.master);
+    noise.start();
+  },
+  
+  startHeartbeat() {
+    const beat = () => {
+      if (!this.ctx) return;
+      const t = this.ctx.currentTime;
+      const interval = this.heartRate;
+      
+      // نبضة 1
+      const o1 = this.ctx.createOscillator();
+      const g1 = this.ctx.createGain();
+      o1.type = 'sine';
+      o1.frequency.setValueAtTime(60, t);
+      o1.frequency.exponentialRampToValueAtTime(30, t + 0.1);
+      g1.gain.setValueAtTime(0.4, t);
+      g1.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+      o1.connect(g1); g1.connect(this.master);
+      o1.start(t); o1.stop(t + 0.15);
+      
+      // نبضة 2
+      const o2 = this.ctx.createOscillator();
+      const g2 = this.ctx.createGain();
+      o2.type = 'sine';
+      o2.frequency.setValueAtTime(55, t + 0.18);
+      o2.frequency.exponentialRampToValueAtTime(25, t + 0.28);
+      g2.gain.setValueAtTime(0.3, t + 0.18);
+      g2.gain.exponentialRampToValueAtTime(0.001, t + 0.33);
+      o2.connect(g2); g2.connect(this.master);
+      o2.start(t + 0.18); o2.stop(t + 0.33);
+    };
+    beat();
+    this.heartInterval = setInterval(beat, 1200);
+  },
+  
+  setHeartRate(rate) {
+    this.heartRate = rate;
+    if (this.heartInterval) {
+      clearInterval(this.heartInterval);
+      const beat = () => {
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        const o1 = this.ctx.createOscillator();
+        const g1 = this.ctx.createGain();
+        o1.type = 'sine';
+        o1.frequency.setValueAtTime(60, t);
+        o1.frequency.exponentialRampToValueAtTime(30, t + 0.08);
+        g1.gain.setValueAtTime(0.35, t);
+        g1.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+        o1.connect(g1); g1.connect(this.master);
+        o1.start(t); o1.stop(t + 0.12);
+        
+        const o2 = this.ctx.createOscillator();
+        const g2 = this.ctx.createGain();
+        o2.type = 'sine';
+        o2.frequency.setValueAtTime(55, t + 0.15);
+        o2.frequency.exponentialRampToValueAtTime(25, t + 0.25);
+        g2.gain.setValueAtTime(0.25, t + 0.15);
+        g2.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+        o2.connect(g2); g2.connect(this.master);
+        o2.start(t + 0.15); o2.stop(t + 0.3);
+      };
+      this.heartInterval = setInterval(beat, rate * 1000);
+    }
+  },
+  
+  scheduleWhisper() {
+    const delay = 4000 + Math.random() * 8000;
+    this.whisperTimeout = setTimeout(() => {
+      this.playWhisper();
+      this.scheduleWhisper();
+    }, delay);
+  },
+  
+  playWhisper() {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    // همسة: صوت مع فلتر
+    const noise = this.ctx.createBufferSource();
+    const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * 0.8, this.ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) {
+      d[i] = (Math.random()*2-1) * Math.sin(i / d.length * Math.PI) * 0.3;
+    }
+    noise.buffer = buf;
+    const filt = this.ctx.createBiquadFilter();
+    filt.type = 'bandpass';
+    filt.frequency.value = 800 + Math.random() * 400;
+    filt.Q.value = 8;
+    const g = this.ctx.createGain();
+    g.gain.value = 0.12;
+    noise.connect(filt); filt.connect(g); g.connect(this.master);
+    noise.start(t);
+    
+    // عرض نصي بسيط
+    const words = ['...تعال...', '...خلفك...', '...لا تقاوم...', '...نحن هنا...', '...انظر...'];
+    const el = document.getElementById('whisper');
+    el.textContent = words[Math.floor(Math.random() * words.length)];
+    el.style.opacity = '1';
+    setTimeout(() => { el.style.opacity = '0'; }, 1500);
+  },
+  
+  shoot() {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const noise = this.ctx.createBufferSource();
+    const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * 0.15, this.ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 3);
+    noise.buffer = buf;
+    const filt = this.ctx.createBiquadFilter();
+    filt.type = 'lowpass';
+    filt.frequency.value = 900;
+    const g = this.ctx.createGain();
+    g.gain.setValueAtTime(0.4, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+    noise.connect(filt); filt.connect(g); g.connect(this.master);
+    noise.start(t);
+  },
+  
+  hit() {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(200, t);
+    o.frequency.exponentialRampToValueAtTime(50, t + 0.4);
+    g.gain.setValueAtTime(0.3, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+    o.connect(g); g.connect(this.master);
+    o.start(t); o.stop(t + 0.4);
+  },
+  
+  spawnScare() {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    // صوت غريب مفاجئ
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(800, t);
+    o.frequency.exponentialRampToValueAtTime(80, t + 0.5);
+    g.gain.setValueAtTime(0.15, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+    o.connect(g); g.connect(this.master);
+    o.start(t); o.stop(t + 0.5);
+  },
+  
+  death() {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(400, t);
+    o.frequency.exponentialRampToValueAtTime(20, t + 2);
+    g.gain.setValueAtTime(0.4, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 2);
+    o.connect(g); g.connect(this.master);
+    o.start(t); o.stop(t + 2);
+  },
+  
+  jumpScare() {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    // صرخة عالية
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(2000, t);
+    o.frequency.exponentialRampToValueAtTime(400, t + 0.6);
+    g.gain.setValueAtTime(0.5, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
+    o.connect(g); g.connect(this.master);
+    o.start(t); o.stop(t + 0.8);
+    
+    // ضجيج عالي
+    const noise = this.ctx.createBufferSource();
+    const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * 0.8, this.ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 1.5);
+    noise.buffer = buf;
+    const ng = this.ctx.createGain();
+    ng.gain.setValueAtTime(0.4, t);
+    ng.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
+    noise.connect(ng); ng.connect(this.master);
+    noise.start(t);
+  }
+};
+
+// ==========================================
+// JUMP SCARE
+// ==========================================
+function triggerJumpScare() {
+  const scare = document.getElementById('scare');
+  // صورة مرعبة SVG (رسم بسيط)
+  scare.innerHTML = `
+    <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;background:#000">
+      <rect width="500" height="500" fill="#0a0000"/>
+      <ellipse cx="250" cy="220" rx="180" ry="220" fill="#1a0505"/>
+      <circle cx="160" cy="180" r="30" fill="#000"/>
+      <circle cx="340" cy="180" r="30" fill="#000"/>
+      <circle cx="160" cy="180" r="10" fill="#ff0000"/>
+      <circle cx="340" cy="180" r="10" fill="#ff0000"/>
+      <circle cx="160" cy="180" r="5" fill="#fff"/>
+      <circle cx="340" cy="180" r="5" fill="#fff"/>
+      <path d="M120 320 Q250 420 380 320 Q250 380 120 320 Z" fill="#000"/>
+      <path d="M140 330 L160 360 L180 330 L200 360 L220 330 L240 360 L260 330 L280 360 L300 330 L320 360 L340 330 L360 360" stroke="#fff" stroke-width="4" fill="none"/>
+      <path d="M100 100 L80 40 M400 100 L420 40 M150 60 L130 10 M350 60 L370 10" stroke="#1a0000" stroke-width="8"/>
+    </svg>
+  `;
+  scare.style.display = 'flex';
+  document.getElementById('flash').style.opacity = '1';
+  setTimeout(() => { document.getElementById('flash').style.opacity = '0'; }, 50);
+  audio.jumpScare();
+  setTimeout(() => {
+    scare.style.display = 'none';
+  }, 600);
+}
+
+// ==========================================
 // INPUT
-// =============================================
+// ==========================================
+const input = { moveX: 0, moveY: 0, shoot: false, sprint: false };
 const keys = {};
-const input = { moveX: 0, moveY: 0, shooting: false };
 const joy = document.getElementById('joy');
 const joyk = document.getElementById('joyk');
 let joyOn = false, joyX = 0, joyY = 0;
 
-function joyCenter() {
-  const r = joy.getBoundingClientRect();
-  return { x: r.left + r.width/2, y: r.top + r.height/2 };
-}
-
 joy.addEventListener('touchstart', e => {
   e.preventDefault();
   joyOn = true;
-  const c = joyCenter();
-  joyX = c.x; joyY = c.y;
+  const r = joy.getBoundingClientRect();
+  joyX = r.left + r.width/2;
+  joyY = r.top + r.height/2;
 }, { passive: false });
 
 document.addEventListener('touchmove', e => {
@@ -486,7 +890,7 @@ document.addEventListener('touchmove', e => {
   e.preventDefault();
   const t = e.touches[0];
   let dx = t.clientX - joyX, dy = t.clientY - joyY;
-  const d = Math.hypot(dx, dy), mx = 60;
+  const d = Math.hypot(dx, dy), mx = 55;
   if (d > mx) { dx = dx/d*mx; dy = dy/d*mx; }
   input.moveX = dx/mx;
   input.moveY = dy/mx;
@@ -499,10 +903,11 @@ document.addEventListener('touchend', () => {
   joyk.style.transform = 'translate(-50%, -50%)';
 });
 
-// دوران الكاميرا بالسحب على الشاشة
+// كاميرا — سحب على الشاشة
 let lookOn = false, lookX = 0, lookY = 0;
 canvas.addEventListener('touchstart', e => {
   if (e.target === joy || joy.contains(e.target)) return;
+  if (e.target === document.getElementById('btnShoot')) return;
   const t = e.touches[0];
   lookOn = true; lookX = t.clientX; lookY = t.clientY;
 }, { passive: true });
@@ -512,480 +917,116 @@ canvas.addEventListener('touchmove', e => {
   const t = e.touches[0];
   const dx = t.clientX - lookX;
   const dy = t.clientY - lookY;
-  player.yaw -= dx * 0.005;
-  player.pitch -= dy * 0.005;
-  player.pitch = Math.max(-1.4, Math.min(1.4, player.pitch));
+  player.yaw -= dx * 0.004;
+  player.pitch -= dy * 0.004;
+  player.pitch = Math.max(-1.3, Math.min(1.3, player.pitch));
   lookX = t.clientX; lookY = t.clientY;
 }, { passive: true });
 
 canvas.addEventListener('touchend', () => { lookOn = false; });
 
 // أزرار
-function bindBtn(id, down, up) {
-  const b = document.getElementById(id);
-  b.addEventListener('touchstart', e => { e.preventDefault(); down(); }, { passive: false });
-  b.addEventListener('touchend', e => { e.preventDefault(); if (up) up(); }, { passive: false });
-  b.addEventListener('mousedown', e => { e.preventDefault(); down(); });
-  b.addEventListener('mouseup', e => { e.preventDefault(); if (up) up(); });
-}
-bindBtn('bshoot', () => input.shooting = true, () => input.shooting = false);
-bindBtn('breload', () => startReload(), null);
-bindBtn('bswap', () => equipWeapon((currentWeapon + 1) % 3), null);
+const btnShoot = document.getElementById('btnShoot');
+btnShoot.addEventListener('touchstart', e => { e.preventDefault(); input.shoot = true; }, { passive: false });
+btnShoot.addEventListener('touchend', e => { e.preventDefault(); input.shoot = false; }, { passive: false });
+btnShoot.addEventListener('mousedown', () => input.shoot = true);
+btnShoot.addEventListener('mouseup', () => input.shoot = false);
 
-// كمبيوتر
 addEventListener('keydown', e => {
   keys[e.key.toLowerCase()] = true;
-  if (e.key === ' ') input.shooting = true;
-  if (e.key.toLowerCase() === 'r') startReload();
-  if (e.key.toLowerCase() === 'q') equipWeapon((currentWeapon + 1) % 3);
+  if (e.key === ' ') input.shoot = true;
+  if (e.key === 'f') player.flashlightOn = !player.flashlightOn;
 });
 addEventListener('keyup', e => {
   keys[e.key.toLowerCase()] = false;
-  if (e.key === ' ') input.shooting = false;
+  if (e.key === ' ') input.shoot = false;
 });
 
-addEventListener('mousemove', e => {
-  if (document.pointerLockElement === canvas) {
-    player.yaw -= e.movementX * 0.002;
-    player.pitch -= e.movementY * 0.002;
-    player.pitch = Math.max(-1.4, Math.min(1.4, player.pitch));
-  }
-});
-
-canvas.addEventListener('click', () => {
-  if (!document.pointerLockElement && G.running) canvas.requestPointerLock();
-});
-
-// =============================================
-// AUDIO
-// =============================================
-let actx = null;
-function initAudio() { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); }
-function sfx(type) {
-  if (!actx) return;
-  const t = actx.currentTime;
-  
-  if (type === 'pistol' || type === 'rifle' || type === 'smg') {
-    // طلقة
-    const dur = type === 'smg' ? 0.05 : 0.12;
-    const noise = actx.createBufferSource();
-    const buf = actx.createBuffer(1, actx.sampleRate * dur, actx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 2);
-    noise.buffer = buf;
-    const filt = actx.createBiquadFilter();
-    filt.type = 'lowpass';
-    filt.frequency.value = type === 'rifle' ? 1200 : 800;
-    const g = actx.createGain();
-    g.gain.setValueAtTime(0.3, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
-    noise.connect(filt); filt.connect(g); g.connect(actx.destination);
-    noise.start(t);
-  } else if (type === 'hit' || type === 'headshot') {
-    const o = actx.createOscillator();
-    const g = actx.createGain();
-    o.type = 'sawtooth';
-    o.frequency.setValueAtTime(type === 'headshot' ? 400 : 250, t);
-    o.frequency.exponentialRampToValueAtTime(60, t + 0.15);
-    g.gain.setValueAtTime(0.15, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
-    o.connect(g); g.connect(actx.destination);
-    o.start(t); o.stop(t + 0.15);
-  } else if (type === 'reload') {
-    const o = actx.createOscillator();
-    const g = actx.createGain();
-    o.type = 'square';
-    o.frequency.setValueAtTime(150, t);
-    o.frequency.setValueAtTime(300, t + 0.08);
-    o.frequency.setValueAtTime(200, t + 0.16);
-    g.gain.setValueAtTime(0.08, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    o.connect(g); g.connect(actx.destination);
-    o.start(t); o.stop(t + 0.3);
-  } else if (type === 'hurt') {
-    const o = actx.createOscillator();
-    const g = actx.createGain();
-    o.type = 'sawtooth';
-    o.frequency.setValueAtTime(120, t);
-    o.frequency.exponentialRampToValueAtTime(50, t + 0.3);
-    g.gain.setValueAtTime(0.2, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    o.connect(g); g.connect(actx.destination);
-    o.start(t); o.stop(t + 0.3);
-  } else if (type === 'zombie') {
-    const o = actx.createOscillator();
-    const g = actx.createGain();
-    o.type = 'sawtooth';
-    o.frequency.setValueAtTime(80 + Math.random()*40, t);
-    o.frequency.linearRampToValueAtTime(50, t + 0.6);
-    g.gain.setValueAtTime(0.08, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
-    o.connect(g); g.connect(actx.destination);
-    o.start(t); o.stop(t + 0.6);
-  }
-}
-
-// =============================================
-// ZOMBIES
-// =============================================
-const zombies = [];
-const ZTYPES = {
-  walker: { col: 0x3a5a2a, emi: 0x0a1500, hp: 80, spd: 1.2, dmg: 12, score: 100, scale: 1 },
-  runner: { col: 0x8a5a2a, emi: 0x2a1500, hp: 60, spd: 2.5, dmg: 15, score: 150, scale: 0.9 },
-  brute: { col: 0x2a1a0a, emi: 0x150500, hp: 250, spd: 0.9, dmg: 30, score: 300, scale: 1.5 },
-  boss: { col: 0x8b0000, emi: 0x4a0000, hp: 1000, spd: 1.4, dmg: 45, score: 1500, scale: 2.2 }
-};
-
-function makeZombie(type) {
-  const t = ZTYPES[type];
-  const g = new THREE.Group();
-  
-  const mat = new THREE.MeshStandardMaterial({ color: t.col, roughness: 0.9, metalness: 0.05, emissive: t.emi, emissiveIntensity: 0.6 });
-  
-  // جسم
-  const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.35, 1, 5, 8), mat);
-  body.position.y = 1.15;
-  body.castShadow = true;
-  g.add(body);
-  
-  // رأس
-  const head = new THREE.Mesh(new THREE.SphereGeometry(0.32, 12, 12), mat);
-  head.position.y = 2;
-  head.castShadow = true;
-  g.add(head);
-  
-  // عيون متوهجة
-  const eyeMat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-  const eL = new THREE.Mesh(new THREE.SphereGeometry(0.06, 6, 6), eyeMat);
-  eL.position.set(-0.12, 2.05, 0.28);
-  g.add(eL);
-  const eR = new THREE.Mesh(new THREE.SphereGeometry(0.06, 6, 6), eyeMat);
-  eR.position.set(0.12, 2.05, 0.28);
-  g.add(eR);
-  
-  // ذراعان ممدودان
-  const armMat = mat;
-  const armL = new THREE.Mesh(new THREE.CapsuleGeometry(0.12, 0.7, 3, 6), armMat);
-  armL.position.set(-0.45, 1.5, 0.35);
-  armL.rotation.set(-Math.PI/2.2, 0, 0);
-  armL.castShadow = true;
-  g.add(armL);
-  const armR = armL.clone();
-  armR.position.x = 0.45;
-  g.add(armR);
-  
-  // أرجل
-  const legL = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.8, 3, 6), armMat);
-  legL.position.set(-0.18, 0.5, 0);
-  g.add(legL);
-  const legR = legL.clone();
-  legR.position.x = 0.18;
-  g.add(legR);
-  
-  // ضوء للزعيم
-  if (type === 'boss') {
-    const bl = new THREE.PointLight(0xff0000, 3, 18, 2);
-    bl.position.y = 1.5;
-    g.add(bl);
-  }
-  
-  g.scale.setScalar(t.scale);
-  
-  // ظهور على الحافة
-  const a = Math.random() * Math.PI * 2;
-  const r = 40;
-  g.position.set(Math.cos(a) * r, 0, Math.sin(a) * r);
-  
-  g.userData = {
-    type, mesh: g, mat, head, body, legL, legR, armL, armR,
-    hp: t.hp, maxHp: t.hp, spd: t.spd, dmg: t.dmg, score: t.score,
-    flash: 0, animT: Math.random() * 10, legPhase: 0
-  };
-  
-  scene.add(g);
-  zombies.push(g);
-}
-
-// =============================================
-// BLOOD / PARTICLES
-// =============================================
-const bloodParts = [];
-function bloodBurst(pos, n = 15) {
-  for (let i = 0; i < n; i++) {
-    const mat = new THREE.MeshBasicMaterial({ color: 0x8b0000, transparent: true, opacity: 0.9 });
-    const p = new THREE.Mesh(new THREE.SphereGeometry(0.06 + Math.random()*0.08, 5, 5), mat);
-    p.position.copy(pos);
-    const v = new THREE.Vector3((Math.random()-.5)*2, Math.random()*0.8+0.2, (Math.random()-.5)*2).normalize().multiplyScalar(4 + Math.random()*4);
-    scene.add(p);
-    bloodParts.push({ m: p, v, life: 1 });
-  }
-}
-
-function bulletHit(pos, normal) {
-  // أثر الرصاصة
-  const decal = new THREE.Mesh(
-    new THREE.CircleGeometry(0.12, 8),
-    new THREE.MeshBasicMaterial({ color: 0x111111, transparent: true, opacity: 0.9 })
-  );
-  decal.position.copy(pos);
-  decal.lookAt(pos.clone().add(normal));
-  scene.add(decal);
-  // sparks
-  for (let i = 0; i < 5; i++) {
-    const p = new THREE.Mesh(
-      new THREE.SphereGeometry(0.03, 4, 4),
-      new THREE.MeshBasicMaterial({ color: 0xffaa00 })
-    );
-    p.position.copy(pos);
-    const v = new THREE.Vector3((Math.random()-.5)*2, Math.random()*0.5, (Math.random()-.5)*2).normalize().multiplyScalar(6);
-    scene.add(p);
-    bloodParts.push({ m: p, v, life: 0.4 });
-  }
-}
-
-// =============================================
-// GAME STATE
-// =============================================
-const G = {
-  running: false, wave: 0, toSpawn: 0, spawnT: 0, waveOn: false,
-  paused: false, storyT: 0, shake: 0,
-  hi: parseInt(localStorage.getItem('laststand_hi') || '0')
-};
-document.getElementById('hisc').textContent = G.hi;
-
-// =============================================
-// WAVES
-// =============================================
-const STORIES = [
-  { t: 'WAVE 1', p: 'قليل من الزومبي القادمين من الظلام. <span class="k">اقتلهم.</span>' },
-  { t: 'WAVE 2', p: 'صوت خطواتهم يقترب. <span class="k">لا تتوقف.</span>' },
-  { t: 'WAVE 3', p: 'هناك عداؤون سريعون بينهم. <span class="k">صوّب على الرأس.</span>' },
-  { t: 'WAVE 4', p: 'الظلام يزداد. <span class="k">النجاة صعبة.</span>' },
-  { t: 'WAVE 5', p: '⚠️ قائد قادم... <span class="k">استعد للمعركة الحقيقية.</span>' },
-  { t: 'WAVE 6', p: 'لا رجوع. <span class="k">انجُ.</span>' },
-  { t: 'WAVE 7', p: 'الفجر يقترب. <span class="k">صمد قليلًا.</span>' },
-  { t: 'WAVE 8', p: 'أنت آخر من يقف. <span class="k">لا تخذلهم.</span>' },
-  { t: 'WAVE 9', p: 'دمك على الأرض. <span class="k">لكنك لا تزال حيًا.</span>' },
-  { t: 'WAVE 10', p: '⚔️ الموجة الأخيرة... <span class="k">الزعيم الأكبر هنا.</span>' }
-];
-
-function showStory(t, p, dur = 2.5) {
-  document.getElementById('storyT').textContent = t;
-  document.getElementById('storyP').innerHTML = p;
-  document.getElementById('story').style.display = 'flex';
-  G.paused = true;
-  G.storyT = dur;
-}
-
-function nextWave() {
-  G.wave++;
-  G.waveOn = true;
-  G.toSpawn = Math.floor(5 + G.wave * 2.2);
-  G.spawnT = 0;
-  document.getElementById('wn').textContent = G.wave;
-  
-  const s = STORIES[Math.min(G.wave - 1, STORIES.length - 1)];
-  showStory(s.t, s.p);
-  
-  if (G.wave % 5 === 0) {
-    setTimeout(() => {
-      makeZombie('boss');
-      sfx('zombie');
-    }, 2500);
-  }
-}
-
-function spawnRandom() {
-  const w = G.wave;
-  const roll = Math.random();
-  let type = 'walker';
-  if (w >= 2 && roll < 0.4) type = 'runner';
-  if (w >= 4 && roll >= 0.4 && roll < 0.55) type = 'brute';
-  if (w >= 6 && roll >= 0.55) type = 'brute';
-  if (w >= 3 && roll < 0.3 && w >= 3) type = 'runner';
-  makeZombie(type);
-}
-
-// =============================================
+// ==========================================
 // SHOOTING
-// =============================================
+// ==========================================
 const raycaster = new THREE.Raycaster();
-
 function shoot() {
-  const w = weapons[currentWeapon];
-  if (w.ammo <= 0 || player.reloading) return;
+  if (player.ammo <= 0) return;
+  if (player.shootCd > 0) return;
+  player.shootCd = 0.5;
+  player.ammo--;
+  audio.shoot();
+  audio.setHeartRate(Math.max(0.5, audio.heartRate - 0.15));
   
-  w.ammo--;
-  player.shootCd = w.rate;
-  player.recoil = 0.05;
-  player.kick = 1;
-  G.shake = 0.15;
-  
-  sfx(w.sound);
-  updateAmmoHud();
-  
-  // Raycast
   const dir = new THREE.Vector3(0, 0, -1).applyEuler(camera.rotation);
   raycaster.set(camera.position, dir);
   
-  let hit = false;
-  let closestZ = null;
-  let closestDist = Infinity;
-  
-  for (const z of zombies) {
-    const head = z.userData.head;
-    const hp = new THREE.Vector3();
-    head.getWorldPosition(hp);
-    const dist = camera.position.distanceTo(hp);
-    
-    // raycast on head
-    const headSphere = new THREE.Sphere(hp, 0.32 * z.userData.mesh.scale.x);
-    const ray = new THREE.Ray(camera.position, dir);
-    const pt = new THREE.Vector3();
-    if (ray.intersectSphere(headSphere, pt)) {
-      if (dist < closestDist) {
-        closestDist = dist;
-        closestZ = { z, headshot: true, pt };
-      }
+  let closest = null, closestDist = Infinity;
+  for (const e of enemies) {
+    const pos = new THREE.Vector3();
+    e.mesh.getWorldPosition(pos);
+    pos.y += 1.2 * e.scale;
+    const d = camera.position.distanceTo(pos);
+    if (d > 25) continue;
+    const hit = raycaster.ray.distanceToPoint(pos);
+    if (hit < 0.9 * e.scale && d < closestDist) {
+      closest = e;
+      closestDist = d;
     }
   }
   
-  // فحص الجسم الكامل
-  for (const z of zombies) {
-    const wp = new THREE.Vector3();
-    z.getWorldPosition(wp);
-    wp.y += 1.2;
-    const d = camera.position.distanceTo(wp);
-    const bodySphere = new THREE.Sphere(wp, 0.5 * z.userData.mesh.scale.x);
-    const ray = new THREE.Ray(camera.position, dir);
-    const pt = new THREE.Vector3();
-    if (ray.intersectSphere(bodySphere, pt)) {
-      if (d < closestDist) {
-        closestDist = d;
-        closestZ = { z, headshot: false, pt };
-      }
-    }
-  }
-  
-  if (closestZ && closestDist < 60) {
-    const z = closestZ.z;
-    const d = z.userData;
-    const dmg = w.dmg * (closestZ.headshot ? w.hsMult : 1);
-    d.hp -= dmg;
-    d.flash = 0.15;
-    d.mat.emissiveIntensity = 3;
-    setTimeout(() => { if (d.mat) d.mat.emissiveIntensity = 0.6; }, 100);
-    
-    bloodBurst(closestZ.pt, closestZ.headshot ? 30 : 15);
-    
-    if (closestZ.headshot) {
-      sfx('headshot');
-      showHitmark(true);
-    } else {
-      sfx('hit');
-      showHitmark(false);
+  if (closest) {
+    closest.hp--;
+    // انفجار دم
+    const pos = new THREE.Vector3();
+    closest.mesh.getWorldPosition(pos);
+    pos.y += 1.2;
+    for (let i = 0; i < 12; i++) {
+      const p = new THREE.Mesh(
+        new THREE.SphereGeometry(0.05 + Math.random()*0.05, 4, 4),
+        new THREE.MeshBasicMaterial({ color: 0x660000, transparent: true, opacity: 0.9 })
+      );
+      p.position.copy(pos);
+      scene.add(p);
+      const v = new THREE.Vector3((Math.random()-.5)*2, Math.random()*0.7+0.2, (Math.random()-.5)*2).normalize().multiplyScalar(3+Math.random()*3);
+      bloodParticles.push({ m: p, v, life: 1 });
     }
     
-    if (d.hp <= 0) {
-      killZombie(z);
-    }
-  } else {
-    // miss - bullet hit ground/wall
-    const pt = camera.position.clone().add(dir.clone().multiplyScalar(30));
-    if (pt.y <= 0) {
-      const t = -camera.position.y / dir.y;
-      const gp = camera.position.clone().add(dir.clone().multiplyScalar(t));
-      bulletHit(gp, new THREE.Vector3(0, 1, 0));
+    if (closest.hp <= 0) {
+      killEnemy(closest);
     }
   }
 }
 
-function showHitmark(head) {
-  const hm = document.getElementById('hitmark');
-  hm.classList.remove('show');
-  void hm.offsetWidth;
-  hm.classList.add('show');
-  hm.style.filter = head ? 'hue-rotate(0deg) brightness(1.5)' : 'hue-rotate(0deg)';
-}
-
-function startReload() {
-  const w = weapons[currentWeapon];
-  if (player.reloading || w.ammo === w.maxAmmo) return;
-  player.reloading = true;
-  player.reloadT = w.reload;
-  sfx('reload');
-  document.getElementById('rld').style.display = 'block';
-  document.getElementById('reload-circle').style.display = 'block';
-}
-
-function finishReload() {
-  const w = weapons[currentWeapon];
-  w.ammo = w.maxAmmo;
-  player.reloading = false;
-  document.getElementById('rld').style.display = 'none';
-  document.getElementById('reload-circle').style.display = 'none';
-  updateAmmoHud();
-}
-
-function updateAmmoHud() {
-  const w = weapons[currentWeapon];
-  document.getElementById('ac').textContent = w.ammo;
-  document.getElementById('wname').textContent = w.name;
-  document.getElementById('am').textContent = '/ ∞';
-}
-
-function killZombie(z) {
-  const d = z.userData;
-  bloodBurst(z.position.clone().setY(1.2), 40);
-  G.shake = 0.35;
-  sfx('hit');
-  
-  player.score += d.score;
+const bloodParticles = [];
+function killEnemy(e) {
   player.killCount++;
-  document.getElementById('sc').textContent = player.score;
-  document.getElementById('sc2').textContent = player.score;
-  document.getElementById('kl').textContent = player.killCount;
-  document.getElementById('kills').textContent = 'KILLS: ' + player.killCount;
-  
-  // الزعيم
-  if (d.type === 'boss') {
-    for (let i = 0; i < 5; i++) {
-      setTimeout(() => {
-        const a = Math.random() * Math.PI * 2;
-        const r = 2 + Math.random() * 3;
-        bloodBurst(z.position.clone().add(new THREE.Vector3(Math.cos(a)*r, 1, Math.sin(a)*r)), 20);
-      }, i * 80);
-    }
+  document.getElementById('killS').textContent = player.killCount;
+  // انفجار كبير
+  const pos = new THREE.Vector3();
+  e.mesh.getWorldPosition(pos);
+  pos.y += 1.2;
+  for (let i = 0; i < 30; i++) {
+    const p = new THREE.Mesh(
+      new THREE.SphereGeometry(0.06 + Math.random()*0.08, 4, 4),
+      new THREE.MeshBasicMaterial({ color: 0x880000, transparent: true, opacity: 0.95 })
+    );
+    p.position.copy(pos);
+    scene.add(p);
+    const v = new THREE.Vector3((Math.random()-.5)*2, Math.random()*1.2, (Math.random()-.5)*2).normalize().multiplyScalar(4+Math.random()*5);
+    bloodParticles.push({ m: p, v, life: 1.5 });
   }
-  
-  scene.remove(z);
-  const idx = zombies.indexOf(z);
-  if (idx >= 0) zombies.splice(idx, 1);
+  scene.remove(e.mesh);
+  const idx = enemies.indexOf(e);
+  if (idx >= 0) enemies.splice(idx, 1);
 }
 
-// =============================================
+// ==========================================
 // UPDATE
-// =============================================
+// ==========================================
 const clock = new THREE.Clock();
 let bobT = 0;
+let spawnT = 5;
+let jumpedRecently = false;
 
 function update(dt) {
-  // story
-  if (G.storyT > 0) {
-    G.storyT -= dt;
-    if (G.storyT <= 0) {
-      document.getElementById('story').style.display = 'none';
-      G.paused = false;
-    }
-    return;
-  }
-  if (G.paused) return;
-  
-  // HP regen بطيء جداً
-  if (player.hp > 0 && player.hp < player.maxHp) {
-    player.hp = Math.min(player.maxHp, player.hp + dt * 0.5);
-    document.getElementById('hpf').style.width = (player.hp/player.maxHp*100) + '%';
-  }
+  player.gameTime += dt;
   
   // حركة
   let mx = input.moveX, my = input.moveY;
@@ -995,261 +1036,266 @@ function update(dt) {
   if (keys['d'] || keys['arrowright']) mx = 1;
   
   const mag = Math.hypot(mx, my);
-  let speed = 5.5;
-  const sprinting = mag > 0.7 && player.stamina > 5;
-  if (sprinting) {
-    speed = 8.5;
-    player.stamina = Math.max(0, player.stamina - dt * 25);
+  let speed = 3.2;
+  if (keys['shift'] && player.stamina > 0) {
+    speed = 5.5;
+    player.stamina = Math.max(0, player.stamina - dt * 30);
   } else {
-    player.stamina = Math.min(player.maxStamina, player.stamina + dt * 18);
+    player.stamina = Math.min(100, player.stamina + dt * 20);
   }
-  document.getElementById('stf').style.width = (player.stamina/player.maxStamina*100) + '%';
   
   if (mag > 0.1) {
     mx /= mag; my /= mag;
-    // حركة بالنسبة لاتجاه الكاميرا
     const forward = new THREE.Vector3(-Math.sin(player.yaw), 0, -Math.cos(player.yaw));
     const right = new THREE.Vector3(Math.cos(player.yaw), 0, -Math.sin(player.yaw));
     const move = forward.multiplyScalar(-my).add(right.multiplyScalar(mx));
-    player.pos.x += move.x * speed * dt;
-    player.pos.z += move.z * speed * dt;
     
-    // حدود
-    const dc = Math.hypot(player.pos.x, player.pos.z);
-    if (dc > 30) {
-      player.pos.x *= 30/dc;
-      player.pos.z *= 30/dc;
+    const newX = player.pos.x + move.x * speed * dt;
+    const newZ = player.pos.z + move.z * speed * dt;
+    
+    // كشف التصادم مع الجدران والأثاث
+    let canX = true, canZ = true;
+    
+    for (const p of props) {
+      const dx = newX - p.x, dz = player.pos.z - p.z;
+      if (Math.hypot(dx, dz) < p.r) canX = false;
+      const dx2 = player.pos.x - p.x, dz2 = newZ - p.z;
+      if (Math.hypot(dx2, dz2) < p.r) canZ = false;
     }
     
-    player.walkAmount = Math.min(1, player.walkAmount + dt * 8);
-  } else {
-    player.walkAmount = Math.max(0, player.walkAmount - dt * 8);
+    // حدود الخريطة البسيطة
+    const distFromCenter = Math.hypot(newX, newZ);
+    if (distFromCenter > 28) { canX = false; canZ = false; }
+    
+    if (canX) player.pos.x = newX;
+    if (canZ) player.pos.z = newZ;
+    
+    bobT += dt * (keys['shift'] ? 12 : 8);
   }
-  
-  // أنيميشن bob
-  bobT += dt * (sprinting ? 14 : 9) * player.walkAmount;
-  const bobY = Math.sin(bobT) * 0.06 * player.walkAmount;
-  const bobX = Math.cos(bobT * 0.5) * 0.05 * player.walkAmount;
-  
-  // recoil
-  player.recoil *= 0.88;
-  player.kick *= 0.85;
   
   // موقع الكاميرا
+  const bobY = Math.sin(bobT * 2) * 0.04 * (mag > 0.1 ? 1 : 0);
+  const bobX = Math.cos(bobT) * 0.03 * (mag > 0.1 ? 1 : 0);
   camera.position.set(
     player.pos.x + bobX,
-    1.7 + bobY,
+    1.6 + bobY,
     player.pos.z
   );
-  
   camera.rotation.order = 'YXZ';
   camera.rotation.y = player.yaw;
-  camera.rotation.x = player.pitch - player.recoil * 3;
-  camera.rotation.z = Math.sin(bobT * 0.5) * 0.02 * player.walkAmount;
+  camera.rotation.x = player.pitch;
   
-  // الكشاف يتبع الكاميرا
+  // كشاف
   flashlight.position.copy(camera.position);
   const fdir = new THREE.Vector3(0, 0, -1).applyEuler(camera.rotation);
-  flashlight.target.position.copy(camera.position.clone().add(fdir.clone().multiplyScalar(10)));
+  flashlight.target.position.copy(camera.position.clone().add(fdir.clone().multiplyScalar(15)));
+  flashlight.intensity = player.flashlightOn ? 3.5 * (player.battery / 100) : 0;
   
-  // سلاح في اليد - اهتزاز
-  const w = weapons[currentWeapon];
-  w.model.position.x = 0.28 + bobX * 0.5;
-  w.model.position.y = -0.28 + bobY * 0.5 - player.kick * 0.03;
-  w.model.rotation.x = player.recoil * 2;
-  w.model.rotation.z = Math.sin(bobT * 0.5) * 0.03 * player.walkAmount;
+  playerGlow.position.copy(camera.position);
+  
+  // بطارية
+  if (player.flashlightOn) {
+    player.battery -= dt * 0.7;
+    if (player.battery <= 0) {
+      player.battery = 0;
+      player.flashlightOn = false;
+    }
+  }
+  document.getElementById('batv').textContent = Math.round(player.battery) + '%';
   
   // shooting
+  if (input.shoot) shoot();
   player.shootCd -= dt;
-  if (input.shooting && player.shootCd <= 0 && !player.reloading && player.alive) {
-    shoot();
-  }
   
-  // reload
-  if (player.reloading) {
-    player.reloadT -= dt;
-    if (player.reloadT <= 0) finishReload();
-  }
-  
-  if (player.invuln > 0) player.invuln -= dt;
-  
-  // zombies
-  for (let i = zombies.length - 1; i >= 0; i--) {
-    const z = zombies[i];
-    const d = z.userData;
-    if (d.flash > 0) d.flash -= dt;
-    
-    const dx = player.pos.x - z.position.x;
-    const dz = player.pos.z - z.position.z;
+  // enemies
+  for (const e of enemies) {
+    const dx = player.pos.x - e.mesh.position.x;
+    const dz = player.pos.z - e.mesh.position.z;
     const dd = Math.hypot(dx, dz) || 1;
     
-    if (dd > 1.2) {
-      z.position.x += dx/dd * d.spd * dt;
-      z.position.z += dz/dd * d.spd * dt;
-      // أنيميشن الأرجل
-      d.legPhase += dt * 8;
-      d.legL.rotation.x = Math.sin(d.legPhase) * 0.5;
-      d.legR.rotation.x = -Math.sin(d.legPhase) * 0.5;
-      // اهتزاز الجسم
-      d.mesh.position.y = Math.abs(Math.sin(d.legPhase * 2)) * 0.05;
+    // حركة
+    if (dd > 1) {
+      e.mesh.position.x += dx/dd * e.speed * dt;
+      e.mesh.position.z += dz/dd * e.speed * dt;
     }
     
-    // دوران
-    const ta = Math.atan2(dx, dz);
-    z.rotation.y += (ta - z.rotation.y) * Math.min(1, dt * 3);
+    // دوران نحو اللاعب
+    e.mesh.rotation.y = Math.atan2(dx, dz);
     
-    // اهتزاز الذراعين
-    d.armL.rotation.z = Math.sin(d.legPhase * 0.5) * 0.1;
-    d.armR.rotation.z = -Math.sin(d.legPhase * 0.5) * 0.1;
+    // أنيميشن
+    e.animT += dt * (5 + e.speed);
+    e.armL.rotation.z = 0.3 + Math.sin(e.animT * 2) * 0.4;
+    e.armR.rotation.z = -0.3 - Math.sin(e.animT * 2) * 0.4;
+    e.body.rotation.z = Math.sin(e.animT * 3) * 0.15;
+    e.head.rotation.y = Math.sin(e.animT * 4) * 0.4;
     
     // هجوم
-    if (dd < 1.5 && player.invuln <= 0) {
-      player.hp -= d.dmg;
-      player.invuln = 1;
-      G.shake = 0.6;
-      sfx('hurt');
-      document.getElementById('damage').style.opacity = 1;
-      setTimeout(() => { document.getElementById('damage').style.opacity = 0; }, 200);
-      if (player.hp <= 0) { player.hp = 0; gameOver(); return; }
+    if (dd < 1.5) {
+      const t = performance.now() / 1000;
+      if (!e.lastHit || t - e.lastHit > 1.2) {
+        e.lastHit = t;
+        player.hp -= 15;
+        audio.hit();
+        // دم على الشاشة
+        document.getElementById('bloodScreen').style.opacity = '1';
+        setTimeout(() => {
+          document.getElementById('bloodScreen').style.opacity = Math.max(0, 1 - player.hp/100);
+        }, 400);
+        // اهتزاز
+        G.shake = 1;
+        audio.setHeartRate(0.5);
+        if (player.hp <= 0) { gameOver(); return; }
+      }
     }
   }
   
+  // HP UI
+  document.getElementById('hpv').textContent = Math.max(0, Math.round(player.hp));
+  
   // blood particles
-  for (let i = bloodParts.length - 1; i >= 0; i--) {
-    const p = bloodParts[i];
+  for (let i = bloodParticles.length - 1; i >= 0; i--) {
+    const p = bloodParticles[i];
     p.m.position.add(p.v.clone().multiplyScalar(dt));
-    p.v.y -= 12 * dt;
-    p.v.multiplyScalar(0.97);
+    p.v.y -= 8 * dt;
+    p.v.multiplyScalar(0.96);
     p.life -= dt;
     p.m.material.opacity = Math.max(0, p.life);
     if (p.life <= 0) {
       scene.remove(p.m);
       p.m.geometry.dispose();
       p.m.material.dispose();
-      bloodParts.splice(i, 1);
+      bloodParticles.splice(i, 1);
     }
   }
   
-  // fires flicker
-  for (const f of fires) {
-    f.f.intensity = 3 * (0.8 + Math.random() * 0.4);
-    f.flame.scale.setScalar(0.9 + Math.random() * 0.3);
+  // spawn enemies
+  spawnT -= dt;
+  if (spawnT <= 0 && enemies.length < 4) {
+    spawnT = 4 + Math.random() * 5;
+    spawnEnemyOutOfSight();
+    // زيادة نبضات القلب
+    audio.setHeartRate(Math.max(0.55, 1.2 - enemies.length * 0.12));
   }
   
-  // waves
-  if (G.waveOn) {
-    G.spawnT -= dt;
-    if (G.toSpawn > 0 && G.spawnT <= 0) {
-      spawnRandom();
-      G.toSpawn--;
-      G.spawnT = Math.max(0.3, 1.1 - G.wave * 0.05);
+  // زيادة التوتر مع اقتراب العدو
+  let minDist = Infinity;
+  for (const e of enemies) {
+    const d = Math.hypot(player.pos.x - e.mesh.position.x, player.pos.z - e.mesh.position.z);
+    if (d < minDist) minDist = d;
+  }
+  if (minDist < 6) {
+    audio.setHeartRate(0.55);
+    document.getElementById('static').style.opacity = '0.15';
+  } else if (minDist < 12) {
+    document.getElementById('static').style.opacity = '0.08';
+  } else {
+    document.getElementById('static').style.opacity = '0.06';
+  }
+  
+  // كشف الباب (exit)
+  const distExit = Math.hypot(player.pos.x - 0, player.pos.z - 25);
+  if (distExit < 3) {
+    document.getElementById('objective').textContent = 'اخرج من الباب!';
+    // نهاية اللعبة
+    if (distExit < 1.5) {
+      winGame();
     }
-    if (G.toSpawn === 0 && zombies.length === 0) {
-      G.waveOn = false;
-      setTimeout(() => { if (G.running) nextWave(); }, 2000);
-    }
+  }
+  
+  // jump scare عشوائي
+  if (Math.random() < 0.0008 && !jumpedRecently) {
+    jumpedRecently = true;
+    triggerJumpScare();
+    setTimeout(() => jumpedRecently = false, 8000);
   }
   
   // shake
   if (G.shake > 0) {
-    camera.position.x += (Math.random() - 0.5) * G.shake * 0.5;
-    camera.position.y += (Math.random() - 0.5) * G.shake * 0.5;
+    camera.position.x += (Math.random() - 0.5) * G.shake * 0.3;
+    camera.position.y += (Math.random() - 0.5) * G.shake * 0.3;
     G.shake *= 0.85;
   }
-  
-  // HP UI
-  document.getElementById('hpf').style.width = (player.hp/player.maxHp*100) + '%';
-  document.getElementById('blood').style.opacity = player.hp < 40 ? (40 - player.hp) / 60 : 0;
 }
 
+// ==========================================
+// GAME STATE
+// ==========================================
+const G = { running: false, shake: 0 };
+
+const clock2 = new THREE.Clock();
+
 function loop() {
-  const dt = Math.min(0.05, clock.getDelta());
+  const dt = Math.min(0.05, clock2.getDelta());
   if (G.running) update(dt);
   renderer.render(scene, camera);
   requestAnimationFrame(loop);
 }
 
-// =============================================
-// START / OVER
-// =============================================
+// ==========================================
+// START / END
+// ==========================================
 function startGame() {
-  initAudio();
-  if (actx.state === 'suspended') actx.resume();
+  audio.init();
+  if (audio.ctx.state === 'suspended') audio.ctx.resume();
   
   G.running = true;
-  G.wave = 0; G.toSpawn = 0; G.spawnT = 0; G.waveOn = false;
-  G.paused = false; G.storyT = 0; G.shake = 0;
-  
-  player.pos.set(0, 1.7, 0);
-  player.hp = player.maxHp = 100;
-  player.stamina = player.maxStamina = 100;
+  G.shake = 0;
+  player.pos.set(0, 1.6, 12);
   player.yaw = 0; player.pitch = 0;
-  player.score = 0; player.killCount = 0;
-  player.reloading = false;
-  player.invuln = 2;
-  player.alive = true;
-  
-  weapons.forEach(w => w.ammo = w.maxAmmo);
-  equipWeapon(0);
+  player.hp = 100; player.battery = 100;
+  player.ammo = 6; player.killCount = 0;
+  player.gameTime = 0;
+  player.flashlightOn = true;
+  spawnT = 3;
   
   document.getElementById('menu').style.display = 'none';
   document.getElementById('gameover').style.display = 'none';
-  document.getElementById('story').style.display = 'none';
-  document.getElementById('hpf').style.width = '100%';
-  document.getElementById('stf').style.width = '100%';
-  document.getElementById('sc').textContent = '0';
-  document.getElementById('sc2').textContent = '0';
-  document.getElementById('kl').textContent = '0';
-  document.getElementById('kills').textContent = 'KILLS: 0';
-  document.getElementById('damage').style.opacity = 0;
-  document.getElementById('blood').style.opacity = 0;
+  document.getElementById('bloodScreen').style.opacity = '0';
+  document.getElementById('objective').textContent = 'ابحث عن الباب... واخرج من هنا';
+  document.getElementById('hpv').textContent = '100';
+  document.getElementById('batv').textContent = '100%';
   
-  // clear zombies
-  zombies.forEach(z => scene.remove(z)); zombies.length = 0;
-  bloodParts.forEach(p => scene.remove(p.m)); bloodParts.length = 0;
+  // clear enemies
+  enemies.forEach(e => scene.remove(e.mesh));
+  enemies.length = 0;
+  bloodParticles.forEach(p => scene.remove(p.m));
+  bloodParticles.length = 0;
   
-  showStory('مهمتك', 'اصمد أمام موجات الزومبي. <span class="k">اقتل أو تُقتل.</span>', 3);
-  
-  setTimeout(() => {
-    if (G.running && !G.waveOn) nextWave();
-  }, 3200);
+  audio.setHeartRate(1.2);
 }
 
 function gameOver() {
   G.running = false;
-  player.alive = false;
-  G.shake = 1;
-  sfx('hurt');
+  audio.death();
+  document.getElementById('bloodScreen').style.opacity = '1';
   
-  // تحقق من أعلى نتيجة
-  if (player.score > G.hi) {
-    G.hi = player.score;
-    localStorage.setItem('laststand_hi', player.score);
-    document.getElementById('hisc').textContent = G.hi;
-  }
-  
-  let rank = 'ROOKIE';
-  if (G.wave >= 5) rank = 'SURVIVOR';
-  if (G.wave >= 10) rank = 'WARRIOR';
-  if (G.wave >= 15) rank = 'VETERAN';
-  if (G.wave >= 20) rank = '🔴 LEGEND 🔴';
+  const m = Math.floor(player.gameTime / 60);
+  const s = Math.floor(player.gameTime % 60);
+  document.getElementById('timeS').textContent = m + ':' + (s < 10 ? '0' + s : s);
+  document.getElementById('killS').textContent = player.killCount;
+  document.getElementById('roomS').textContent = Math.floor(Math.random() * 3) + 1;
   
   setTimeout(() => {
-    document.getElementById('fw').textContent = G.wave;
-    document.getElementById('fs').textContent = player.score;
-    document.getElementById('fk').textContent = player.killCount;
-    document.getElementById('rank').innerHTML = 'RANK: <b>' + rank + '</b>';
     document.getElementById('gameover').style.display = 'flex';
-  }, 1500);
+  }, 2000);
+}
+
+function winGame() {
+  G.running = false;
+  document.getElementById('objective').textContent = '🎉 نجوت!';
+  setTimeout(() => {
+    alert('🎉 نجحت!\n\nخرجت من الملجأ المهجور.\n\nالوقت: ' + Math.floor(player.gameTime) + ' ثانية\nقتلت: ' + player.killCount + ' كائن');
+    location.reload();
+  }, 500);
 }
 
 document.getElementById('startBtn').addEventListener('click', startGame);
-document.getElementById('restartBtn').addEventListener('click', startGame);
+document.getElementById('retryBtn').addEventListener('click', startGame);
 
 setTimeout(() => {
   document.getElementById('loading').style.display = 'none';
   loop();
-}, 2000);
+}, 1500);
 </script>
 </body>
-                                                      </html>
+  </html>
